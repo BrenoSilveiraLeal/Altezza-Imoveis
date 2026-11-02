@@ -51,10 +51,11 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--nav-h) + 16px); scrollbar-width: none; }
+html { width: 100%; max-width: 100%; overflow-x: clip; font-size: 16px; -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--nav-h) + 16px); scrollbar-width: none; }
 /* Barra de rolagem invisível; a página continua rolando normalmente. */
 html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
 body {
+  width: 100%; max-width: 100%;
   font-family: var(--font);
   background: var(--bg);
   color: var(--ink);

@@ -79,6 +79,9 @@
 @media (max-width: 809.98px) {
   .show { padding-top: calc(var(--nav-h) + 24px); gap: 20px; }
   .show__inner { gap: 18px; }
+  .show__copy, .show__ctas, .show__specs { min-width: 0; max-width: 100%; }
+  .show__ctas .btn { max-width: 100%; }
+  .show__specs dd { overflow-wrap: anywhere; }
   .show__specs { gap: 8px 22px; margin-top: 16px; }
   .show__specs div:first-child { flex-basis: 100%; }
   .show__ctas { margin-top: 18px; }
@@ -88,6 +91,7 @@
   .show__arrows { order: 3; }
   .show__arrows .round-btn { width: 44px; height: 44px; }
   .show__thumb { gap: 10px; padding: 6px 10px 10px 6px; border-radius: 14px; }
+  .show__thumb-txt { flex: 1; }
   .show__thumb-img { width: 44px; height: 44px; border-radius: 8px; }
   .show__thumb-txt strong { font-size: .84rem; }
   .show__thumb-txt small { font-size: .72rem; overflow: hidden; text-overflow: ellipsis; }
