@@ -338,6 +338,20 @@ form.is-sent .form-ok { display: grid; animation: fade-up .9s var(--ease) both; 
   .footer__top { grid-template-columns: 1.2fr 1fr; align-items: end; }
   .footer__cols { grid-template-columns: repeat(3, 1fr); }
 }
+@media (max-width: 699.98px) {
+  .footer { padding-top: 72px; }
+  .footer__top { gap: 40px; padding-bottom: 44px; }
+  .footer__cta { min-width: 0; }
+  .footer__cta h2 { font-size: clamp(2.15rem, 9vw, 3rem); }
+  .footer__cta .btn { max-width: 100%; height: auto; min-height: 52px; padding: 7px 8px 7px 20px; gap: 8px; white-space: normal; }
+  .footer__cta .btn__arrow { margin-left: auto; }
+  .footer__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; min-width: 0; }
+  .footer__cols > div { min-width: 0; overflow-wrap: anywhere; }
+  .footer__cols > div:nth-child(3) { grid-column: 1 / -1; }
+  .footer__cols li { line-height: 1.55; }
+  .footer__word { font-size: clamp(4rem, 19vw, 8rem); }
+  .footer__legal .wrap { min-width: 0; }
+}
 
 /* ---------- Movimento reduzido ---------- */
 @media (prefers-reduced-motion: reduce) {

@@ -303,6 +303,17 @@
 .exp__steps h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -.02em; margin-bottom: 6px; }
 .exp__steps p { color: var(--on-night-2); font-size: .98rem; max-width: 34em; }
 @media (min-width: 1024px) { .exp__grid { grid-template-columns: 1fr 1.15fr; gap: 80px; } }
+@media (max-width: 699.98px) {
+  .exp__grid, .exp__copy, .exp__copy > *, .exp__steps li, .exp__steps li > div { min-width: 0; max-width: 100%; }
+  .exp__copy .h2 { font-size: clamp(2.1rem, 9vw, 3rem); }
+  .exp__copy .lead { font-size: clamp(1rem, 4.4vw, 1.2rem); overflow-wrap: anywhere; }
+  .exp__steps { margin: 32px 0; }
+  .exp__steps li { grid-template-columns: 34px minmax(0, 1fr); gap: 12px; padding: 20px 0; }
+  .exp__steps h3 { font-size: 1.12rem; }
+  .exp__steps p { font-size: .94rem; overflow-wrap: anywhere; }
+  .exp__copy > .btn { max-width: 100%; height: auto; min-height: 52px; padding: 7px 8px 7px 18px; gap: 8px; white-space: normal; }
+  .exp__copy > .btn .btn__arrow { margin-left: auto; }
+}
 
 .demo { position: relative; aspect-ratio: 4 / 5; border-radius: var(--r); overflow: hidden; background: var(--night-2); border: 1px solid var(--line-night); }
 .demo__img { position: absolute; inset: 0; overflow: hidden; }
@@ -327,6 +338,16 @@
 .demo__bar { position: absolute; z-index: 3; left: 18px; right: 18px; top: 18px; height: 2px; background: rgba(255,255,255,.2); border-radius: 2px; overflow: hidden; }
 .demo__bar i { display: block; height: 100%; width: 100%; background: var(--accent-glow); transform-origin: left; animation: demo-bar 14s linear infinite alternate; }
 @keyframes demo-bar { from { transform: scaleX(.3); } to { transform: scaleX(.52); } }
+@media (max-width: 699.98px) {
+  .demo { aspect-ratio: 4 / 5.4; border-radius: 20px; }
+  .demo__panel { left: 12px; right: 100px; bottom: 12px; min-width: 0; padding: 12px; }
+  .demo__panel p { font-size: .62rem; letter-spacing: .1em; }
+  .demo__panel strong { font-size: clamp(.9rem, 4vw, 1.05rem); line-height: 1.2; overflow-wrap: anywhere; }
+  .demo__map { right: 12px; bottom: 12px; width: 78px; padding: 6px; }
+  .demo__spot { max-width: calc(100% - 24px); font-size: .7rem; }
+  .demo__spot b { white-space: normal; }
+  .demo__bar { left: 12px; right: 12px; top: 12px; }
+}
 
 /* ---------- Coleção ---------- */
 .collection__grid { display: grid; grid-template-columns: 1fr; gap: 48px 24px; }

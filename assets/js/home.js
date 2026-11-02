@@ -178,6 +178,7 @@
     const out = ex.querySelector('[data-ex-preco-out]');
     const ordem = ex.querySelector('[data-ex-ordem]');
     const state = { tipo: '', cidade: '', max: 25, ordem: '', view: 'grid' };
+    let priceRenderTimer;
 
     const countBy = (key, v) => PROPERTIES.filter(p => !v || p[key] === v).length;
     ex.querySelector('[data-ex-tipo]').innerHTML = ['', ...unique('tipo')].map(v =>
@@ -240,6 +241,7 @@
 
     ex.addEventListener('change', e => {
       const t = e.target;
+      clearTimeout(priceRenderTimer);
       if (t.name === 'ex-tipo') state.tipo = t.value;
       if (t.name === 'ex-cidade') state.cidade = t.value;
       if (t === ordem) state.ordem = t.value;
@@ -249,14 +251,17 @@
     range.addEventListener('input', () => {
       paintRange();
       state.max = +range.value;
-      render();
+      clearTimeout(priceRenderTimer);
+      priceRenderTimer = setTimeout(render, 320);
     });
     ex.querySelectorAll('[data-ex-view]').forEach(b => b.addEventListener('click', () => {
+      clearTimeout(priceRenderTimer);
       state.view = b.dataset.exView;
       ex.querySelectorAll('[data-ex-view]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
       render();
     }));
     resetBtns.forEach(b => b.addEventListener('click', () => {
+      clearTimeout(priceRenderTimer);
       Object.assign(state, { tipo: '', cidade: '', max: 25, ordem: '' });
       ex.querySelectorAll('input[type="radio"][value=""]').forEach(r => { r.checked = true; });
       range.value = 25; ordem.value = '';
