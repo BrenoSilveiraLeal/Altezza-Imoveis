@@ -251,7 +251,7 @@
     let W = 0, H = 0, sceneLen = 0, tourTop = 0;
     let target = 0, cur = 0, raf = 0, last = 0, active = -1;
     let pan = { x: 0, y: 0 }, panT = { x: 0, y: 0 };
-    let focus = null, fk = 0, fkT = 0;   // aproximação do ponto de interesse
+    let focus = null, focusFrom = null, fk = 0, fkT = 0;   // aproximação do ponto de interesse
     let tipDone = false, infoY = 0, infoAt = [0, 0];
     const isStatic = reduce.matches;
 
@@ -338,7 +338,8 @@
           if (focus && focus.scene === j) {
             // Voa até o ponto escolhido, como numa galeria.
             const e = easeIO(fk);
-            c = { x: lerp(c.x, focus.x, e), y: lerp(c.y, focus.y, e), z: lerp(c.z, c.z * 1.28, e) };
+            const from = focusFrom || c;
+            c = { x: lerp(from.x, focus.x, e), y: lerp(from.y, focus.y, e), z: lerp(from.z, from.z * 1.28, e) };
           }
           const view = place(s, c, 1, true);
           s.el.style.clipPath = 'none';
@@ -436,7 +437,10 @@
     function openInfo(si, hi) {
       const s = scenes[si];
       const h = s.data.hotspots[hi];
+      const previous = focus && focus.scene === si ? focus : camAt(s, clamp(cur - I - si));
+      focusFrom = { x: previous.x, y: previous.y, z: previous.z };
       focus = { scene: si, x: h.x, y: h.y, k: hi };
+      fk = 0;
       fkT = 1;
       infoY = scrollY;
       tipDone = true;
@@ -460,6 +464,7 @@
     function closeInfo() {
       if (info.hidden) return;
       fkT = 0;
+      focusFrom = null;
       info.classList.remove('is-open');
       sticky.classList.remove('has-info');
       tourEl.querySelectorAll('.hotspot.is-open').forEach(el => el.classList.remove('is-open'));
