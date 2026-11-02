@@ -180,7 +180,7 @@
     const ordem = ex.querySelector('[data-ex-ordem]');
     const cheapest = Math.min(...PROPERTIES.map(p => p.preco)) / 1e6;
     range.min = String(cheapest);
-    range.step = 'any';
+    range.step = '.5';
     const state = { tipo: '', cidade: '', max: 25, ordem: '', view: 'grid' };
     let priceRenderTimer;
 
@@ -202,7 +202,7 @@
     addEventListener('resize', moveInk);
     document.fonts && document.fonts.ready.then(moveInk);
 
-    const fmtMax = v => v >= 25 ? 'Qualquer valor' : `Até R$ ${String(v).replace('.', ',')} mi`;
+    const fmtMax = v => v >= 25 ? 'Qualquer valor' : `Até R$ ${new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(v)} mi`;
     const paintRange = () => {
       const pct = (range.value - range.min) / (range.max - range.min) * 100;
       range.style.setProperty('--fill', pct + '%');
