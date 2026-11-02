@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Altezza — Imóveis de alto padrão</title>
+  <meta name="description" content="Altezza: imóveis de alto padrão apresentados como arquitetura. Coberturas, casas e residências exclusivas com apresentação imersiva de cada ambiente.">
+  <meta name="theme-color" content="#0b0c0a">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230b0c0a'/%3E%3Ccircle cx='50' cy='50' r='14' fill='%23d7e43c'/%3E%3C/svg%3E">
+  <link rel="preload" href="assets/fonts/open-sauce-one-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/open-sauce-one-semibold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/home.css">
+  <script>document.documentElement.classList.add('js');try{if(sessionStorage.getItem('altezza:nav'))document.documentElement.classList.add('is-entering')}catch(e){}</script>
+  <script src="assets/js/data.js" defer></script>
+  <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/home.js" defer></script>
+</head>
+<body data-page="home">
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+  <main id="conteudo">
+    <!-- 1 · Vitrine de imóveis -->
+    <section class="show" id="topo" aria-labelledby="show-title" data-nav-solid-after>
+      <h1 class="sr-only" id="show-title">Altezza — imóveis de alto padrão</h1>
+      <div class="show__bg" data-show-bg aria-hidden="true"></div>
+      <div class="show__shade" aria-hidden="true"></div>
+      <div class="wrap show__inner">
+        <div class="show__copies" data-show-copies aria-live="polite"></div>
+        <aside class="show__side">
+          <p class="show__count"><strong data-show-n>01</strong><span>/ <span data-show-total>06</span></span></p>
+          <div class="show__arrows">
+            <button type="button" class="round-btn round-btn--light" data-show-step="-1" aria-label="Imóvel anterior"></button>
+            <button type="button" class="round-btn round-btn--light" data-show-step="1" aria-label="Próximo imóvel"></button>
+          </div>
+          <button type="button" class="show__pause" data-show-pause aria-pressed="false">Pausar</button>
+        </aside>
+      </div>
+      <div class="wrap">
+        <div class="show__thumbs" role="tablist" aria-label="Escolha um imóvel" data-show-thumbs></div>
+      </div>
+    </section>
+
+    <!-- 2 · Explorador da coleção -->
+    <section class="explore sec" id="imoveis" aria-labelledby="ex-title">
+      <div class="wrap">
+        <header class="sec-head sec-head--split">
+          <div>
+            <p class="eyebrow" data-reveal>01 — Coleção</p>
+            <h2 class="h2" id="ex-title" data-split style="margin-top:20px">Escolha por onde<br>começar a <em>visita</em>.</h2>
+          </div>
+          <div data-reveal>
+            <p class="lead">Filtre, compare e abra a apresentação imersiva de qualquer imóvel. A coleção se reorganiza na hora.</p>
+          </div>
+        </header>
+
+        <div class="ex-bar" data-reveal>
+          <div class="ex-tabs" role="radiogroup" aria-label="Tipo de imóvel">
+            <div class="ex-tabs__list" data-ex-tipo></div>
+            <span class="ex-tabs__ink" aria-hidden="true"></span>
+          </div>
+          <div class="ex-tools">
+            <div class="ex-tool ex-tool--seg">
+              <span class="ex-tool__label">Região</span>
+              <div class="ex-seg" role="radiogroup" aria-label="Região" data-ex-cidade></div>
+            </div>
+            <div class="ex-tool ex-tool--range">
+              <label class="ex-tool__label" for="ex-preco">Investimento</label>
+              <div class="ex-range">
+                <input id="ex-preco" type="range" min="6" max="25" step=".5" value="25" data-ex-preco>
+                <output for="ex-preco" data-ex-preco-out>Qualquer valor</output>
+              </div>
+            </div>
+            <div class="ex-tool ex-tool--end">
+              <label class="ex-sort"><span class="sr-only">Ordenar</span>
+                <select data-ex-ordem>
+                  <option value="">Destaques</option>
+                  <option value="preco-asc">Menor valor</option>
+                  <option value="preco-desc">Maior valor</option>
+                  <option value="area-desc">Maior área</option>
+                </select>
+              </label>
+              <div class="ex-view" role="group" aria-label="Visualização">
+                <button type="button" data-ex-view="grid" aria-pressed="true" aria-label="Grade"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg></button>
+                <button type="button" data-ex-view="list" aria-pressed="false" aria-label="Lista"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="ex-status" aria-live="polite"><strong data-ex-count>6</strong> <span data-ex-label>imóveis na coleção</span><button type="button" class="ex-reset" data-ex-reset hidden>Limpar filtros</button></p>
+        <div class="ex-grid" data-ex-grid></div>
+        <div class="ex-list" data-ex-list hidden></div>
+        <div class="ex-empty" data-ex-empty hidden>
+          <p>Nenhum imóvel com esses filtros. Experimente aumentar o investimento ou trocar a região.</p>
+          <button type="button" class="btn btn--ghost" data-ex-reset>Limpar filtros</button>
+        </div>
+        <a class="link-arrow ex-more" href="imoveis.html" data-transition="Coleção Altezza">Abrir o catálogo completo<span class="la"></span></a>
+      </div>
+    </section>
+
+    <!-- 3 · Destaques (cards com inclinação 3D) -->
+    <section class="case-studies-section" id="destaques" aria-labelledby="section-title">
+      <div class="section-container">
+        <header class="section-header">
+          <p class="eyebrow-tag"><span class="eyebrow-dot" aria-hidden="true"></span>Coleção em destaque</p>
+          <h2 class="section-title" id="section-title">Espaços para viver.<br>Detalhes para sentir.</h2>
+          <p class="section-subtitle">Escolha um imóvel e comece a apresentação imersiva de cada ambiente.</p>
+        </header>
+        <div class="cards-list" data-featured></div>
+      </div>
+    </section>
+
+    <!-- 4 · Experiência -->
+    <section class="exp on-night sec" id="experiencia" aria-labelledby="exp-title" data-nav-dark>
+      <div class="wrap exp__grid">
+        <div class="exp__copy">
+          <p class="eyebrow" data-reveal>02 — Experiência imersiva</p>
+          <h2 class="h2" id="exp-title" data-split>Uma visita<br>antes da <em>visita</em>.</h2>
+          <p class="lead" data-reveal>Cada imóvel da coleção tem uma apresentação própria. Você rola a página e a câmera caminha pela casa, parando nos detalhes que fazem diferença.</p>
+          <ol class="exp__steps">
+            <li data-reveal><span class="exp__n">01</span><div><h3>Percorra cada ambiente</h3><p>A rolagem conduz o passeio: fachada, salas, suítes e áreas externas, na ordem em que você viveria a casa.</p></div></li>
+            <li data-reveal style="--d:.1s"><span class="exp__n">02</span><div><h3>Descubra os detalhes</h3><p>Pontos de interesse revelam materiais, curiosidades e as decisões de arquitetura por trás de cada espaço.</p></div></li>
+            <li data-reveal style="--d:.2s"><span class="exp__n">03</span><div><h3>Agende a visita</h3><p>Quando o imóvel fizer sentido, um consultor acompanha você pessoalmente, no horário que preferir.</p></div></li>
+          </ol>
+          <a class="btn btn--light" href="imovel.html?id=dossel" data-transition="Cobertura Dossel" data-reveal>Experimentar com a Cobertura Dossel<span class="btn__arrow"></span></a>
+        </div>
+        <div class="exp__demo" data-reveal="scale" aria-hidden="true">
+          <div class="demo">
+            <div class="demo__img"><img src="assets/img/living-l.webp" alt="" width="2400" height="1340" loading="lazy" decoding="async"></div>
+            <span class="demo__spot" style="left:52%;top:34%"><i></i><b>Caixilho piso-teto</b></span>
+            <span class="demo__spot" style="left:78%;top:60%"><i></i><b>Oliveira centenária</b></span>
+            <span class="demo__spot" style="left:24%;top:76%"><i></i><b>Sofá em linho oliva</b></span>
+            <div class="demo__panel">
+              <p>03 / 07 · Área social</p>
+              <strong>Living entre as árvores</strong>
+            </div>
+            <svg class="demo__map" viewBox="0 0 100 64">
+              <rect x="4" y="4" width="38" height="30"/><rect x="44" y="4" width="14" height="14"/><rect x="60" y="4" width="16" height="14"/>
+              <rect x="44" y="20" width="22" height="14"/><rect x="68" y="20" width="28" height="22"/><rect x="4" y="36" width="36" height="24"/>
+              <rect x="42" y="36" width="24" height="24"/><rect x="78" y="4" width="18" height="14"/>
+              <rect class="on" x="4" y="4" width="38" height="30"/><circle class="me" cx="23" cy="19" r="2.6"/>
+            </svg>
+            <div class="demo__bar"><i></i></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 · Manifesto -->
+    <section class="manifesto sec" aria-labelledby="manifesto-title">
+      <div class="wrap mani">
+        <div class="mani__head">
+          <p class="eyebrow" data-reveal>03 — Manifesto</p>
+          <h2 class="mani__title" id="manifesto-title" data-split>Um imóvel não se<br>explica em metragens.<br>Ele se revela na <em>luz</em>.</h2>
+        </div>
+        <figure class="mani__img" data-mask>
+          <img src="assets/img/escada-l.webp" alt="Escada de degraus soltos de madeira contra parede de concreto aparente, com luz zenital." width="1600" height="1986" loading="lazy" decoding="async">
+          <figcaption><span>Casa Brise</span> Escada escultórica</figcaption>
+        </figure>
+        <div class="mani__text" data-reveal>
+          <p class="lead">No caminho do sol, na escolha de uma pedra, no silêncio de uma sala. É isso que faz uma casa ser lembrada.</p>
+          <p>Por isso a Altezza apresenta cada residência como um percurso, ambiente por ambiente, com a arquitetura no centro da conversa.</p>
+          <a class="link-arrow" href="#experiencia">Como funciona o tour<span class="la"></span></a>
+        </div>
+        <dl class="mani__stats">
+          <div data-reveal><dd><span data-count="12">0</span></dd><dt>Anos de mercado</dt></div>
+          <div data-reveal style="--d:.08s"><dd><span data-count="184">0</span><small>+</small></dd><dt>Famílias atendidas</dt></div>
+          <div data-reveal style="--d:.16s"><dd><small>R$</small><span data-count="1">0</span>,2<small>bi</small></dd><dt>Negociados em imóveis</dt></div>
+          <div data-reveal style="--d:.24s" class="is-accent"><dd><span data-count="100">0</span><small>%</small></dd><dt>Com tour imersivo</dt></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- 6 · Serviços -->
+    <section class="services sec" aria-labelledby="serv-title">
+      <div class="wrap">
+        <header class="sec-head sec-head--split">
+          <div>
+            <p class="eyebrow" data-reveal>04 — Serviços</p>
+            <h2 class="h2" id="serv-title" data-split style="margin-top:20px">Do primeiro olhar<br>às <em>chaves</em>.</h2>
+          </div>
+          <p class="lead" data-reveal>Uma equipe pequena, com arquitetos, advogados e consultores, cuidando de cada etapa da compra ou da venda.</p>
+        </header>
+        <ul class="services__list" data-services>
+          <li data-img="assets/img/mesa-m.webp" data-reveal><span class="services__n">01</span><h3>Curadoria de imóveis</h3><p>Visitamos e avaliamos cada residência antes de ela entrar na coleção. Menos opções, mais certeiras.</p><a class="services__arrow" href="imoveis.html" data-transition="Coleção Altezza" aria-label="Curadoria de imóveis: ver a coleção"></a></li>
+          <li data-img="assets/img/living-m.webp" data-reveal><span class="services__n">02</span><h3>Apresentação imersiva</h3><p>Fotografia arquitetônica, tour guiado por ambientes e ficha técnica completa de cada imóvel.</p><a class="services__arrow" href="imovel.html?id=dossel" data-transition="Cobertura Dossel" aria-label="Apresentação imersiva: experimentar um tour"></a></li>
+          <li data-img="assets/img/materiais-m.webp" data-reveal><span class="services__n">03</span><h3>Assessoria jurídica e financeira</h3><p>Due diligence documental, estruturação de pagamento e acompanhamento até a escritura.</p><a class="services__arrow" href="#contato" data-interest="comprar" data-msg="Gostaria de saber mais sobre a assessoria jurídica e financeira para a compra de um imóvel." aria-label="Assessoria jurídica e financeira: falar com a equipe"></a></li>
+          <li data-img="assets/img/brise-m.webp" data-reveal><span class="services__n">04</span><h3>Venda do seu imóvel</h3><p>Avaliação, produção de imagens e apresentação imersiva para compradores qualificados.</p><a class="services__arrow" href="#contato" data-interest="vender" data-msg="Tenho um imóvel e gostaria de uma avaliação para vendê-lo com a Altezza." aria-label="Venda do seu imóvel: pedir uma avaliação"></a></li>
+          <li data-img="assets/img/suite-m.webp" data-reveal><span class="services__n">05</span><h3>Concierge pós-compra</h3><p>Arquitetos parceiros, reformas, mudança e decoração: a casa pronta para morar.</p><a class="services__arrow" href="#contato" data-interest="comprar" data-msg="Gostaria de saber mais sobre o concierge pós-compra (reforma, mudança e decoração)." aria-label="Concierge pós-compra: falar com a equipe"></a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7 · Regiões -->
+    <section class="regions sec" aria-labelledby="reg-title">
+      <div class="wrap">
+        <header class="sec-head">
+          <p class="eyebrow" data-reveal>05 — Regiões</p>
+          <h2 class="h2" id="reg-title" data-split>Onde a coleção<br><em>mora</em>.</h2>
+        </header>
+        <div class="regions__grid">
+          <a class="region" href="imoveis.html?cidade=São+Paulo" data-transition="São Paulo" data-reveal data-cursor="Ver<br>imóveis">
+            <img src="assets/img/bairro-m.webp" srcset="assets/img/bairro-m.webp 800w, assets/img/bairro-l.webp 1600w" sizes="(min-width: 800px) 45vw, 100vw" alt="Vista aérea de bairro arborizado em São Paulo." width="800" height="447" loading="lazy" decoding="async">
+            <span class="region__txt"><span class="label">São Paulo · SP</span><strong>Jardins, Cidade Jardim e Pinheiros</strong><span class="region__n" data-region-count="São Paulo"></span></span>
+          </a>
+          <a class="region" href="imoveis.html?cidade=Nova+Lima" data-transition="Nova Lima" data-reveal style="--d:.1s" data-cursor="Ver<br>imóveis">
+            <img src="https://res.cloudinary.com/dalwymbky/image/upload/v1793039689/casa-horizonte_bwhflv.jpg" alt="Casa contemporânea com fachada de madeira, grandes janelas e jardim ao entardecer." width="2400" height="1600" loading="lazy" decoding="async">
+            <span class="region__txt"><span class="label">Nova Lima · MG</span><strong>Vale dos Cristais</strong><span class="region__n" data-region-count="Nova Lima"></span></span>
+          </a>
+          <a class="region" href="imoveis.html?cidade=São+Sebastião" data-transition="Litoral Norte" data-reveal style="--d:.2s" data-cursor="Ver<br>imóveis">
+            <img src="assets/img/mare-m.webp" srcset="assets/img/mare-m.webp 800w, assets/img/mare-l.webp 1600w" sizes="(min-width: 800px) 30vw, 100vw" alt="Varanda com pergolado de madeira e vista para o mar." width="800" height="537" loading="lazy" decoding="async">
+            <span class="region__txt"><span class="label">Litoral Norte · SP</span><strong>Barra do Sahy</strong><span class="region__n" data-region-count="São Sebastião"></span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 · Sobre -->
+    <section class="about sec on-night" id="sobre" aria-labelledby="about-title" data-nav-dark>
+      <div class="wrap about__grid">
+        <figure class="about__portrait" data-mask>
+          <img src="assets/img/curadora-m.webp" alt="Retrato de Helena Duarte, diretora de curadoria da Altezza, apoiada em uma mesa com maquete." width="800" height="993" loading="lazy" decoding="async">
+        </figure>
+        <div class="about__copy">
+          <p class="eyebrow" data-reveal>06 — Sobre a Altezza</p>
+          <h2 class="h2" id="about-title" data-split>Uma imobiliária<br>com olhar de <em>arquiteto</em>.</h2>
+          <blockquote class="about__quote" data-reveal>
+            <p>“Antes de falar de preço, a gente fala de luz, de materiais e de como a casa vai envelhecer. É isso que separa um bom imóvel de um imóvel para a vida inteira.”</p>
+            <footer><strong>Helena Duarte</strong><span>Arquiteta e diretora de curadoria</span></footer>
+          </blockquote>
+          <div class="about__cols" data-reveal>
+            <p>A Altezza nasceu em 2014 dentro de um escritório de arquitetura. Até hoje, cada imóvel passa por uma visita técnica antes de ser apresentado.</p>
+            <p>Trabalhamos com poucos imóveis por vez, para acompanhar cada cliente de perto — do primeiro tour à entrega das chaves.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9 · Depoimentos -->
+    <section class="quotes sec" aria-labelledby="quotes-title">
+      <div class="wrap">
+        <header class="sec-head sec-head--split">
+          <div>
+            <p class="eyebrow" data-reveal>07 — Depoimentos</p>
+            <h2 class="h2" id="quotes-title" data-split style="margin-top:20px">Quem já chegou<br>em <em>casa</em>.</h2>
+          </div>
+          <div class="quotes__nav" data-reveal>
+            <button type="button" class="round-btn" data-q="-1" aria-label="Depoimento anterior"></button>
+            <button type="button" class="round-btn" data-q="1" aria-label="Próximo depoimento"></button>
+          </div>
+        </header>
+        <div class="quotes__track" data-quotes tabindex="0" aria-label="Depoimentos de clientes (fictícios)">
+          <figure class="quote" data-reveal><blockquote>“Fizemos o tour da casa três vezes antes de visitar. Quando entramos, parecia que já conhecíamos cada canto.”</blockquote><figcaption><strong>Marina e Rafael</strong><span>Compradores · Casa em Cidade Jardim</span></figcaption></figure>
+          <figure class="quote" data-reveal style="--d:.1s"><blockquote>“A curadoria poupou meses. Vimos quatro imóveis, todos com a mesma qualidade, e decidimos pelo segundo.”</blockquote><figcaption><strong>Eduardo T.</strong><span>Comprador · Cobertura no Jardim Europa</span></figcaption></figure>
+          <figure class="quote" data-reveal style="--d:.2s"><blockquote>“Vender a casa da família era delicado. A apresentação mostrou o projeto com o cuidado que ele merecia.”</blockquote><figcaption><strong>Beatriz M.</strong><span>Proprietária · Casa de praia no Litoral Norte</span></figcaption></figure>
+          <figure class="quote" data-reveal style="--d:.3s"><blockquote>“Morando fora do país, fechei a compra praticamente pelo tour. A visita presencial só confirmou o que eu já tinha visto.”</blockquote><figcaption><strong>Lucas A.</strong><span>Comprador · Apartamento em Pinheiros</span></figcaption></figure>
+        </div>
+        <p class="quotes__note">Depoimentos fictícios, criados para esta demonstração.</p>
+      </div>
+    </section>
+
+    <!-- 10 · Perguntas -->
+    <section class="faq sec" aria-labelledby="faq-title">
+      <div class="wrap faq__grid">
+        <header>
+          <p class="eyebrow" data-reveal>08 — Perguntas</p>
+          <h2 class="h2" id="faq-title" data-split style="margin-top:20px">Antes de<br><em>começar</em>.</h2>
+        </header>
+        <div class="faq__list">
+          <details data-reveal><summary>Como funciona a apresentação imersiva?<span></span></summary><p>Ao abrir um imóvel, a página conduz um passeio pelos ambientes conforme você rola. Em cada parada aparecem características, curiosidades e pontos de interesse clicáveis. Você também pode pular direto para a ficha técnica.</p></details>
+          <details data-reveal><summary>Posso visitar o imóvel pessoalmente?<span></span></summary><p>Sim. As visitas são feitas com hora marcada e sempre acompanhadas por um consultor. Basta escolher o melhor dia na página do imóvel ou falar com a equipe.</p></details>
+          <details data-reveal><summary>Vocês ajudam na documentação e no financiamento?<span></span></summary><p>Nossa assessoria cuida da análise documental, da estruturação do pagamento e do acompanhamento até a escritura, em parceria com escritórios jurídicos especializados.</p></details>
+          <details data-reveal><summary>Quero vender meu imóvel. Ele pode entrar na coleção?<span></span></summary><p>Fazemos uma visita técnica gratuita de avaliação. Se o imóvel tiver o perfil da coleção, produzimos as imagens e a apresentação imersiva sem custo inicial.</p></details>
+          <details data-reveal><summary>Os favoritos ficam salvos?<span></span></summary><p>Sim, neste navegador. Toque no coração de qualquer imóvel para salvá-lo e encontre todos pelo ícone no topo da página.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11 · Contato -->
+    <section class="contact sec on-night" id="contato" aria-labelledby="contact-title" data-nav-dark>
+      <div class="wrap contact__grid">
+        <div class="contact__copy">
+          <p class="eyebrow" data-reveal>09 — Contato</p>
+          <h2 class="h2" id="contact-title" data-split style="margin-top:20px">Conte o que<br>você <em>procura</em>.</h2>
+          <p class="lead" data-reveal>Um consultor responde pessoalmente em até um dia útil, com uma seleção feita para você.</p>
+          <dl class="contact__info" data-reveal>
+            <div><dt>Escritório</dt><dd>Rua Exemplo, 000 · Jardim Europa · São Paulo – SP</dd></div>
+            <div><dt>Atendimento</dt><dd>Com hora marcada, seg a sex, 9h–19h</dd></div>
+            <div><dt>E-mail</dt><dd><a href="mailto:contato@altezza.com.br">contato@altezza.com.br</a></dd></div>
+            <div><dt>Telefone</dt><dd>(11) 0000-0000</dd></div>
+          </dl>
+        </div>
+        <form class="contact__form" data-demo-form novalidate data-reveal>
+          <fieldset class="field">
+            <legend>Interesse</legend>
+            <div class="pills" style="margin-top:10px">
+              <label class="pill"><input type="radio" name="interesse" value="comprar" checked><span>Comprar</span></label>
+              <label class="pill"><input type="radio" name="interesse" value="vender"><span>Vender</span></label>
+              <label class="pill"><input type="radio" name="interesse" value="investir"><span>Investir</span></label>
+            </div>
+          </fieldset>
+          <div class="contact__row">
+            <div class="field"><label for="c-nome">Nome</label><input id="c-nome" name="nome" autocomplete="name" required></div>
+            <div class="field"><label for="c-email">E-mail</label><input id="c-email" name="email" type="email" autocomplete="email" required></div>
+          </div>
+          <div class="contact__row">
+            <div class="field"><label for="c-tel">Telefone</label><input id="c-tel" name="telefone" type="tel" autocomplete="tel" inputmode="tel"></div>
+            <div class="field"><label for="c-imovel">Imóvel de interesse</label><select id="c-imovel" name="imovel" data-fill="imovel"><option value="">Ainda não sei</option></select></div>
+          </div>
+          <div class="field"><label for="c-msg">Mensagem</label><textarea id="c-msg" name="mensagem" rows="3" placeholder="Região, metragem, número de suítes, prazo…"></textarea></div>
+          <button class="btn btn--light" type="submit">Enviar mensagem<span class="btn__arrow"></span></button>
+          <p class="contact__note">Demonstração: nenhum dado é enviado ou armazenado.</p>
+          <div class="form-ok" role="status">
+            <p class="eyebrow">Mensagem recebida</p>
+            <h3><span data-ok-name></span>, obrigado pelo contato.</h3>
+            <p class="lead">Em um site real, um consultor da Altezza responderia em até um dia útil. Enquanto isso, que tal percorrer a coleção?</p>
+            <a class="btn btn--light" href="imoveis.html" data-transition="Coleção Altezza">Ver imóveis<span class="btn__arrow"></span></a>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
