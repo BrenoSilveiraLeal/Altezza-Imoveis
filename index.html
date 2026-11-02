@@ -88,12 +88,17 @@
           </div>
         </div>
 
-        <p class="ex-status" aria-live="polite"><strong data-ex-count>6</strong> <span data-ex-label>imóveis na coleção</span><button type="button" class="ex-reset" data-ex-reset hidden>Limpar filtros</button></p>
+        <p class="ex-status" aria-live="polite"><strong data-ex-count>6</strong> <span data-ex-label>imóveis na coleção</span><button type="button" class="ex-reset" data-ex-reset hidden>Limpar busca</button></p>
         <div class="ex-grid" data-ex-grid></div>
         <div class="ex-list" data-ex-list hidden></div>
         <div class="ex-empty" data-ex-empty hidden>
           <p>Nenhum imóvel com esses filtros. Experimente aumentar o investimento ou trocar a região.</p>
-          <button type="button" class="btn btn--ghost" data-ex-reset>Limpar filtros</button>
+          <button type="button" class="btn btn--ghost" data-ex-reset>Limpar busca</button>
+          <section class="ex-recommendations" data-ex-recommendations aria-labelledby="ex-recommendations-title">
+            <p class="eyebrow">Nossa curadoria</p>
+            <h3 id="ex-recommendations-title">Outras opções que podem te interessar</h3>
+            <div class="ex-grid" data-ex-recommended></div>
+          </section>
         </div>
         <a class="link-arrow ex-more" href="imoveis.html" data-transition="Coleção Altezza">Abrir o catálogo completo<span class="la"></span></a>
       </div>

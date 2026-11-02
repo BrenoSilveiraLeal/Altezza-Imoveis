@@ -171,12 +171,16 @@
     const grid = ex.querySelector('[data-ex-grid]');
     const list = ex.querySelector('[data-ex-list]');
     const empty = ex.querySelector('[data-ex-empty]');
+    const recommended = ex.querySelector('[data-ex-recommended]');
     const count = ex.querySelector('[data-ex-count]');
     const label = ex.querySelector('[data-ex-label]');
     const resetBtns = ex.querySelectorAll('[data-ex-reset]');
     const range = ex.querySelector('[data-ex-preco]');
     const out = ex.querySelector('[data-ex-preco-out]');
     const ordem = ex.querySelector('[data-ex-ordem]');
+    const cheapest = Math.min(...PROPERTIES.map(p => p.preco)) / 1e6;
+    range.min = String(cheapest);
+    range.step = 'any';
     const state = { tipo: '', cidade: '', max: 25, ordem: '', view: 'grid' };
     let priceRenderTimer;
 
@@ -234,6 +238,11 @@
         : 'imóveis na coleção';
       resetBtns[0].hidden = !filtered;
       empty.hidden = items.length > 0;
+      recommended.innerHTML = items.length ? '' : [...PROPERTIES]
+        .sort((a, b) => a.preco - b.preco)
+        .slice(0, 3)
+        .map(p => cardHTML(p))
+        .join('');
       grid.hidden = state.view !== 'grid' || !items.length;
       list.hidden = state.view !== 'list' || !items.length;
       syncFavs();

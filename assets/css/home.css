@@ -195,6 +195,9 @@
 }
 .ex-empty { display: grid; justify-items: start; gap: 16px; padding: 40px 0; color: var(--ink-2); }
 .ex-empty[hidden], .ex-grid[hidden], .ex-list[hidden] { display: none; }
+.ex-recommendations { display: grid; gap: 12px; width: 100%; margin-top: 22px; color: var(--ink); }
+.ex-recommendations h3 { max-width: 22em; font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight: 400; letter-spacing: -.04em; line-height: 1.1; }
+.ex-recommendations .ex-grid { margin-top: 12px; }
 .ex-more { margin-top: 48px; }
 .float-preview { position: fixed; left: 0; top: 0; z-index: 80; width: 260px; aspect-ratio: 4 / 5; border-radius: 18px; overflow: hidden; pointer-events: none; opacity: 0; scale: .85; transition: opacity .35s, scale .5s var(--ease); }
 .float-preview.on { opacity: 1; scale: 1; }
