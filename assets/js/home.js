@@ -352,18 +352,50 @@
 
   function revealFeaturedCards() {
     const cards = [...document.querySelectorAll('.card-wrapper')];
-    if (!cards.length || reduce.matches || !('IntersectionObserver' in window)) return;
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
+    if (!cards.length) return;
+    if (!reduce.matches && 'IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        });
+      }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+      cards.forEach((card, i) => {
+        card.style.setProperty('--card-delay', `${Math.min(i * 100, 200)}ms`);
+        revealObserver.observe(card);
       });
-    }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
-    cards.forEach((card, i) => {
-      card.style.setProperty('--card-delay', `${Math.min(i * 100, 200)}ms`);
-      observer.observe(card);
-    });
+    } else cards.forEach(card => card.classList.add('is-visible'));
+
+    let frame = 0;
+    const clamp = value => Math.max(0, Math.min(1, value));
+    const update = () => {
+      frame = 0;
+      const viewport = window.innerHeight;
+      const maxTilt = mobileMQ.matches ? 30 : 50;
+      const scaleRange = mobileMQ.matches ? .1 : .2;
+      const bounds = cards.map(card => card.getBoundingClientRect());
+      const transforms = bounds.map((rect, i) => {
+        const entering = 1 - clamp((viewport - rect.top) / rect.height);
+        const next = bounds[i + 1];
+        const nextTop = next ? next.top : rect.bottom + 20;
+        const nextHeight = next ? next.height : rect.height;
+        const leaving = clamp((viewport - nextTop) / nextHeight);
+        const tilt = (leaving - entering) * maxTilt;
+        const scale = 1 - (entering + leaving) * scaleRange;
+        return reduce.matches ? 'none'
+          : `perspective(2000px) scale(${scale.toFixed(6)}) rotateX(${tilt.toFixed(6)}deg)`;
+      });
+      cards.forEach((card, i) => { card.firstElementChild.style.transform = transforms[i]; });
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    addEventListener('scroll', schedule, { passive: true });
+    addEventListener('resize', schedule, { passive: true });
+    addEventListener('pageshow', schedule);
+    reduce.addEventListener('change', schedule);
+    const resizeObserver = new ResizeObserver(schedule);
+    cards.forEach(card => resizeObserver.observe(card));
+    update();
   }
   /* ======================================================================
      Serviços: a foto de cada linha aparece num espaço reservado entre

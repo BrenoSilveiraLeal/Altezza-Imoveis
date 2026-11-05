@@ -32,18 +32,24 @@
 
   const orderMenu = document.querySelector('[data-order-menu]');
   if (orderMenu) {
-    const select = orderMenu.querySelector('select');
+    const orderInput = orderMenu.querySelector('input[name="ordem"]');
     const trigger = orderMenu.querySelector('.fsel__trigger');
     const menu = orderMenu.querySelector('.fsel__menu');
+    const choices = [
+      ['', 'Destaques'],
+      ['preco-asc', 'Menor valor'],
+      ['preco-desc', 'Maior valor'],
+      ['area-desc', 'Maior área']
+    ];
     const close = () => { menu.hidden = true; trigger.setAttribute('aria-expanded', 'false'); };
-    menu.innerHTML = [...select.options].map((option, i) =>
-      `<button type="button" role="option" class="fsel__option" data-value="${option.value}" aria-selected="${option.selected}" tabindex="-1">${option.textContent}<span aria-hidden="true">${option.selected ? '✓' : ''}</span></button>`
+    menu.innerHTML = choices.map(([value, title]) =>
+      `<button type="button" role="option" class="fsel__option" data-value="${value}" aria-selected="${value === orderInput.value}" tabindex="-1">${title}<span aria-hidden="true">${value === orderInput.value ? '✓' : ''}</span></button>`
     ).join('');
     const sync = () => {
-      const option = select.options[select.selectedIndex];
-      trigger.querySelector('span').textContent = option.textContent;
+      const active = choices.find(([value]) => value === orderInput.value) || choices[0];
+      trigger.querySelector('span').textContent = active[1];
       menu.querySelectorAll('[role="option"]').forEach(item => {
-        const selected = item.dataset.value === select.value;
+        const selected = item.dataset.value === orderInput.value;
         item.setAttribute('aria-selected', String(selected));
         item.lastElementChild.textContent = selected ? '✓' : '';
       });
@@ -52,13 +58,13 @@
       const open = menu.hidden;
       menu.hidden = !open;
       trigger.setAttribute('aria-expanded', String(open));
-      if (open) menu.querySelector(`[data-value="${CSS.escape(select.value)}"]`)?.focus();
+      if (open) menu.querySelector(`[data-value="${CSS.escape(orderInput.value)}"]`)?.focus();
     });
     menu.addEventListener('click', event => {
       const option = event.target.closest('[role="option"]');
       if (!option) return;
-      select.value = option.dataset.value;
-      select.dispatchEvent(new Event('input', { bubbles: true }));
+      orderInput.value = option.dataset.value;
+      orderInput.dispatchEvent(new Event('input', { bubbles: true }));
       sync();
       close();
       trigger.focus();
@@ -72,7 +78,6 @@
       } else if (event.key === 'Escape') { close(); trigger.focus(); }
     });
     document.addEventListener('click', event => { if (!orderMenu.contains(event.target)) close(); });
-    select.addEventListener('change', sync);
     form.addEventListener('reset', () => requestAnimationFrame(sync));
     sync();
   }
