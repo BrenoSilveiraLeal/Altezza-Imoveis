@@ -54,14 +54,17 @@
               <option value="5">5 ou mais</option>
             </select>
           </label>
-          <label class="fsel"><span class="sr-only">Ordenar</span>
-            <select name="ordem">
+          <div class="fsel fsel--order" data-order-menu>
+            <label class="sr-only" for="order-select">Ordenar im&#243;veis</label>
+            <select name="ordem" id="order-select" tabindex="-1" aria-hidden="true">
               <option value="">Destaques</option>
               <option value="preco-asc">Menor valor</option>
               <option value="preco-desc">Maior valor</option>
-              <option value="area-desc">Maior área</option>
+              <option value="area-desc">Maior &aacute;rea</option>
             </select>
-          </label>
+            <button class="fsel__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="order-options"><span>Destaques</span><i aria-hidden="true"></i></button>
+            <div class="fsel__menu" id="order-options" role="listbox" aria-label="Ordenar im&#243;veis" hidden></div>
+          </div>
           <label class="ftoggle"><input type="checkbox" name="favoritos" value="1"><span>Favoritos</span></label>
         </div>
       </div>

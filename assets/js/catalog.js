@@ -30,6 +30,53 @@
     else el.value = v;
   });
 
+  const orderMenu = document.querySelector('[data-order-menu]');
+  if (orderMenu) {
+    const select = orderMenu.querySelector('select');
+    const trigger = orderMenu.querySelector('.fsel__trigger');
+    const menu = orderMenu.querySelector('.fsel__menu');
+    const close = () => { menu.hidden = true; trigger.setAttribute('aria-expanded', 'false'); };
+    menu.innerHTML = [...select.options].map((option, i) =>
+      `<button type="button" role="option" class="fsel__option" data-value="${option.value}" aria-selected="${option.selected}" tabindex="-1">${option.textContent}<span aria-hidden="true">${option.selected ? '✓' : ''}</span></button>`
+    ).join('');
+    const sync = () => {
+      const option = select.options[select.selectedIndex];
+      trigger.querySelector('span').textContent = option.textContent;
+      menu.querySelectorAll('[role="option"]').forEach(item => {
+        const selected = item.dataset.value === select.value;
+        item.setAttribute('aria-selected', String(selected));
+        item.lastElementChild.textContent = selected ? '✓' : '';
+      });
+    };
+    trigger.addEventListener('click', () => {
+      const open = menu.hidden;
+      menu.hidden = !open;
+      trigger.setAttribute('aria-expanded', String(open));
+      if (open) menu.querySelector(`[data-value="${CSS.escape(select.value)}"]`)?.focus();
+    });
+    menu.addEventListener('click', event => {
+      const option = event.target.closest('[role="option"]');
+      if (!option) return;
+      select.value = option.dataset.value;
+      select.dispatchEvent(new Event('input', { bubbles: true }));
+      sync();
+      close();
+      trigger.focus();
+    });
+    menu.addEventListener('keydown', event => {
+      const options = [...menu.querySelectorAll('[role="option"]')];
+      const index = options.indexOf(document.activeElement);
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        options[(index + (event.key === 'ArrowDown' ? 1 : options.length - 1)) % options.length].focus();
+      } else if (event.key === 'Escape') { close(); trigger.focus(); }
+    });
+    document.addEventListener('click', event => { if (!orderMenu.contains(event.target)) close(); });
+    select.addEventListener('change', sync);
+    form.addEventListener('reset', () => requestAnimationFrame(sync));
+    sync();
+  }
+
   function state() {
     const fd = new FormData(form);
     return {
