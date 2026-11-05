@@ -168,13 +168,13 @@
             <div class="footer__cols">
               <div><h3>Navegue</h3><ul>${LINKS.map(([h, t]) => `<li><a href="${h}">${t}</a></li>`).join('')}</ul></div>
               <div><h3>Coleção</h3><ul>${window.ALTEZZA.PROPERTIES.slice(0, 5).map(p => `<li><a href="imovel.html?id=${p.id}" data-transition="${p.nome}">${p.nome}</a></li>`).join('')}</ul></div>
-              <div><h3>Contato</h3><ul><li>Rua Exemplo, 000</li><li>Jardim Europa · São Paulo</li><li><a href="mailto:contato@altezza.com.br">contato@altezza.com.br</a></li><li>Seg a sex · 9h–19h</li></ul></div>
+              <div class="footer__contact"><h3>Contato</h3><ul><li><address class="footer__address">Rua Exemplo, 000<br>Jardim Europa · São Paulo</address></li><li><a class="footer__email" href="mailto:contato@altezza.com.br">contato@altezza.com.br</a></li><li class="footer__hours">Seg a sex · 9h–19h</li></ul></div>
             </div>
           </div>
           <p class="footer__word" aria-hidden="true">ALTEZZA</p>
         </div>
         <div class="footer__legal"><div class="wrap" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 32px">
-          <span>© ${new Date().getFullYear()} Altezza Imóveis · CRECI de exemplo</span>
+          <span>© ${new Date().getFullYear()} Altezza Imóveis · CRECI 12345-J</span>
           <span>Projeto de demonstração. Imóveis, valores, pessoas e depoimentos são fictícios; imagens ilustrativas.</span>
         </div></div>`;
       document.body.append(footer);
