@@ -240,10 +240,13 @@
 .section-subtitle { font-size: 18px; color: #404040; line-height: 1.55; }
 .cards-list { display: flex; flex-direction: column; gap: 20px; width: 100%; position: relative; overflow: clip; }
 .card-wrapper { position: relative; width: 100%; flex: none; }
+.card-wrapper { opacity: 1; transform: none; }
+html.motion .card-wrapper { opacity: 0; transform: translateY(42px); transition: opacity .8s var(--ease) var(--card-delay, 0ms), transform .9s var(--ease) var(--card-delay, 0ms); }
+html.motion .card-wrapper.is-visible { opacity: 1; transform: none; }
 .case-card {
   --card-height: 600px;
   position: relative; display: block; width: 100%; height: var(--card-height); border-radius: 24px; overflow: hidden;
-  cursor: pointer; background: #0a0a0a; color: #fff; transform-origin: center; will-change: transform;
+  cursor: pointer; background: #0a0a0a; color: #fff; transform-origin: center;
 }
 .case-card:focus-visible { outline: 3px solid #858910; outline-offset: -3px; border-radius: 24px; }
 .card-media, .card-overlay { position: absolute; inset: 0; pointer-events: none; }
@@ -292,7 +295,7 @@
   .card-go span:last-child { width: 44px; height: 44px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .case-card { will-change: auto; }
+  .card-wrapper { opacity: 1 !important; transform: none !important; transition: none !important; }
   .card-img { transition: none; }
   .case-card:hover .card-img, .case-card:focus-visible .card-img { transform: none; }
 }

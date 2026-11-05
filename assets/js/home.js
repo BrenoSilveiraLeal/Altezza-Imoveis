@@ -347,58 +347,24 @@
           </div>
         </a>
       </div>`).join('');
-    tiltCards();
+    revealFeaturedCards();
   }
 
-  function tiltCards() {
-    const wrappers = [...document.querySelectorAll('.card-wrapper')];
-    if (!wrappers.length) return;
-    let frame = 0;
-    const clamp = v => Math.max(0, Math.min(1, v));
-    function update() {
-      frame = 0;
-      const viewport = window.innerHeight;
-      const maxTilt = mobileMQ.matches ? 30 : 50;
-      const scaleRange = mobileMQ.matches ? .1 : .2;
-      // Lê todos os retângulos estáveis antes de escrever as transformações.
-      const bounds = wrappers.map(w => w.getBoundingClientRect());
-      const transforms = bounds.map((rect, i) => {
-        const entering = 1 - clamp((viewport - rect.top) / rect.height);
-        const next = bounds[i + 1];
-        const nextTop = next ? next.top : rect.bottom + 20;
-        const nextHeight = next ? next.height : rect.height;
-        const leaving = clamp((viewport - nextTop) / nextHeight);
-        const tilt = (leaving - entering) * maxTilt;
-        const scale = 1 - (entering + leaving) * scaleRange;
-        return reduce.matches ? 'none'
-          : `perspective(2000px) scale(${scale.toFixed(6)}) rotateX(${tilt.toFixed(6)}deg)`;
+  function revealFeaturedCards() {
+    const cards = [...document.querySelectorAll('.card-wrapper')];
+    if (!cards.length || reduce.matches || !('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
       });
-      wrappers.forEach((w, i) => { w.firstElementChild.style.transform = transforms[i]; });
-    }
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
-    addEventListener('scroll', schedule, { passive: true });
-    addEventListener('resize', schedule, { passive: true });
-    addEventListener('pageshow', schedule);
-    reduce.addEventListener('change', schedule);
-    const ro = new ResizeObserver(schedule);
-    wrappers.forEach(w => ro.observe(w));
-    update();
-
-    if (!reduce.matches && !mobileMQ.matches) {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          entry.target.animate([
-            { opacity: 0, transform: 'translateY(150px)' },
-            { opacity: 1, transform: 'translateY(0)' }
-          ], { duration: 1000, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
-          observer.unobserve(entry.target);
-        });
-      });
-      document.querySelectorAll('.section-header > *').forEach(part => observer.observe(part));
-    }
+    }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+    cards.forEach((card, i) => {
+      card.style.setProperty('--card-delay', `${Math.min(i * 100, 200)}ms`);
+      observer.observe(card);
+    });
   }
-
   /* ======================================================================
      Serviços: a foto de cada linha aparece num espaço reservado entre
      o título e a descrição, sem cobrir o texto

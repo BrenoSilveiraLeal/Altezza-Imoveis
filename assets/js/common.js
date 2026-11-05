@@ -174,7 +174,7 @@
           <p class="footer__word" aria-hidden="true">ALTEZZA</p>
         </div>
         <div class="footer__legal"><div class="wrap" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 32px">
-          <span>© ${new Date().getFullYear()} Altezza Imóveis · CRECI 00000-J (exemplo)</span>
+          <span>© ${new Date().getFullYear()} Altezza Imóveis · CRECI (exemplo)</span>
           <span>Projeto de demonstração. Imóveis, valores, pessoas e depoimentos são fictícios; imagens ilustrativas.</span>
         </div></div>`;
       document.body.append(footer);
