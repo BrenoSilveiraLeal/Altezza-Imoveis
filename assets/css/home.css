@@ -454,7 +454,7 @@
 .round-btn:hover { background: var(--ink); color: var(--paper); }
 .round-btn svg { width: 18px; height: 18px; }
 .round-btn[data-q="-1"] svg { transform: scaleX(-1); }
-.quotes__track { display: grid; grid-auto-flow: column; grid-auto-columns: min(86%, 440px); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 6px; }
+.quotes__track { display: grid; grid-auto-flow: column; grid-auto-columns: min(86%, 440px); gap: 20px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 6px; }
 .quotes__track::-webkit-scrollbar { display: none; }
 .quote { scroll-snap-align: start; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; min-height: 340px; padding: 32px; border-radius: var(--r); background: var(--paper); border: 1px solid var(--line); }
 .quote blockquote { font-size: 1.3rem; line-height: 1.4; letter-spacing: -.02em; font-weight: 500; }
