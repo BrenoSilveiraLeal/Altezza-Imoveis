@@ -72,14 +72,17 @@
               </div>
             </div>
             <div class="ex-tool ex-tool--end">
-              <label class="ex-sort"><span class="sr-only">Ordenar</span>
-                <select data-ex-ordem>
-                  <option value="">Destaques</option>
-                  <option value="preco-asc">Menor valor</option>
-                  <option value="preco-desc">Maior valor</option>
-                  <option value="area-desc">Maior área</option>
-                </select>
-              </label>
+              <div class="ex-sort" data-ex-sort>
+                <input type="hidden" data-ex-ordem value="">
+                <button class="ex-sort__trigger" type="button" aria-label="Ordenar imóveis" aria-haspopup="menu" aria-expanded="false" aria-controls="ex-sort-menu"><span data-ex-sort-label>Destaques</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+                <div class="ex-sort__menu" id="ex-sort-menu" role="menu" aria-label="Ordenar imóveis" hidden>
+                  <p class="ex-sort__heading">Ordenar por</p>
+                  <button type="button" role="menuitemradio" aria-checked="true" data-sort-value="">Destaques<span aria-hidden="true">✓</span></button>
+                  <button type="button" role="menuitemradio" aria-checked="false" data-sort-value="preco-asc">Menor valor<span aria-hidden="true">✓</span></button>
+                  <button type="button" role="menuitemradio" aria-checked="false" data-sort-value="preco-desc">Maior valor<span aria-hidden="true">✓</span></button>
+                  <button type="button" role="menuitemradio" aria-checked="false" data-sort-value="area-desc">Maior área<span aria-hidden="true">✓</span></button>
+                </div>
+              </div>
               <div class="ex-view" role="group" aria-label="Visualização">
                 <button type="button" data-ex-view="grid" aria-pressed="true" aria-label="Grade"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg></button>
                 <button type="button" data-ex-view="list" aria-pressed="false" aria-label="Lista"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12"/></svg></button>

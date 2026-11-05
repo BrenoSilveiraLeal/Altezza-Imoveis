@@ -42,9 +42,9 @@
       ['area-desc', 'Maior área']
     ];
     const close = () => { menu.hidden = true; trigger.setAttribute('aria-expanded', 'false'); };
-    menu.innerHTML = choices.map(([value, title]) =>
+    menu.innerHTML = `<p class="fsel__menu-label">Ordenar coleção</p>${choices.map(([value, title]) =>
       `<button type="button" role="option" class="fsel__option" data-value="${value}" aria-selected="${value === orderInput.value}" tabindex="-1">${title}<span aria-hidden="true">${value === orderInput.value ? '✓' : ''}</span></button>`
-    ).join('');
+    ).join('')}`;
     const sync = () => {
       const active = choices.find(([value]) => value === orderInput.value) || choices[0];
       trigger.querySelector('span').textContent = active[1];

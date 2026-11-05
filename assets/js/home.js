@@ -3,7 +3,6 @@
   'use strict';
   const { PROPERTIES, find, featured } = window.ALTEZZA;
   const { ICON, cardHTML, num, brl, brlShort, reduce, syncFavs } = window.AZ;
-  const mobileMQ = window.matchMedia('(max-width: 809.98px)');
   const pad = n => String(n).padStart(2, '0');
   const unique = key => [...new Set(PROPERTIES.map(p => p[key]))];
 
@@ -178,9 +177,48 @@
     const range = ex.querySelector('[data-ex-preco]');
     const out = ex.querySelector('[data-ex-preco-out]');
     const ordem = ex.querySelector('[data-ex-ordem]');
+    const sort = ex.querySelector('[data-ex-sort]');
+    const sortTrigger = sort.querySelector('.ex-sort__trigger');
+    const sortMenu = sort.querySelector('.ex-sort__menu');
+    const sortOptions = [...sortMenu.querySelectorAll('[data-sort-value]')];
+    const syncSort = () => {
+      sortOptions.forEach(option => option.setAttribute('aria-checked', String(option.dataset.sortValue === ordem.value)));
+      sort.querySelector('[data-ex-sort-label]').textContent = sortOptions.find(option => option.dataset.sortValue === ordem.value).firstChild.textContent;
+    };
+    const closeSort = () => { sortMenu.hidden = true; sortTrigger.setAttribute('aria-expanded', 'false'); };
+    sortTrigger.addEventListener('click', () => {
+      const open = sortMenu.hidden;
+      sortMenu.hidden = !open;
+      sortTrigger.setAttribute('aria-expanded', String(open));
+      if (open) {
+        const bounds = sortTrigger.getBoundingClientRect();
+        sortMenu.classList.toggle('is-up', innerHeight - bounds.bottom < sortMenu.offsetHeight + 24 && bounds.top > sortMenu.offsetHeight + 24);
+        sortOptions.find(option => option.dataset.sortValue === ordem.value).focus({ preventScroll: true });
+      }
+    });
+    sortMenu.addEventListener('click', event => {
+      const option = event.target.closest('[data-sort-value]');
+      if (!option) return;
+      ordem.value = option.dataset.sortValue;
+      syncSort();
+      ordem.dispatchEvent(new Event('change', { bubbles: true }));
+      closeSort();
+      sortTrigger.focus();
+    });
+    sortMenu.addEventListener('keydown', event => {
+      if (event.key === 'Escape') { closeSort(); sortTrigger.focus(); }
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        const direction = event.key === 'ArrowDown' ? 1 : -1;
+        sortOptions[(sortOptions.indexOf(document.activeElement) + direction + sortOptions.length) % sortOptions.length].focus();
+      }
+    });
+    sort.addEventListener('focusout', event => { if (!sort.contains(event.relatedTarget)) closeSort(); });
+    document.addEventListener('click', event => { if (!sort.contains(event.target)) closeSort(); });
     const cheapest = Math.min(...PROPERTIES.map(p => p.preco)) / 1e6;
     range.min = String(cheapest);
-    range.step = '.5';
+    range.step = '.1';
+    range.value = range.max;
     const state = { tipo: '', cidade: '', max: 25, ordem: '', view: 'grid' };
     let priceRenderTimer;
 
@@ -206,6 +244,7 @@
     const paintRange = () => {
       const pct = (range.value - range.min) / (range.max - range.min) * 100;
       range.style.setProperty('--fill', pct + '%');
+      range.dataset.atMax = String(+range.value >= +range.max);
       out.textContent = fmtMax(+range.value);
     };
 
@@ -274,6 +313,7 @@
       Object.assign(state, { tipo: '', cidade: '', max: 25, ordem: '' });
       ex.querySelectorAll('input[type="radio"][value=""]').forEach(r => { r.checked = true; });
       range.value = 25; ordem.value = '';
+      syncSort();
       paintRange();
       moveInk();
       render();
@@ -329,7 +369,7 @@
   }
 
   /* ======================================================================
-     Destaques: cards com inclinação 3D
+     Destaques: cards editoriais com entrada ao rolar
      ====================================================================== */
   const cardsList = document.querySelector('[data-featured]');
   if (cardsList) {
@@ -352,50 +392,18 @@
 
   function revealFeaturedCards() {
     const cards = [...document.querySelectorAll('.card-wrapper')];
-    if (!cards.length) return;
-    if (!reduce.matches && 'IntersectionObserver' in window) {
-      const revealObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add('is-visible');
-          revealObserver.unobserve(entry.target);
-        });
-      }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
-      cards.forEach((card, i) => {
-        card.style.setProperty('--card-delay', `${Math.min(i * 100, 200)}ms`);
-        revealObserver.observe(card);
+    if (!cards.length || reduce.matches || !('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.animate([
+          { opacity: 0, transform: 'translateY(150px)' },
+          { opacity: 1, transform: 'translateY(0)' }
+        ], { duration: 1000, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'both' });
+        observer.unobserve(entry.target);
       });
-    } else cards.forEach(card => card.classList.add('is-visible'));
-
-    let frame = 0;
-    const clamp = value => Math.max(0, Math.min(1, value));
-    const update = () => {
-      frame = 0;
-      const viewport = window.innerHeight;
-      const maxTilt = mobileMQ.matches ? 30 : 50;
-      const scaleRange = mobileMQ.matches ? .1 : .2;
-      const bounds = cards.map(card => card.getBoundingClientRect());
-      const transforms = bounds.map((rect, i) => {
-        const entering = 1 - clamp((viewport - rect.top) / rect.height);
-        const next = bounds[i + 1];
-        const nextTop = next ? next.top : rect.bottom + 20;
-        const nextHeight = next ? next.height : rect.height;
-        const leaving = clamp((viewport - nextTop) / nextHeight);
-        const tilt = (leaving - entering) * maxTilt;
-        const scale = 1 - (entering + leaving) * scaleRange;
-        return reduce.matches ? 'none'
-          : `perspective(2000px) scale(${scale.toFixed(6)}) rotateX(${tilt.toFixed(6)}deg)`;
-      });
-      cards.forEach((card, i) => { card.firstElementChild.style.transform = transforms[i]; });
-    };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
-    addEventListener('scroll', schedule, { passive: true });
-    addEventListener('resize', schedule, { passive: true });
-    addEventListener('pageshow', schedule);
-    reduce.addEventListener('change', schedule);
-    const resizeObserver = new ResizeObserver(schedule);
-    cards.forEach(card => resizeObserver.observe(card));
-    update();
+    }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+    cards.forEach(card => observer.observe(card));
   }
   /* ======================================================================
      Serviços: a foto de cada linha aparece num espaço reservado entre
