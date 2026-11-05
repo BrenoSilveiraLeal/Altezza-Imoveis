@@ -365,7 +365,7 @@ form.is-sent .form-ok { display: grid; animation: fade-up .9s var(--ease) both; 
   .footer__hours { font-size: .82rem; color: var(--muted-night); }
   .footer__word { font-size: clamp(4rem, 19vw, 8rem); }
   .footer__legal .wrap { min-width: 0; }
-  .footer__legal .wrap > span:first-child { width: 100%; text-align: center; }
+  .footer__legal .wrap > span { width: 100%; text-align: center; }
 }
 
 /* ---------- Movimento reduzido ---------- */
