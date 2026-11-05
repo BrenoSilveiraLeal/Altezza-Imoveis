@@ -180,12 +180,6 @@
       document.body.append(footer);
     }
 
-    const curtain = document.createElement('div');
-    curtain.className = 'curtain';
-    curtain.setAttribute('aria-hidden', 'true');
-    curtain.innerHTML = '<div class="curtain__inner"><p class="curtain__kicker">Altezza apresenta</p><p class="curtain__title"></p><div class="curtain__bar"><i></i></div></div>';
-    document.body.append(curtain);
-
     const cursor = document.createElement('div');
     cursor.className = 'cursor';
     cursor.setAttribute('aria-hidden', 'true');
@@ -195,31 +189,54 @@
 
   /* ---------- Transição entre páginas ---------- */
   function transitions() {
-    const curtainTitle = document.querySelector('.curtain__title');
-    try { sessionStorage.removeItem('altezza:nav'); } catch (e) { /* ok */ }
+    const curtain = document.querySelector('.curtain');
+    const curtainTitle = curtain.querySelector('.curtain__title');
+    const destinationTitle = (url, fallback = 'Altezza') => {
+      if (url.pathname.endsWith('/imovel.html')) {
+        const property = window.ALTEZZA.PROPERTIES.find(p => p.id === url.searchParams.get('id'));
+        if (property) return property.nome;
+      }
+      return fallback;
+    };
+    const setTitle = title => {
+      curtainTitle.textContent = title;
+      curtainTitle.classList.toggle('logo', title === 'Altezza');
+    };
+    clearTimeout(window.azLoadingFallback);
+    let previousTitle = '';
+    try {
+      previousTitle = sessionStorage.getItem('altezza:nav') || '';
+      sessionStorage.removeItem('altezza:nav');
+    } catch (e) { /* ok */ }
+    setTitle(destinationTitle(new URL(location.href), previousTitle && previousTitle !== '1' ? previousTitle : 'Altezza'));
+    const finish = () => {
+      root.classList.add('is-entered');
+      root.classList.remove('is-entering', 'is-leaving');
+      curtain.setAttribute('aria-hidden', 'true');
+    };
     if (root.classList.contains('is-entering')) {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        root.classList.add('is-entered');
-        root.classList.remove('is-entering');
-      }));
-    }
+      curtain.setAttribute('aria-hidden', 'false');
+      setTimeout(finish, reduce.matches ? 0 : previousTitle ? 100 : 600);
+    } else curtain.setAttribute('aria-hidden', 'true');
     document.addEventListener('click', e => {
       const a = e.target.closest('a[href]');
       if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target === '_blank' || a.hasAttribute('download')) return;
       const url = new URL(a.href, location.href);
-      if (url.origin !== location.origin) return;
+      if (url.origin !== location.origin || url.protocol !== location.protocol) return;
       const samePage = url.pathname === location.pathname && url.search === location.search;
       if (samePage) return; // âncoras na mesma página rolam normalmente
       if (reduce.matches) return;
       e.preventDefault();
-      curtainTitle.textContent = a.dataset.transition || 'Altezza';
+      if (root.classList.contains('is-leaving')) return;
+      setTitle(destinationTitle(url, a.dataset.transition || 'Altezza'));
+      curtain.setAttribute('aria-hidden', 'false');
       root.classList.remove('is-entered');
       root.classList.add('is-leaving');
-      try { sessionStorage.setItem('altezza:nav', '1'); } catch (err) { /* ok */ }
-      setTimeout(() => { location.href = url.href; }, 880);
+      try { sessionStorage.setItem('altezza:nav', curtainTitle.textContent); } catch (err) { /* ok */ }
+      setTimeout(() => { location.href = url.href; }, 650);
     });
     addEventListener('pageshow', e => {
-      if (e.persisted) root.classList.remove('is-leaving', 'is-entering');
+      if (e.persisted) finish();
     });
   }
 

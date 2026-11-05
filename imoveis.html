@@ -11,12 +11,16 @@
   <link rel="preload" href="assets/fonts/open-sauce-one-semibold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/catalog.css">
-  <script>document.documentElement.classList.add('js');try{if(sessionStorage.getItem('altezza:nav'))document.documentElement.classList.add('is-entering')}catch(e){}</script>
+  <script>document.documentElement.classList.add('js');try{if(sessionStorage.getItem('altezza:nav')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('is-entering');window.azLoadingFallback=setTimeout(function(){document.documentElement.classList.remove('is-entering');document.documentElement.classList.add('is-entered')},4000)}}catch(e){}</script>
   <script src="assets/js/data.js" defer></script>
   <script src="assets/js/common.js" defer></script>
   <script src="assets/js/catalog.js" defer></script>
 </head>
 <body data-page="catalog">
+  <div class="curtain" role="status" aria-label="Carregando a p?gina" aria-live="polite">
+    <div class="curtain__inner"><p class="curtain__kicker">Altezza apresenta</p><p class="curtain__title logo">Altezza</p><div class="curtain__bar" aria-hidden="true"><i></i></div></div>
+  </div>
+  <script>(function(){var title=document.querySelector('.curtain__title');try{var pending=sessionStorage.getItem('altezza:nav');if(pending&&pending!=='1')title.textContent=pending}catch(e){}title.classList.toggle('logo',title.textContent==='Altezza')})()</script>
   <a class="skip" href="#resultados">Pular para os resultados</a>
   <main id="conteudo">
     <header class="cat-head wrap">
