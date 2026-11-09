@@ -9,12 +9,13 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=2">
   <link rel="preload" href="assets/fonts/open-sauce-one-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/open-sauce-one-semibold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/base.css">
-  <link rel="stylesheet" href="assets/css/home.css">
+  <link rel="stylesheet" href="assets/css/base.css?v=20261108-2">
+  <link rel="stylesheet" href="assets/css/home.css?v=20261108-2">
   <script>document.documentElement.classList.add('js');try{if(sessionStorage.getItem('altezza:nav')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('is-entering');window.azLoadingFallback=setTimeout(function(){document.documentElement.classList.remove('is-entering');document.documentElement.classList.add('is-entered')},4000)}}catch(e){}</script>
-  <script src="assets/js/data.js" defer></script>
-  <script src="assets/js/common.js" defer></script>
-  <script src="assets/js/home.js" defer></script>
+  <script>(function(){var nav=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(nav&&nav.type==='reload'){history.scrollRestoration='manual';window.addEventListener('pageshow',function(){window.scrollTo({top:0,left:0,behavior:'instant'})},{once:true})}})()</script>
+  <script src="assets/js/data.js?v=20261108-2" defer></script>
+  <script src="assets/js/common.js?v=20261108-4" defer></script>
+  <script src="assets/js/home.js?v=20261108-2" defer></script>
 </head>
 <body data-page="home">
   <div class="curtain" role="status" aria-label="Carregando a p?gina" aria-live="polite">
@@ -279,12 +280,12 @@
           <p class="eyebrow" data-reveal>08 — Perguntas</p>
           <h2 class="h2" id="faq-title" data-split style="margin-top:20px">Antes de<br><em>começar</em>.</h2>
         </header>
-        <div class="faq__list">
-          <details data-reveal><summary>Como funciona a apresentação imersiva?<span></span></summary><p>Ao abrir um imóvel, a página conduz um passeio pelos ambientes conforme você rola. Em cada parada aparecem características, curiosidades e pontos de interesse clicáveis. Você também pode pular direto para a ficha técnica.</p></details>
-          <details data-reveal><summary>Posso visitar o imóvel pessoalmente?<span></span></summary><p>Sim. As visitas são feitas com hora marcada e sempre acompanhadas por um consultor. Basta escolher o melhor dia na página do imóvel ou falar com a equipe.</p></details>
-          <details data-reveal><summary>Vocês ajudam na documentação e no financiamento?<span></span></summary><p>Nossa assessoria cuida da análise documental, da estruturação do pagamento e do acompanhamento até a escritura, em parceria com escritórios jurídicos especializados.</p></details>
-          <details data-reveal><summary>Quero vender meu imóvel. Ele pode entrar na coleção?<span></span></summary><p>Fazemos uma visita técnica gratuita de avaliação. Se o imóvel tiver o perfil da coleção, produzimos as imagens e a apresentação imersiva sem custo inicial.</p></details>
-          <details data-reveal><summary>Os favoritos ficam salvos?<span></span></summary><p>Sim, neste navegador. Toque no coração de qualquer imóvel para salvá-lo e encontre todos pelo ícone no topo da página.</p></details>
+      <div class="faq__list">
+        <details data-reveal><summary>Como funciona a apresentação imersiva?<span></span></summary><div class="faq__answer"><div><p>Ao abrir um imóvel, a página conduz um passeio pelos ambientes conforme você rola. Em cada parada aparecem características, curiosidades e pontos de interesse clicáveis. Você também pode pular direto para a ficha técnica.</p></div></div></details>
+        <details data-reveal><summary>Posso visitar o imóvel pessoalmente?<span></span></summary><div class="faq__answer"><div><p>Sim. As visitas são feitas com hora marcada e sempre acompanhadas por um consultor. Basta escolher o melhor dia na página do imóvel ou falar com a equipe.</p></div></div></details>
+        <details data-reveal><summary>Vocês ajudam na documentação e no financiamento?<span></span></summary><div class="faq__answer"><div><p>Nossa assessoria cuida da análise documental, da estruturação do pagamento e do acompanhamento até a escritura, em parceria com escritórios jurídicos especializados.</p></div></div></details>
+        <details data-reveal><summary>Quero vender meu imóvel. Ele pode entrar na coleção?<span></span></summary><div class="faq__answer"><div><p>Fazemos uma visita técnica gratuita de avaliação. Se o imóvel tiver o perfil da coleção, produzimos as imagens e a apresentação imersiva sem custo inicial.</p></div></div></details>
+        <details data-reveal><summary>Os favoritos ficam salvos?<span></span></summary><div class="faq__answer"><div><p>Sim, neste navegador. Toque no coração de qualquer imóvel para salvá-lo e encontre todos pelo ícone no topo da página.</p></div></div></details>
         </div>
       </div>
     </section>

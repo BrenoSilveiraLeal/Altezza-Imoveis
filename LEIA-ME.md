@@ -15,6 +15,10 @@ então elas precisam de internet.
 - `imoveis.html`: catálogo com busca, filtros (tipo, região, valor, suítes, favoritos) e ordenação. Os filtros ficam na URL.
 - `imovel.html?id=<id>`: apresentação imersiva de cada imóvel. Ids disponíveis: `dossel`, `brise`, `horizonte`, `mare`, `copa`, `aurora`.
 
+## Navegação
+
+Os links do menu levam às páginas ou seções correspondentes. Clicar novamente no link da página ou seção atual não recarrega o site; links para outra seção da mesma página continuam rolando até ela normalmente.
+
 ## Onde editar
 
 - **Imóveis, textos, ambientes do tour, pontos de interesse e plantas:** `assets/js/data.js`.

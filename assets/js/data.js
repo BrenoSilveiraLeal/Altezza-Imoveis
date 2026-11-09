@@ -5,6 +5,9 @@
   const local = (name, w, h, alt) => ({
     src: `assets/img/${name}-l.webp`, srcM: `assets/img/${name}-m.webp`, w, h, alt
   });
+  const localJpg = (name, w, h, alt) => ({
+    src: `assets/img/${name}-l.jpg`, srcM: `assets/img/${name}-m.jpg`, w, h, alt
+  });
   const remote = (src, w, h, alt) => ({ src, srcM: src, w, h, alt });
   // Ambientes gerados por IA para completar os imóveis que só tinham uma foto.
   const gen = (name, alt) => ({ src: `assets/img/${name}-l.jpg`, srcM: `assets/img/${name}-m.jpg`, w: 1536, h: 1024, alt });
@@ -18,6 +21,16 @@
     piscina: local('piscina', 2400, 1340, 'Piscina de borda infinita na cobertura, com espreguiçadeiras e vista para a cidade ao pôr do sol.'),
     spa: local('spa', 1600, 1986, 'Spa com raia coberta de pedra verde, paredes de travertino e jardim interno atrás do vidro.'),
     bairro: local('bairro', 1600, 893, 'Vista aérea do bairro arborizado com a torre entre as árvores e a cidade ao fundo.'),
+    radarBrise: localJpg('radar-brise', 1600, 1001, 'Vista aérea da Casa Brise entre o jardim tropical e a piscina.'),
+    radarHorizonte: localJpg('radar-horizonte', 1600, 1001, 'Vista aérea da Casa Horizonte no Vale dos Cristais, com a Serra do Curral ao fundo.'),
+    radarMare: localJpg('radar-mare', 1600, 1001, 'Vista aérea da Casa Maré entre a Mata Atlântica e o mar.'),
+    radarCopa: localJpg('radar-copa', 1600, 1001, 'Vista aérea da Residência Copa em uma rua arborizada de Alto de Pinheiros.'),
+    radarAurora: localJpg('radar-aurora', 1600, 1001, 'Vista aérea da Residência Aurora na Vila Nova Conceição, perto do Parque Ibirapuera.'),
+    sketchDossel: localJpg('sketch-dossel', 1600, 893, 'Croqui do living da Cobertura Dossel.'),
+    sketchHorizonte: localJpg('sketch-horizonte', 1520, 1034, 'Croqui da sala da Casa Horizonte.'),
+    sketchMare: localJpg('sketch-mare', 1536, 1024, 'Croqui da sala da Casa Maré.'),
+    sketchCopa: localJpg('sketch-copa', 1536, 1024, 'Croqui da cozinha da Residência Copa.'),
+    sketchAurora: localJpg('sketch-aurora', 1536, 1024, 'Croqui da sala de jantar da Residência Aurora.'),
     maquete: local('maquete', 1600, 1986, 'Maquete branca da torre sobre uma mesa de madeira, iluminada por um pendente.'),
     brise: local('brise', 1600, 1073, 'Casa de concreto com brises de cumaru no pavimento superior, jardim tropical e piscina.'),
     sala: local('sala', 2400, 1340, 'Sala de estar com painel de madeira, sofá de linho, poltrona de couro e vista para o jardim e a piscina.'),
@@ -144,7 +157,7 @@
           ]
         },
         {
-          img: IMG.living, room: 'living', kicker: 'Área social', nome: 'Living entre as árvores',
+          img: IMG.living, sketch: IMG.sketchDossel, room: 'living', kicker: 'Do croqui ao espaço', nome: 'Living entre as árvores',
           texto: 'Noventa e seis metros quadrados abertos para a copa. Os caixilhos de piso a teto têm perfis de apenas 4 cm, e a sala parece suspensa no verde.',
           itens: ['Pé-direito de 3,40 m', 'Caixilhos de piso a teto em latão', 'Piso aquecido em travertino'],
           curiosidade: 'Nesta altura, a janela enquadra exatamente a copa das tipuanas da rua, não os prédios vizinhos.',
@@ -254,6 +267,7 @@
       ],
       localizacao: {
         texto: 'Numa rua sem saída da Cidade Jardim, cercada por quintais arborizados, com acesso rápido à Marginal Pinheiros e ao Jockey Club.',
+        imagem: IMG.radarBrise,
         pontos: [
           { nome: 'Shopping Cidade Jardim', tempo: '5 min', ang: 200, dist: .42 },
           { nome: 'Jockey Club', tempo: '7 min', ang: 250, dist: .58 },
@@ -370,6 +384,7 @@
       ],
       localizacao: {
         texto: 'No alto do Vale dos Cristais, com vista para a Serra do Curral, a 15 minutos do centro de Belo Horizonte.',
+        imagem: IMG.radarHorizonte,
         pontos: [
           { nome: 'BH Shopping', tempo: '12 min', ang: 340, dist: .6 },
           { nome: 'Serra do Curral', tempo: '10 min', ang: 20, dist: .5 },
@@ -415,7 +430,7 @@
           ]
         },
         {
-          img: IMG.convivio, room: 'estar', kicker: 'Área social', nome: 'Estar e cozinha',
+          img: IMG.convivio, sketch: IMG.sketchHorizonte, room: 'estar', kicker: 'Do croqui ao espaço', nome: 'Estar e cozinha',
           texto: 'Sala e cozinha se conectam em um espaço fluido, feito para compartilhar refeições, conversas e bons momentos.',
           itens: ['Lareira em pedra natural', 'Cozinha com ilha de 3,2 m', 'Portas de vidro de correr'],
           curiosidade: 'As portas de vidro correm para dentro das paredes: abertas, a sala vira varanda.',
@@ -484,6 +499,7 @@
       ],
       localizacao: {
         texto: 'Na Barra do Sahy, uma das praias mais preservadas do Litoral Norte, entre a Serra do Mar e o canal de São Sebastião.',
+        imagem: IMG.radarMare,
         pontos: [
           { nome: 'Praia da Baleia', tempo: '6 min', ang: 80, dist: .45 },
           { nome: 'Juquehy', tempo: '10 min', ang: 250, dist: .6 },
@@ -515,7 +531,7 @@
           ]
         },
         {
-          img: IMG.mareSala, room: 'estar', kicker: 'Área social', nome: 'Estar aberto para o mar',
+          img: IMG.mareSala, sketch: IMG.sketchMare, room: 'estar', kicker: 'Do croqui ao espaço', nome: 'Estar aberto para o mar',
           texto: 'Paredes de taipa, forro de madeira e um sofá em L de linho. Os caixilhos correm por inteiro e a sala termina no deck, de frente para as montanhas e o mar.',
           itens: ['Caixilhos totalmente recolhíveis', 'Paredes de taipa contemporânea', 'Forro em freijó'],
           curiosidade: 'Os trilhos dos caixilhos ficam embutidos no piso: com a casa aberta, não há nenhum degrau entre dentro e fora.',
@@ -599,6 +615,7 @@
       ],
       localizacao: {
         texto: 'Em frente à Praça Pôr do Sol, numa das áreas mais verdes de São Paulo, perto da USP e da Vila Madalena.',
+        imagem: IMG.radarCopa,
         pontos: [
           { nome: 'Praça Pôr do Sol', tempo: '1 min', ang: 300, dist: .18 },
           { nome: 'Parque Villa-Lobos', tempo: '8 min', ang: 230, dist: .55 },
@@ -631,7 +648,7 @@
           ]
         },
         {
-          img: IMG.copaCozinha, room: 'cozinha', kicker: 'Área social', nome: 'Cozinha em nogueira',
+          img: IMG.copaCozinha, sketch: IMG.sketchCopa, room: 'cozinha', kicker: 'Do croqui ao espaço', nome: 'Cozinha em nogueira',
           texto: 'Marcenaria de nogueira do piso ao teto, revestimento artesanal de terracota e uma ilha de pedra clara com banquetas. A janela leva o verde da praça até o fogão.',
           itens: ['Ilha em pedra natural', 'Revestimento de terracota feito à mão', 'Metais em latão'],
           curiosidade: 'Os azulejos de terracota foram queimados em um forno a lenha no interior de São Paulo, por isso nenhum tem exatamente a mesma cor.',
@@ -715,6 +732,7 @@
       ],
       localizacao: {
         texto: 'Na Vila Nova Conceição, a duas quadras do Parque do Ibirapuera, entre restaurantes e o comércio de rua do bairro.',
+        imagem: IMG.radarAurora,
         pontos: [
           { nome: 'Parque do Ibirapuera', tempo: '3 min', ang: 20, dist: .3 },
           { nome: 'Rua Joaquim Floriano', tempo: '6 min', ang: 220, dist: .5 },
@@ -746,7 +764,7 @@
           ]
         },
         {
-          img: IMG.auroraJantar, room: 'jantar', kicker: 'Área social', nome: 'Jantar sobre a cidade',
+          img: IMG.auroraJantar, sketch: IMG.sketchAurora, room: 'jantar', kicker: 'Do croqui ao espaço', nome: 'Jantar sobre a cidade',
           texto: 'Uma mesa redonda de carvalho sob uma luminária de papel, cercada por janelas de pé-direito duplo. Do 31º andar, o skyline e o Ibirapuera viram parte da mesa.',
           itens: ['Mesa redonda em carvalho', 'Janelas de 6 m de altura', 'Vista para o Ibirapuera'],
           curiosidade: 'Nos dias claros, é possível ver a Serra da Cantareira no horizonte, a mais de 25 km.',

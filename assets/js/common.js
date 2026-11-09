@@ -104,7 +104,7 @@
     const nav = document.createElement('header');
     nav.className = 'nav';
     nav.innerHTML = `<div class="wrap nav__inner">
-        <a class="logo" href="index.html" aria-label="Altezza, página inicial">${LOGO}<span>Altezza</span></a>
+        <a class="logo" href="index.html#topo" data-home-logo aria-label="Altezza, página inicial">${LOGO}<span>Altezza</span></a>
         <nav class="nav__links" aria-label="Principal">
           ${LINKS.slice(1).map(([h, t]) => `<a href="${h}"${current(h) ? ' aria-current="page"' : ''}>${t}</a>`).join('')}
         </nav>
@@ -171,7 +171,17 @@
               <div class="footer__contact"><h3>Contato</h3><ul><li><address class="footer__address">Rua Exemplo, 000<br>Jardim Europa · São Paulo</address></li><li><a class="footer__email" href="mailto:contato@altezza.com.br">contato@altezza.com.br</a></li><li class="footer__hours">Seg a sex · 9h–19h</li></ul></div>
             </div>
           </div>
-          <p class="footer__word" aria-hidden="true">ALTEZZA</p>
+          <svg class="footer__word" viewBox="0 0 1200 210" role="presentation" aria-hidden="true" focusable="false">
+            <g>
+              <path d="M14 200 61 8h54l47 192h-41l-10-44H65l-10 44H14Zm61-82h27L89 63l-14 55Z"/>
+              <path d="M180 8h42v152h102v40H180V8Z"/>
+              <path d="M338 8h150v40h-54v152h-42V48h-54V8Z"/>
+              <path d="M504 8h150v40h-108v38h91v40h-91v34h108v40H504V8Z"/>
+              <path d="M670 8h150v34L722 160h98v40H670v-34L768 48h-98V8Z"/>
+              <path d="M836 8h150v34L888 160h98v40H836v-34L934 48h-98V8Z"/>
+              <path d="m1002 200 47-192h54l47 192h-41l-10-44h-46l-10 44h-41Zm61-82h27l-13-55-14 55Z"/>
+            </g>
+          </svg>
         </div>
         <div class="footer__legal"><div class="wrap" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 32px">
           <span>© ${new Date().getFullYear()} Altezza Imóveis · CRECI 12345-J</span>
@@ -223,8 +233,43 @@
       if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target === '_blank' || a.hasAttribute('download')) return;
       const url = new URL(a.href, location.href);
       if (url.origin !== location.origin || url.protocol !== location.protocol) return;
-      const samePage = url.pathname === location.pathname && url.search === location.search;
-      if (samePage) return; // âncoras na mesma página rolam normalmente
+      const page = document.body.dataset.page;
+      const sameHome = page === 'home'
+        && /(?:^|\/)index\.html$/.test(url.pathname)
+        && /(?:^|\/)index\.html$/.test(location.pathname.replace(/\/$/, '/index.html'));
+      const sameCatalog = page === 'catalog'
+        && /(?:^|\/)imoveis\.html$/.test(url.pathname)
+        && /(?:^|\/)imoveis\.html$/.test(location.pathname);
+      const sameRoute = (url.pathname === location.pathname || sameHome || sameCatalog)
+        && url.search === location.search;
+      if (sameRoute) {
+        e.preventDefault();
+        if (page === 'home' && a.hasAttribute('data-home-logo')) {
+          if (location.hash !== '#topo') history.replaceState(null, '', `${location.pathname}${location.search}#topo`);
+          if (scrollY <= 1 || reduce.matches) {
+            window.scrollTo(0, 0);
+            return;
+          }
+          if (root.classList.contains('is-leaving')) return;
+          setTitle('Altezza');
+          curtain.setAttribute('aria-hidden', 'false');
+          root.classList.remove('is-entered');
+          root.classList.add('is-leaving');
+          setTimeout(() => {
+            window.scrollTo(0, 0);
+            finish();
+          }, 650);
+          return;
+        }
+        if (url.hash) {
+          const target = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+          if (target) {
+            if (url.hash !== location.hash) history.pushState(null, '', url.hash);
+            target.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'start' });
+          }
+        }
+        return;
+      }
       if (reduce.matches) return;
       e.preventDefault();
       if (root.classList.contains('is-leaving')) return;

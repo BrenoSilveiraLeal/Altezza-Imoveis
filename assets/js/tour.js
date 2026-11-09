@@ -23,7 +23,7 @@
           ${P.scenes.map((s, i) => `
             <div class="scene" data-i="${i}" aria-hidden="${i ? 'true' : 'false'}">
               <div class="scene__cam">
-                ${s.sketch ? `<img class="scene__sketch" src="${s.sketch.srcM}" data-full="${s.sketch.src}" alt="" decoding="async" draggable="false">` : ''}
+                ${s.sketch ? `<img class="scene__sketch" src="${i < 2 ? s.sketch.src : s.sketch.srcM}" data-full="${s.sketch.src}" alt="" decoding="async" draggable="false">` : ''}
                 <img class="scene__img" src="${i < 2 ? s.img.src : s.img.srcM}" data-full="${s.img.src}" alt="${s.img.alt}" decoding="async" draggable="false">
                 ${s.sketch ? '<span class="scene__seam" aria-hidden="true"></span>' : ''}
                 ${s.hotspots.map((h, k) => `
@@ -33,16 +33,12 @@
                   </div>`).join('')}
               </div>
               <div class="scene__mag">
-                <div class="mag">
+                  <div class="mag" tabindex="0" role="region" aria-label="Informações do ambiente">
                   <p class="mag__kicker"><span>${pad(i + 1)}<small>/${pad(N)}</small></span>${s.kicker}</p>
                   <h2 class="mag__title">${s.nome}</h2>
                   <p class="mag__text">${s.texto}</p>
                   <ul class="mag__tags">${s.itens.map(t => `<li>${t}</li>`).join('')}</ul>
                   <p class="mag__fact"><span>Curiosidade</span>${s.curiosidade}</p>
-                  <div class="mag__points">
-                    <p>Pontos de interesse</p>
-                    <ol>${s.hotspots.map((h, k) => `<li><button type="button" data-hot="${i}:${k}"><i>${EYE}</i>${h.t}</button></li>`).join('')}</ol>
-                  </div>
                 </div>
               </div>
               <div class="scene__dim"></div>
@@ -53,7 +49,7 @@
         <div class="tour__frame" aria-hidden="true"></div>
 
         <header class="tbar">
-          <a class="tbar__logo" href="index.html" aria-label="Altezza, página inicial">${LOGO}<span>Altezza</span></a>
+          <a class="tbar__logo" href="index.html#topo" data-home-logo aria-label="Altezza, página inicial">${LOGO}<span>Altezza</span></a>
           <p class="tbar__name"><span>${P.nome}</span><small>${P.bairro}, ${P.cidade}</small></p>
           <nav class="tbar__links" aria-label="Tour">
             <a href="#visao">Pular tour</a>
@@ -227,6 +223,7 @@
       img: el.querySelector('.scene__img'),
       sketch: el.querySelector('.scene__sketch'),
       seam: el.querySelector('.scene__seam'),
+      hotspots: [...el.querySelectorAll('.hotspot')],
       dim: el.querySelector('.scene__dim'),
       mag: el.querySelector('.scene__mag'),
       box: { w: 0, h: 0 }, lim: [0, 0, 0, 0]
@@ -260,6 +257,10 @@
     const easeIO = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     const easeOut = t => 1 - Math.pow(1 - t, 3);
     const sameView = (a, b) => a && b && a.data.img === b.data.img;
+    const updateSplitMagWidth = s => {
+      if (s && s.split) sticky.style.setProperty('--split-mag-width', `${Math.max(0, W - s.box.w)}px`);
+      else sticky.style.removeProperty('--split-mag-width');
+    };
 
     function measure() {
       W = sticky.clientWidth;
@@ -273,10 +274,12 @@
         s.el.classList.toggle('is-split', s.split);
         const sc = s.split ? H / ih : Math.max(W / iw, H / ih);
         s.box = { w: iw * sc, h: ih * sc };
+        s.el.style.setProperty('--hotspot-label-max', `${Math.max(96, Math.min(W - 48, s.split ? s.box.w - 24 : W - 48))}px`);
         s.cam.style.width = s.box.w + 'px';
         s.cam.style.height = s.box.h + 'px';
         if (s.split) s.mag.style.width = (W - s.box.w) + 'px';
       });
+      if (active >= 0) updateSplitMagWidth(scenes[active]);
       // Quanto se rola para atravessar um ambiente: maior = caminhada mais lenta.
       sceneLen = H * (mobileMQ.matches ? 1.8 : 2.2);
       tourEl.style.height = (sceneLen * (N + I) + H) + 'px';
@@ -294,12 +297,30 @@
     const fit = (start, size, view) => size <= view ? [(view - size) / 2, (view - size) / 2] : [view - size, 0];
     function place(s, c, extra = 1, usePan = false) {
       if (s.split) {
-        // O cômodo fica inteiro e parado; o movimento acontece no painel de detalhe.
-        const left = W - s.box.w;
+        const paneW = s.box.w;
+        const paneLeft = W - paneW;
+        if (focus && focus.scene === s.i) {
+          // Ao abrir um ponto, o painel editorial some. Expande a foto vertical
+          // para a tela inteira para não deixar a área do painel vazia/preta.
+          const infoOpen = sticky.classList.contains('has-info');
+          const expand = infoOpen ? W / paneW : 1;
+          const z = c.z * extra * ZB * expand;
+          const bw = s.box.w * z, bh = s.box.h * z;
+          const viewW = infoOpen ? W : paneW;
+          const viewLeft = infoOpen ? 0 : paneLeft;
+          const l0 = viewW / 2 - c.x * bw, t0 = H / 2 - c.y * bh;
+          const [lx0, lx1] = fit(l0, bw, viewW), [ty0, ty1] = fit(t0, bh, H);
+          s.lim = [lx0 - l0, lx1 - l0, ty0 - t0, ty1 - t0];
+          const left = viewLeft + clamp(l0 + (usePan ? pan.x : 0), lx0, lx1);
+          const top = clamp(t0 + (usePan ? pan.y : 0), ty0, ty1);
+          s.cam.style.transform = `translate3d(${left.toFixed(2)}px, ${top.toFixed(2)}px, 0) scale(${z.toFixed(4)})`;
+          s.cam.style.setProperty('--z', z.toFixed(4));
+          return { z, left, vx0: -(left - viewLeft) / bw, vx1: (viewW - (left - viewLeft)) / bw };
+        }
         s.lim = [0, 0, 0, 0];
-        s.cam.style.transform = `translate3d(${left.toFixed(2)}px, 0, 0)`;
+        s.cam.style.transform = `translate3d(${paneLeft.toFixed(2)}px, 0, 0)`;
         s.cam.style.setProperty('--z', 1);
-        return { z: 1, vx0: 0, vx1: 1 };
+        return { z: 1, left: paneLeft, vx0: 0, vx1: 1 };
       }
       const z = c.z * extra * ZB;
       const bw = s.box.w * z, bh = s.box.h * z;
@@ -311,7 +332,36 @@
       const top = clamp(t0 + (usePan ? pan.y : 0), ty0, ty1);
       s.cam.style.transform = `translate3d(${left.toFixed(2)}px, ${top.toFixed(2)}px, 0) scale(${z.toFixed(4)})`;
       s.cam.style.setProperty('--z', z.toFixed(4));
-      return { z, vx0: -left / bw, vx1: (W - left) / bw };
+      return { z, left, vx0: -left / bw, vx1: (W - left) / bw };
+    }
+
+    function alignHotspotTags(s, view) {
+      const leftBound = s.split && !sticky.classList.contains('has-info') ? W - s.box.w : 0;
+      const rightBound = W;
+      const maxWidth = Math.max(96, Math.min(rightBound - leftBound - 24, s.split && !sticky.classList.contains('has-info') ? s.box.w - 24 : W - 48));
+      s.hotspots.forEach((el, i) => {
+        const h = s.data.hotspots[i];
+        const tag = el.querySelector('.hotspot__tag');
+        const x = view.left + h.x * s.box.w * view.z;
+        tag.style.maxWidth = `${maxWidth}px`;
+        tag.style.translate = '0px 0px';
+        const labelWidth = tag.getBoundingClientRect().width;
+        const leftRoom = x - leftBound - 34;
+        const rightRoom = rightBound - x - 34;
+        const side = rightRoom >= labelWidth ? 'right' : leftRoom >= labelWidth ? 'left' : 'center';
+        el.classList.toggle('hotspot--left', side === 'left');
+        el.classList.toggle('hotspot--center', side === 'center');
+        if (side === 'center') {
+          const labelLeft = clamp(x - labelWidth / 2, leftBound + 8, rightBound - labelWidth - 8);
+          tag.style.setProperty('--hotspot-center-shift', `${labelLeft + labelWidth / 2 - x}px`);
+        }
+        // A largura real muda com a fonte, o zoom e a animação. Corrige a
+        // posição final pelo retângulo renderizado, incluindo o estado hover.
+        const rect = tag.getBoundingClientRect();
+        const shift = rect.left < leftBound + 8 ? leftBound + 8 - rect.left
+          : rect.right > rightBound - 8 ? rightBound - 8 - rect.right : 0;
+        tag.style.translate = `${shift}px 0px`;
+      });
     }
 
     function render(u) {
@@ -339,13 +389,14 @@
             // Voa até o ponto escolhido, como numa galeria.
             const e = easeIO(fk);
             const from = focusFrom || c;
-            c = { x: lerp(from.x, focus.x, e), y: lerp(from.y, focus.y, e), z: lerp(from.z, from.z * 1.28, e) };
+            c = { x: lerp(from.x, focus.x, e), y: lerp(from.y, focus.y, e), z: lerp(from.z, focus.z, e) };
           }
           const view = place(s, c, 1, true);
+          alignHotspotTags(s, view);
           s.el.style.clipPath = 'none';
           s.dim.style.opacity = nextIsSame ? 0 : (q * .55).toFixed(3);
           if (s.sketch) {
-            const r = easeIO(clamp((p - .12) / .5));
+            const r = easeIO(clamp((p - .02) / .88));
             const edge = r >= 1 ? 1 : lerp(view.vx0, view.vx1, r);
             const pct = (edge * 100).toFixed(2);
             s.img.style.clipPath = `inset(0 ${(100 - pct).toFixed(2)}% 0 0)`;
@@ -387,6 +438,7 @@
       const prev = active;
       active = a;
       sticky.classList.toggle('split-on', Boolean(scenes[a].split));
+      updateSplitMagWidth(scenes[a]);
       scenes.forEach((s, j) => s.el.classList.toggle('is-cur', j === a));
       cards.forEach((el, j) => { el.classList.toggle('is-active', j === a); el.classList.toggle('is-past', j < a); });
       rooms.forEach((el, j) => el.classList.toggle('is-on', j === a));
@@ -439,7 +491,13 @@
       const h = s.data.hotspots[hi];
       const previous = focus && focus.scene === si ? focus : camAt(s, clamp(cur - I - si));
       focusFrom = { x: previous.x, y: previous.y, z: previous.z };
-      focus = { scene: si, x: h.x, y: h.y, k: hi };
+      focus = {
+        scene: si,
+        x: h.x,
+        y: h.y,
+        z: focus && focus.scene === si ? previous.z : previous.z * 1.28,
+        k: hi
+      };
       fk = 0;
       fkT = 1;
       infoY = scrollY;
@@ -476,7 +534,7 @@
     /* ---------- Arrastar para olhar em volta ---------- */
     let dragging = false, dragStart = null, axis = null;
     stage.addEventListener('pointerdown', e => {
-      if (isStatic || e.button !== 0 || e.target.closest('button')) return;
+      if (isStatic || e.button !== 0 || e.target.closest('button, .mag')) return;
       dragStart = { x: e.clientX, y: e.clientY, px: panT.x, py: panT.y, t: e.pointerType };
       axis = null;
     });

@@ -48,6 +48,10 @@
     </section>`;
 
   const A = P.arquiteturaTexto;
+  const sketchScene = P.scenes.find(scene => scene.sketch);
+  const archPhoto = A.foto || sketchScene?.img || A.imagem;
+  const archSketch = A.croqui || sketchScene?.sketch;
+  const hasOriginalSketch = Boolean(archSketch);
   const arch = `
     <section class="p-sec p-arch on-night" id="arquitetura" aria-labelledby="arq-title" data-nav-dark>
       <div class="wrap p-arch__grid">
@@ -56,16 +60,15 @@
           <h2 class="h2" id="arq-title" data-split style="margin:22px 0 26px">${A.titulo.replace(/\s(\S+\.)$/, '<br>$1')}</h2>
           <p class="lead" data-reveal>${A.texto}</p>
         </div>
-        ${A.croqui ? `
-          <figure class="compare" data-reveal="scale" style="--pos:50%">
-            <img src="${A.foto.srcM}" srcset="${A.foto.srcM} 800w, ${A.foto.src} ${A.foto.w}w" sizes="(min-width:1024px) 60vw, 100vw" alt="${A.foto.alt}" width="${A.foto.w}" height="${A.foto.h}" loading="lazy" decoding="async">
-            <img class="compare__top" src="${A.croqui.srcM}" srcset="${A.croqui.srcM} 800w, ${A.croqui.src} ${A.croqui.w}w" sizes="(min-width:1024px) 60vw, 100vw" alt="${A.croqui.alt}" width="${A.croqui.w}" height="${A.croqui.h}" loading="lazy" decoding="async">
+        ${hasOriginalSketch ? `
+          <figure class="compare" data-reveal="scale" style="--pos:50%;--compare-ratio:${archPhoto.w} / ${archPhoto.h}">
+            <img src="${archPhoto.srcM}" srcset="${archPhoto.srcM} 800w, ${archPhoto.src} ${archPhoto.w}w" sizes="(min-width:1024px) 60vw, 100vw" alt="${archPhoto.alt}" width="${archPhoto.w}" height="${archPhoto.h}" loading="lazy" decoding="async">
+            <img class="compare__top" src="${archSketch.srcM}" srcset="${archSketch.srcM} 800w, ${archSketch.src} ${archSketch.w}w" sizes="(min-width:1024px) 60vw, 100vw" alt="${archSketch.alt}" width="${archSketch.w}" height="${archSketch.h}" loading="lazy" decoding="async">
             <span class="compare__tag compare__tag--l">Croqui · 2022</span><span class="compare__tag compare__tag--r">Entrega · 2024</span>
             <span class="compare__line" aria-hidden="true"><i>${ICON.arrow}${ICON.arrow}</i></span>
             <input class="compare__range" type="range" min="0" max="100" value="50" aria-label="Comparar croqui e foto do ambiente">
-            <figcaption class="sr-only">${A.legenda}</figcaption>
-          </figure>`
-        : `
+            <figcaption class="sr-only">Compare o croqui com a foto de ${sketchScene?.nome || 'um ambiente do imóvel'}.</figcaption>
+          </figure>` : `
           <figure class="p-arch__fig" data-mask>
             <img src="${A.imagem.srcM}" srcset="${A.imagem.srcM} 800w, ${A.imagem.src} ${A.imagem.w}w" sizes="(min-width:1024px) 45vw, 100vw" alt="${A.imagem.alt}" width="${A.imagem.w}" height="${A.imagem.h}" loading="lazy" decoding="async">
             <figcaption>${A.legenda}</figcaption>
@@ -129,7 +132,7 @@
           </ul>
         </div>
         <div class="radar" data-reveal="scale" aria-hidden="true">
-          ${L.imagem ? `<img class="radar__img" src="${L.imagem.srcM}" alt="" loading="lazy" decoding="async">` : ''}
+          ${L.imagem ? `<img class="radar__img" src="${L.imagem.srcM}" srcset="${L.imagem.srcM} 900w, ${L.imagem.src} ${L.imagem.w}w" sizes="(min-width:1024px) 560px, 92vw" alt="" loading="eager" decoding="async">` : ''}
           <svg viewBox="-100 -100 200 200">
             <circle r="96"/><circle r="72"/><circle r="48"/><circle r="24"/>
             <path d="M-96 0H96M0-96V96"/>

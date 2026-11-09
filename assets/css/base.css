@@ -334,12 +334,8 @@ form.is-sent .form-ok { display: grid; animation: fade-up .9s var(--ease) both; 
 .footer__cols a { color: var(--on-night-2); transition: color .3s; }
 .footer__cols a:hover { color: var(--accent-glow); }
 .footer__address { font-style: normal; }
-.footer__word {
-  font-size: clamp(4.5rem, 21vw, 22rem); font-weight: 600; letter-spacing: -.06em; line-height: .78;
-  text-align: center; margin: 40px 0 -.08em; color: transparent;
-  -webkit-text-stroke: 1px rgba(241, 243, 232, .22);
-  user-select: none;
-}
+.footer__word { display: block; width: 100%; height: auto; overflow: visible; margin: 40px 0 -.08em; user-select: none; }
+.footer__word path { fill: none; stroke: rgba(241, 243, 232, .22); stroke-width: 1.25; stroke-linejoin: miter; stroke-linecap: square; vector-effect: non-scaling-stroke; }
 .footer__legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; padding: 26px 0 30px; font-size: .78rem; color: var(--muted-night); border-top: 1px solid var(--line-night); position: relative; background: var(--night); }
 @media (min-width: 900px) {
   .footer__top { grid-template-columns: 1.2fr 1fr; align-items: end; }
@@ -363,7 +359,6 @@ form.is-sent .form-ok { display: grid; animation: fade-up .9s var(--ease) both; 
   .footer__address { font-size: .94rem; line-height: 1.75; color: var(--on-night-2); }
   .footer__email { display: inline-flex; align-items: center; min-height: 44px; font-size: 1rem; text-decoration: underline; text-decoration-color: var(--line-night); text-underline-offset: 6px; }
   .footer__hours { font-size: .82rem; color: var(--muted-night); }
-  .footer__word { font-size: clamp(4rem, 19vw, 8rem); }
   .footer__legal .wrap { min-width: 0; }
   .footer__legal .wrap > span { width: 100%; text-align: center; }
 }

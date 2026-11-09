@@ -463,10 +463,80 @@
 
   /* ---------- Depoimentos ---------- */
   const track = document.querySelector('[data-quotes]');
-  document.querySelectorAll('[data-q]').forEach(btn => btn.addEventListener('click', () => {
-    const card = track.querySelector('.quote');
-    track.scrollBy({ left: +btn.dataset.q * (card.offsetWidth + 20), behavior: reduce.matches ? 'auto' : 'smooth' });
-  }));
+  if (track) {
+    const quoteButtons = [...document.querySelectorAll('[data-q]')];
+    const quoteCards = [...track.querySelectorAll('.quote')];
+    const quotePositions = () => {
+      const left = track.getBoundingClientRect().left;
+      return quoteCards.map(card => card.getBoundingClientRect().left - left + track.scrollLeft);
+    };
+    const updateQuoteButtons = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      quoteButtons.forEach(button => {
+        button.disabled = Number(button.dataset.q) < 0 ? track.scrollLeft <= 1 : track.scrollLeft >= max - 1;
+      });
+    };
+    quoteButtons.forEach(button => button.addEventListener('click', () => {
+      if (!quoteCards.length) return;
+      const direction = Number(button.dataset.q);
+      const positions = quotePositions();
+      const index = positions.reduce((best, position, i) =>
+        Math.abs(position - track.scrollLeft) < Math.abs(positions[best] - track.scrollLeft) ? i : best, 0);
+      const target = positions[Math.max(0, Math.min(quoteCards.length - 1, index + direction))];
+      track.scrollTo({ left: target, behavior: reduce.matches ? 'auto' : 'smooth' });
+    }));
+    track.addEventListener('scroll', updateQuoteButtons, { passive: true });
+    addEventListener('resize', updateQuoteButtons, { passive: true });
+    updateQuoteButtons();
+  }
+
+  // FAQ: anima o disclosure sem substituir a semântica nativa de <details>.
+  document.querySelectorAll('.faq details').forEach(details => {
+    const summary = details.querySelector('summary');
+    const answer = details.querySelector('.faq__answer');
+    if (!summary || !answer) return;
+    let animating = false;
+
+    summary.addEventListener('click', event => {
+      event.preventDefault();
+      if (animating) return;
+      if (reduce.matches) {
+        details.open = !details.open;
+        return;
+      }
+
+      animating = true;
+      const opening = !details.open;
+      if (opening) {
+        details.open = true;
+        answer.style.gridTemplateRows = '0fr';
+        answer.style.opacity = '0';
+        void answer.offsetHeight;
+        requestAnimationFrame(() => {
+          answer.style.gridTemplateRows = '1fr';
+          answer.style.opacity = '1';
+        });
+      } else {
+        details.classList.add('is-closing');
+        answer.style.gridTemplateRows = '0fr';
+        answer.style.opacity = '0';
+      }
+
+      let fallback;
+      const finish = event => {
+        if (event && (event.target !== answer || event.propertyName !== 'grid-template-rows')) return;
+        clearTimeout(fallback);
+        answer.removeEventListener('transitionend', finish);
+        if (!opening) details.open = false;
+        details.classList.remove('is-closing');
+        answer.style.removeProperty('grid-template-rows');
+        answer.style.removeProperty('opacity');
+        animating = false;
+      };
+      answer.addEventListener('transitionend', finish);
+      fallback = setTimeout(() => finish(), 520);
+    });
+  });
 
   let ticking = false;
   const onScroll = () => {
