@@ -172,14 +172,14 @@
             </div>
           </div>
           <svg class="footer__word" viewBox="0 0 1200 210" role="presentation" aria-hidden="true" focusable="false">
-            <g>
+            <g transform="translate(68 0)">
               <path d="M14 200 61 8h54l47 192h-41l-10-44H65l-10 44H14Zm61-82h27L89 63l-14 55Z"/>
-              <path d="M180 8h42v152h102v40H180V8Z"/>
-              <path d="M338 8h150v40h-54v152h-42V48h-54V8Z"/>
-              <path d="M504 8h150v40h-108v38h91v40h-91v34h108v40H504V8Z"/>
-              <path d="M670 8h150v34L722 160h98v40H670v-34L768 48h-98V8Z"/>
-              <path d="M836 8h150v34L888 160h98v40H836v-34L934 48h-98V8Z"/>
-              <path d="m1002 200 47-192h54l47 192h-41l-10-44h-46l-10 44h-41Zm61-82h27l-13-55-14 55Z"/>
+              <path transform="translate(-8 0)" d="M180 8h42v152h102v40H180V8Z"/>
+              <path transform="translate(-68 0)" d="M338 8h150v40h-54v152h-42V48h-54V8Z"/>
+              <path transform="translate(-76 0)" d="M504 8h150v40h-108v38h91v40h-91v34h108v40H504V8Z"/>
+              <path transform="translate(-84 0)" d="M670 8h150v34L722 160h98v40H670v-34L768 48h-98V8Z"/>
+              <path transform="translate(-92 0)" d="M836 8h150v34L888 160h98v40H836v-34L934 48h-98V8Z"/>
+              <path transform="translate(-100 0)" d="m1002 200 47-192h54l47 192h-41l-10-44h-46l-10 44h-41Zm61-82h27l-13-55-14 55Z"/>
             </g>
           </svg>
         </div>
@@ -388,18 +388,31 @@
     requestAnimationFrame(step);
   }
 
-  /* ---------- Formulários de demonstração ---------- */
+  /* ---------- Formulários sem backend: encaminham o contato ao WhatsApp ---------- */
   function forms() {
     document.querySelectorAll('form[data-demo-form]').forEach(form => {
       form.addEventListener('submit', e => {
         e.preventDefault();
         if (!form.checkValidity()) { form.reportValidity(); return; }
-        const name = (form.querySelector('[name="nome"]') || {}).value || '';
-        const slot = form.querySelector('[data-ok-name]');
-        if (slot) slot.textContent = name.split(' ')[0] || 'Olá';
-        form.classList.add('is-sent');
-        const ok = form.querySelector('.form-ok');
-        if (ok) { ok.setAttribute('tabindex', '-1'); ok.focus({ preventScroll: true }); }
+        const value = name => (form.querySelector(`[name="${name}"]`) || {}).value?.trim() || '';
+        const lines = ['Olá! Vim pelo catálogo da Altezza.'];
+        if (form.matches('[data-vform]')) {
+          const property = form.querySelector('.vform__head strong')?.textContent.trim();
+          const day = form.querySelector('[name="dia"]:checked')?.dataset.label;
+          const period = form.querySelector('[name="periodo"]:checked')?.dataset.label;
+          lines.push('', 'Gostaria de solicitar uma visita:', `Imóvel: ${property}`, `Dia: ${day}`, `Período: ${period}`);
+        } else {
+          const interest = form.querySelector('[name="interesse"]:checked')?.value;
+          const property = form.querySelector('[name="imovel"]')?.selectedOptions[0]?.textContent.trim();
+          lines.push('', `Interesse: ${interest || 'não informado'}`);
+          if (property && property !== 'Ainda não sei') lines.push(`Imóvel: ${property}`);
+          if (value('mensagem')) lines.push(`Mensagem: ${value('mensagem')}`);
+        }
+        lines.push('', `Nome: ${value('nome')}`);
+        if (value('telefone')) lines.push(`Telefone: ${value('telefone')}`);
+        if (value('email')) lines.push(`E-mail: ${value('email')}`);
+        const number = String(window.ALTEZZA.WHATSAPP_NUMBER || '').replace(/\D/g, '');
+        window.location.assign(`https://wa.me/${number}?text=${encodeURIComponent(lines.join('\n'))}`);
       });
     });
   }

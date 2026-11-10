@@ -25,25 +25,35 @@
     <section class="p-sec p-over" id="visao" aria-labelledby="visao-title">
       <div class="wrap">
         <div class="p-over__head">
-          <p class="eyebrow" data-reveal>Visão geral</p>
-          <h2 class="h2 p-over__title" id="visao-title" data-reveal>${P.tagline}</h2>
-          <div class="p-over__text" data-reveal>
-            ${P.descricao.map(t => `<p>${t}</p>`).join('')}
+          <div class="p-over__intro">
+            <p class="eyebrow" data-reveal>Visão geral</p>
+            <h2 class="h2 p-over__title" id="visao-title" data-reveal>${P.tagline}</h2>
           </div>
-          <ul class="p-checks" data-reveal>${P.destaques.map(t => `<li>${t}</li>`).join('')}</ul>
+          <div class="p-over__text" data-reveal>
+            ${P.descricao.map((t, i) => `<p${i ? '' : ' class="p-over__lead"'}>${t}</p>`).join('')}
+          </div>
         </div>
-        <dl class="p-sheet" id="ficha">
-          ${[
-            ['Área privativa', `${num(P.area)} m²`],
-            P.terreno ? ['Terreno', `${num(P.terreno)} m²`] : ['Pavimento', P.andar],
-            ['Suítes', P.suites],
-            ['Vagas', P.vagas],
-            ['Banheiros', P.banheiros],
-            ['Entrega', P.entrega],
-            ['Arquitetura', P.arquitetura],
-            ['Coordenadas', P.coords]
-          ].map(([k, v], i) => `<div data-reveal style="--d:${(i % 4) * .06}s"><dt>${k}</dt><dd>${v}</dd></div>`).join('')}
-        </dl>
+        <div class="p-over__body">
+          <div class="p-over__highlights" data-reveal>
+            <p class="p-over__label">O que faz este imóvel especial</p>
+            <ol class="p-checks">${P.destaques.map((t, i) => `<li><span>${String(i + 1).padStart(2, '0')}</span>${t}</li>`).join('')}</ol>
+          </div>
+          <div class="p-over__facts">
+            <p class="p-over__label" data-reveal>Ficha técnica</p>
+            <dl class="p-sheet" id="ficha">
+              ${[
+                ['Área privativa', `${num(P.area)} m²`],
+                P.terreno ? ['Terreno', `${num(P.terreno)} m²`] : ['Pavimento', P.andar],
+                ['Suítes', P.suites],
+                ['Vagas', P.vagas],
+                ['Banheiros', P.banheiros],
+                ['Entrega', P.entrega],
+                ['Arquitetura', P.arquitetura],
+                ['Coordenadas', P.coords]
+              ].map(([k, v], i) => `<div data-reveal style="--d:${(i % 2) * .06}s"><dt>${k}</dt><dd>${v}</dd></div>`).join('')}
+            </dl>
+          </div>
+        </div>
       </div>
     </section>`;
 
@@ -76,6 +86,7 @@
       </div>
     </section>`;
 
+  const allRoomsInTour = P.plan.rooms.every(r => P.scenes.some(s => s.room === r.id));
   const plan = `
     <section class="p-sec p-plan" id="planta" aria-labelledby="planta-title">
       <div class="wrap">
@@ -84,7 +95,7 @@
             <p class="eyebrow" data-reveal>Planta</p>
             <h2 class="h2" id="planta-title" data-split style="margin-top:22px">Cada ambiente<br>no seu <em>lugar</em>.</h2>
           </div>
-          <p class="lead" data-reveal>Planta esquemática, sem escala. Passe o cursor pelos ambientes e volte ao tour pelo ambiente que quiser rever.</p>
+          <p class="lead" data-reveal>Planta esquemática, sem escala. ${allRoomsInTour ? 'Selecione qualquer ambiente para voltar a ele no tour.' : 'Explore a distribuição dos ambientes e suas áreas.'}</p>
         </header>
         <div class="p-plan__grid">
           <div class="p-plan__svg" data-reveal="scale">${planSVG('big')}</div>
@@ -94,7 +105,7 @@
               return `<li data-room="${r.id}" data-reveal>
                 <span class="p-plan__name">${r.nome}</span>
                 <span class="p-plan__area">${r.area ? `${num(r.area)} m²` : '—'}</span>
-                ${si > -1 ? `<button type="button" data-go="${si}" class="p-plan__go">Ver no tour ${ICON.arrowUp}</button>` : '<span></span>'}
+                ${allRoomsInTour ? `<button type="button" data-go="${si}" class="p-plan__go">Ver no tour ${ICON.arrowUp}</button>` : ''}
               </li>`;
             }).join('')}
           </ul>
@@ -245,12 +256,7 @@
             <p class="vform__sum"><small>Sua visita</small><strong data-vsum></strong></p>
             <button class="vform__submit" type="submit">Solicitar visita<i>${ICON.arrow}</i></button>
           </footer>
-          <p class="vform__note">Demonstração: nenhum dado é enviado ou armazenado.</p>
-          <div class="form-ok" role="status">
-            <p class="eyebrow">Visita solicitada</p>
-            <h3><span data-ok-name></span>, sua visita à ${P.nome} está pré-agendada.</h3>
-            <p class="lead">Em um site real, um consultor confirmaria o horário por telefone. Enquanto isso, conheça outro imóvel da coleção.</p>
-          </div>
+          <p class="vform__note">Ao continuar, seus dados serão incluídos na mensagem aberta no WhatsApp.</p>
         </form>
       </div>
     </section>`;

@@ -322,31 +322,28 @@
     render();
     moveInk();
 
-    // Prévia da foto acompanhando o cursor na visualização em lista.
+    // Prévia da foto na visualização em lista: miniatura fixa na área vazia da linha,
+    // entre as especificações e o preço, para nunca cobrir texto.
     const prev = document.createElement('div');
     prev.className = 'float-preview';
     prev.setAttribute('aria-hidden', 'true');
     prev.innerHTML = '<img alt="">';
     document.body.append(prev);
+    const wideMQ = window.matchMedia('(min-width: 900px)');
     if (window.AZ.fine.matches) {
       const img = prev.querySelector('img');
-      let x = 0, y = 0, fx = 0, fy = 0, raf = 0;
-      const loop = () => {
-        fx += (x - fx) * .16; fy += (y - fy) * .16;
-        prev.style.transform = `translate3d(${fx}px, ${fy}px, 0)`;
-        raf = requestAnimationFrame(loop);
+      const show = row => {
+        if (!row || !wideMQ.matches) { prev.classList.remove('on'); return; }
+        const r = row.getBoundingClientRect();
+        const price = row.querySelector('.ex-row__price').getBoundingClientRect();
+        const w = prev.offsetWidth, h = prev.offsetHeight;
+        prev.style.transform = `translate3d(${Math.round(price.left - w - 40)}px, ${Math.round(r.top + (r.height - h) / 2)}px, 0)`;
+        if (img.getAttribute('src') !== row.dataset.preview) img.src = row.dataset.preview;
+        prev.classList.add('on');
       };
-      list.addEventListener('pointermove', e => {
-        x = e.clientX + 30; y = e.clientY - 140;
-        const row = e.target.closest('.ex-row');
-        if (row && img.getAttribute('src') !== row.dataset.preview) img.src = row.dataset.preview;
-        prev.classList.toggle('on', Boolean(row));
-        if (!raf) { fx = x; fy = y; raf = requestAnimationFrame(loop); }
-      });
-      list.addEventListener('pointerleave', () => {
-        prev.classList.remove('on');
-        cancelAnimationFrame(raf); raf = 0;
-      });
+      list.addEventListener('pointerover', e => show(e.target.closest('.ex-row')));
+      list.addEventListener('pointerleave', () => prev.classList.remove('on'));
+      addEventListener('scroll', () => prev.classList.remove('on'), { passive: true });
     }
   }
 

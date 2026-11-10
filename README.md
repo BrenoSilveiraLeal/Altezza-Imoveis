@@ -12,7 +12,7 @@ Abra `index.html` no navegador ou sirva esta pasta em um servidor estático. As 
 - `imoveis.html`: catálogo com busca, filtros e favoritos.
 - `imovel.html?id=<id>`: tour de cada imóvel. IDs: `dossel`, `brise`, `horizonte`, `mare`, `copa` e `aurora`.
 
-Os links do menu rolam suavemente para seções da página inicial. Clicar novamente no destino atual não recarrega a página. A logo leva ao início da página inicial com a transição visual do site. Ao atualizar uma página, a visualização volta ao topo.
+Os links do menu rolam suavemente para seções da página inicial. Clicar novamente no destino atual não recarrega a página. A logo leva ao início da página inicial com a transição visual do site. Ao recarregar qualquer página (por exemplo, com F5 ou Ctrl+R), a visualização começa no topo.
 
 ## Tour dos imóveis
 
@@ -27,4 +27,4 @@ Cada imóvel tem um ambiente interno com croqui que dá lugar à foto durante a 
 - Tour: `assets/js/tour.js` e `assets/css/tour.css`.
 - Outras seções do imóvel: `assets/js/imovel.js` e `assets/css/imovel.css`.
 
-Os formulários não enviam dados. Os favoritos são salvos apenas no navegador. Imóveis, valores, pessoas e depoimentos são fictícios; as imagens são ilustrativas. Com a preferência de reduzir movimento ativada, o tour mostra uma apresentação estática.
+Os formulários não usam backend nem armazenam dados: após a validação no navegador, abrem o WhatsApp com uma mensagem preenchida com os dados do contato e o imóvel/visita escolhido. Configure `WHATSAPP_NUMBER` em `assets/js/data.js` com o número da imobiliária em formato internacional, apenas dígitos (DDI + DDD + número). O valor atual é um placeholder de demonstração. Os favoritos são salvos apenas no navegador. Imóveis, valores, pessoas e depoimentos são fictícios; as imagens são ilustrativas. Com a preferência de reduzir movimento ativada, o tour mostra uma apresentação estática.

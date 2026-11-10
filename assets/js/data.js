@@ -11,15 +11,20 @@
   const remote = (src, w, h, alt) => ({ src, srcM: src, w, h, alt });
   // Ambientes gerados por IA para completar os imóveis que só tinham uma foto.
   const gen = (name, alt) => ({ src: `assets/img/${name}-l.jpg`, srcM: `assets/img/${name}-m.jpg`, w: 1536, h: 1024, alt });
+  const panorama = name => ({ src: `assets/img/${name}-wide.jpg`, w: 1672, h: 941 });
 
   const IMG = {
     torre: local('torre', 2400, 1340, 'Torre residencial com jardins nas varandas, iluminada ao entardecer entre as copas das árvores.'),
     lobby: local('lobby', 1600, 1986, 'Lobby de pé-direito duplo com paredes ripadas de madeira, balcão de travertino e uma árvore sob a claraboia.'),
+    lobbyWide: panorama('lobby'),
     living: local('living', 2400, 1340, 'Living com caixilhos de piso a teto voltados para as árvores, sofá verde-oliva e mesa de travertino.'),
     suite: local('suite', 1200, 1490, 'Suíte master com cabeceira estofada, painéis de madeira e grande janela para as copas.'),
+    suiteWide: panorama('suite'),
     terraco: local('terraco', 1600, 1986, 'Terraço gourmet com mesa de madeira, bancada de pedra verde e o skyline da cidade ao fundo.'),
+    terracoWide: panorama('terraco'),
     piscina: local('piscina', 2400, 1340, 'Piscina de borda infinita na cobertura, com espreguiçadeiras e vista para a cidade ao pôr do sol.'),
     spa: local('spa', 1600, 1986, 'Spa com raia coberta de pedra verde, paredes de travertino e jardim interno atrás do vidro.'),
+    spaWide: panorama('spa'),
     bairro: local('bairro', 1600, 893, 'Vista aérea do bairro arborizado com a torre entre as árvores e a cidade ao fundo.'),
     radarBrise: localJpg('radar-brise', 1600, 1001, 'Vista aérea da Casa Brise entre o jardim tropical e a piscina.'),
     radarHorizonte: localJpg('radar-horizonte', 1600, 1001, 'Vista aérea da Casa Horizonte no Vale dos Cristais, com a Serra do Curral ao fundo.'),
@@ -36,9 +41,12 @@
     sala: local('sala', 2400, 1340, 'Sala de estar com painel de madeira, sofá de linho, poltrona de couro e vista para o jardim e a piscina.'),
     croqui: local('croqui', 2400, 1340, 'Croqui à mão da mesma sala de estar, em grafite e aquarela leve.'),
     escada: local('escada', 1600, 1986, 'Escada de degraus soltos de madeira contra parede de concreto aparente, com luz zenital.'),
+    escadaWide: panorama('escada'),
     banho: local('banho', 1600, 1986, 'Banheiro todo em travertino com banheira esculpida e abertura para um jardim interno.'),
+    banhoWide: panorama('banho'),
     mare: local('mare', 1600, 1073, 'Varanda com pergolado de madeira, sofá de alvenaria com almofadas de linho e vista para o mar.'),
     copa: local('copa', 1600, 1986, 'Sala de jantar com mesa de madeira, estantes embutidas e janela de canto para as árvores e a cidade.'),
+    copaWide: panorama('copa'),
     curadora: local('curadora', 1200, 1490, 'Retrato da diretora de curadoria apoiada em uma mesa com maquete branca.'),
     mesa: local('mesa', 1600, 1073, 'Mesa de trabalho com plantas, maquete de madeira e amostras de materiais.'),
     materiais: local('materiais', 1600, 1073, 'Amostras de travertino, concreto, madeiras e linho dispostas sobre a mesa.'),
@@ -144,7 +152,7 @@
           ]
         },
         {
-          img: IMG.lobby, room: 'hall', kicker: 'Térreo', nome: 'Lobby de pé-direito duplo',
+          img: IMG.lobby, wide: IMG.lobbyWide, room: 'hall', kicker: 'Térreo', nome: 'Lobby de pé-direito duplo',
           texto: 'A entrada é um pátio coberto: paredes ripadas em madeira, piso de travertino e uma figueira plantada no centro, sob a claraboia.',
           itens: ['Pé-direito de 7,8 m', 'Concierge 24 horas', 'Nichos de espera em linho'],
           curiosidade: 'A claraboia foi posicionada para que o sol do meio-dia caia exatamente sobre a copa da figueira.',
@@ -170,7 +178,7 @@
           ]
         },
         {
-          img: IMG.suite, room: 'suite', kicker: 'Área íntima', nome: 'Suíte master',
+          img: IMG.suite, wide: IMG.suiteWide, room: 'suite', kicker: 'Área íntima', nome: 'Suíte master',
           texto: 'Uma suíte de 64 m² com closet duplo e banho voltado para o nascente. A cabeceira estofada percorre toda a parede e incorpora a iluminação de leitura.',
           itens: ['Closet duplo de 14 m²', 'Banho com vista para as copas', 'Cortinas de linho motorizadas'],
           curiosidade: 'O vidro da janela é laminado acústico: dentro da suíte, o ruído da cidade cai para o nível de uma biblioteca.',
@@ -182,7 +190,7 @@
           ]
         },
         {
-          img: IMG.terraco, room: 'terraco', kicker: 'Terraço', nome: 'Terraço gourmet',
+          img: IMG.terraco, wide: IMG.terracoWide, room: 'terraco', kicker: 'Terraço', nome: 'Terraço gourmet',
           texto: 'Uma segunda sala ao ar livre, com cozinha completa, mesa para doze pessoas e o skyline de São Paulo emoldurado pela vegetação.',
           itens: ['86 m² cobertos e descobertos', 'Churrasqueira e forno a lenha', 'Bancada em quartzito verde'],
           curiosidade: 'Os pendentes foram calibrados para não refletir no vidro: à noite, a vista da cidade continua limpa.',
@@ -207,7 +215,7 @@
           ]
         },
         {
-          img: IMG.spa, room: 'clube', kicker: 'Bem-estar', nome: 'Spa com raia coberta',
+          img: IMG.spa, wide: IMG.spaWide, room: 'clube', kicker: 'Bem-estar', nome: 'Spa com raia coberta',
           texto: 'Um spa em travertino e pedra verde, iluminado por um rasgo zenital, com sauna seca, sala de massagem e um jardim interno atrás do vidro.',
           itens: ['Raia coberta aquecida', 'Sauna seca e a vapor', 'Jardim interno de samambaias'],
           curiosidade: 'A pedra da raia é a mesma do terraço da cobertura: o projeto repete materiais para costurar os ambientes.',
@@ -313,7 +321,7 @@
           ]
         },
         {
-          img: IMG.escada, room: 'escada', kicker: 'Circulação', nome: 'A escada escultórica',
+          img: IMG.escada, wide: IMG.escadaWide, room: 'escada', kicker: 'Circulação', nome: 'A escada escultórica',
           texto: 'Degraus maciços de madeira engastados no concreto, sem corrimão aparente. Uma claraboia derrama luz sobre a parede ao longo do dia.',
           itens: ['Degraus de cumaru maciço', 'Claraboia linear', 'Biblioteca no mezanino'],
           curiosidade: 'Cada degrau é chumbado 40 cm dentro da parede: a escada é parte da estrutura da casa.',
@@ -326,7 +334,7 @@
           ]
         },
         {
-          img: IMG.banho, room: 'banho', kicker: 'Área íntima', nome: 'Banho em travertino',
+          img: IMG.banho, wide: IMG.banhoWide, room: 'banho', kicker: 'Área íntima', nome: 'Banho em travertino',
           texto: 'Um banho escavado em pedra: banheira, bancada e paredes em travertino, abertos para um pequeno jardim interno.',
           itens: ['Banheira esculpida em bloco único', 'Metais em latão escovado', 'Jardim privativo'],
           curiosidade: 'A pedra veio de um só bloco, cortado em sequência para que os veios continuem de uma peça para a outra.',
@@ -635,7 +643,7 @@
       },
       scenes: [
         {
-          img: IMG.copa, room: 'jantar', kicker: 'Área social', nome: 'Sala de jantar',
+          img: IMG.copa, wide: IMG.copaWide, room: 'jantar', kicker: 'Área social', nome: 'Sala de jantar',
           texto: 'A mesa de nogueira ocupa o centro do L. Daqui se vê o estar, as estantes e a janela de canto, com a copa das árvores à altura da sala.',
           itens: ['Mesa de nogueira para 8', 'Janela de canto de 6 m', 'Piso em espinha de peixe'],
           curiosidade: 'É a única unidade do prédio em que o pilar de canto foi transferido, deixando a esquina inteira de vidro.',
@@ -796,6 +804,8 @@
   window.ALTEZZA = {
     IMG,
     PROPERTIES,
+    // Número de demonstração. Troque pelo WhatsApp da imobiliária (DDI + DDD + número, só dígitos).
+    WHATSAPP_NUMBER: '5511000000000',
     find: id => PROPERTIES.find(p => p.id === id),
     featured: ['dossel', 'brise', 'horizonte', 'mare']
   };

@@ -16,6 +16,7 @@
   function markup(P, planSVG) {
     const N = P.scenes.length;
     const roomName = id => (P.plan.rooms.find(r => r.id === id) || {}).nome || '';
+    const sceneSrc = (s, i) => s.wide && innerWidth > innerHeight ? s.wide.src : (i < 2 ? s.img.src : s.img.srcM);
     return `
     <section class="tour" id="tour" aria-labelledby="p-title" data-nav-dark data-nav-solid-after>
       <div class="tour__sticky">
@@ -24,10 +25,10 @@
             <div class="scene" data-i="${i}" aria-hidden="${i ? 'true' : 'false'}">
               <div class="scene__cam">
                 ${s.sketch ? `<img class="scene__sketch" src="${i < 2 ? s.sketch.src : s.sketch.srcM}" data-full="${s.sketch.src}" alt="" decoding="async" draggable="false">` : ''}
-                <img class="scene__img" src="${i < 2 ? s.img.src : s.img.srcM}" data-full="${s.img.src}" alt="${s.img.alt}" decoding="async" draggable="false">
+                <img class="scene__img" src="${sceneSrc(s, i)}" data-active-src="${sceneSrc(s, i)}" data-full="${s.wide && innerWidth > innerHeight ? s.wide.src : s.img.src}" alt="${s.img.alt}" decoding="async" draggable="false">
                 ${s.sketch ? '<span class="scene__seam" aria-hidden="true"></span>' : ''}
                 ${s.hotspots.map((h, k) => `
-                  <div class="hotspot${h.x > .66 ? ' hotspot--left' : ''}" style="left:${h.x * 100}%;top:${h.y * 100}%;--k:${k}">
+                  <div class="hotspot${(h.side ? h.side === 'left' : h.x > .5) ? ' hotspot--left' : ''}" style="left:${h.x * 100}%;top:${h.y * 100}%;--k:${k}">
                     <button class="hotspot__dot" type="button" data-hot="${i}:${k}" aria-label="Explorar: ${h.t}">${EYE}</button>
                     <span class="hotspot__tag" aria-hidden="true">${h.t}</span>
                   </div>`).join('')}
@@ -72,9 +73,11 @@
               </header>
               <h2 class="tcard__title">${s.nome}</h2>
               <p class="tcard__text">${s.texto}</p>
-              <div class="tcard__more">
-                <ul class="tcard__tags">${s.itens.map(t => `<li>${t}</li>`).join('')}</ul>
-                <p class="tcard__fact"><span>Curiosidade</span>${s.curiosidade}</p>
+              <div class="tcard__more" aria-hidden="true">
+                <div class="tcard__more-inner">
+                  <ul class="tcard__tags">${s.itens.map(t => `<li>${t}</li>`).join('')}</ul>
+                  <p class="tcard__fact"><span>Curiosidade</span>${s.curiosidade}</p>
+                </div>
               </div>
               <footer class="tcard__foot">
                 <button type="button" class="tcard__toggle" aria-expanded="false">Detalhes <i aria-hidden="true">+</i></button>
@@ -266,12 +269,20 @@
       W = sticky.clientWidth;
       H = sticky.clientHeight;
       scenes.forEach(s => {
-        const { w: iw, h: ih } = s.data.img;
+        s.useWide = Boolean(s.data.wide && W > H);
+        const image = s.useWide ? s.data.wide : s.data.img;
+        const desiredSrc = s.useWide ? s.data.wide.src : (s.i < 2 ? s.data.img.src : s.data.img.srcM);
+        if (s.img.dataset.activeSrc !== desiredSrc) {
+          s.img.src = desiredSrc;
+          s.img.dataset.activeSrc = desiredSrc;
+        }
+        const { w: iw, h: ih } = image;
         // Foto vertical em tela horizontal: página de revista. O cômodo inteiro fica à direita,
         // na altura total, e o lado esquerdo traz o texto do ambiente num painel liso.
         // Só fotos realmente verticais se dividem; horizontais sempre cobrem a tela.
-        s.split = iw < ih && iw / ih < (W / H) * .75;
+        s.split = !s.useWide && iw < ih && W > H;
         s.el.classList.toggle('is-split', s.split);
+        s.hotspots.forEach((el, i) => { el.style.left = `${mapHotspotX(s, s.data.hotspots[i].x) * 100}%`; });
         const sc = s.split ? H / ih : Math.max(W / iw, H / ih);
         s.box = { w: iw * sc, h: ih * sc };
         s.el.style.setProperty('--hotspot-label-max', `${Math.max(96, Math.min(W - 48, s.split ? s.box.w - 24 : W - 48))}px`);
@@ -287,6 +298,7 @@
     }
 
     function camAt(s, t) {
+      if (s.useWide) return { x: .5, y: .5, z: 1 };
       const [x0, y0, z0] = s.data.cam.from;
       const [x1, y1, z1] = s.data.cam.to;
       const e = easeIO(clamp(t));
@@ -295,15 +307,21 @@
 
     // Posiciona a imagem; numa dimensão em que ela é menor que a tela, fica centralizada.
     const fit = (start, size, view) => size <= view ? [(view - size) / 2, (view - size) / 2] : [view - size, 0];
+    function mapHotspotX(s, x) {
+      if (!s.useWide) return x;
+      const sourceShare = (s.data.img.w / s.data.img.h) / (s.data.wide.w / s.data.wide.h);
+      return .5 + (x - .5) * sourceShare;
+    }
     function place(s, c, extra = 1, usePan = false) {
       if (s.split) {
         const paneW = s.box.w;
         const paneLeft = W - paneW;
         if (focus && focus.scene === s.i) {
-          // Ao abrir um ponto, o painel editorial some. Expande a foto vertical
-          // para a tela inteira para não deixar a área do painel vazia/preta.
+          // Ao abrir um ponto, a foto vertical fica inteira e centralizada;
+          // o fundo desfocado preenche o restante da tela.
           const infoOpen = sticky.classList.contains('has-info');
-          const expand = infoOpen ? W / paneW : 1;
+          // Keep narrow photos at full height; the blurred scene backdrop fills the sides.
+          const expand = 1;
           const z = c.z * extra * ZB * expand;
           const bw = s.box.w * z, bh = s.box.h * z;
           const viewW = infoOpen ? W : paneW;
@@ -336,19 +354,25 @@
     }
 
     function alignHotspotTags(s, view) {
-      const leftBound = s.split && !sticky.classList.contains('has-info') ? W - s.box.w : 0;
-      const rightBound = W;
+      // Os limites são os da imagem visível: o rótulo nunca passa da borda da foto.
+      const leftBound = Math.max(s.split && !sticky.classList.contains('has-info') ? W - s.box.w : 0, view.left);
+      const rightBound = Math.min(W, view.left + s.box.w * view.z);
       const maxWidth = Math.max(96, Math.min(rightBound - leftBound - 24, s.split && !sticky.classList.contains('has-info') ? s.box.w - 24 : W - 48));
       s.hotspots.forEach((el, i) => {
         const h = s.data.hotspots[i];
         const tag = el.querySelector('.hotspot__tag');
-        const x = view.left + h.x * s.box.w * view.z;
+        const x = view.left + mapHotspotX(s, h.x) * s.box.w * view.z;
         tag.style.maxWidth = `${maxWidth}px`;
         tag.style.translate = '0px 0px';
         const labelWidth = tag.getBoundingClientRect().width;
         const leftRoom = x - leftBound - 34;
         const rightRoom = rightBound - x - 34;
-        const side = rightRoom >= labelWidth ? 'right' : leftRoom >= labelWidth ? 'left' : 'center';
+        // Pontos na metade direita da foto abrem o rótulo para a esquerda: do lado
+        // direito ficam painéis e a borda escura, que cortariam o texto.
+        const preferLeft = h.side ? h.side === 'left' : h.x > .5;
+        const side = preferLeft
+          ? (leftRoom >= labelWidth ? 'left' : rightRoom >= labelWidth ? 'right' : 'center')
+          : (rightRoom >= labelWidth ? 'right' : leftRoom >= labelWidth ? 'left' : 'center');
         el.classList.toggle('hotspot--left', side === 'left');
         el.classList.toggle('hotspot--center', side === 'center');
         if (side === 'center') {
@@ -493,9 +517,9 @@
       focusFrom = { x: previous.x, y: previous.y, z: previous.z };
       focus = {
         scene: si,
-        x: h.x,
+        x: mapHotspotX(s, h.x),
         y: h.y,
-        z: focus && focus.scene === si ? previous.z : previous.z * 1.28,
+        z: focus && focus.scene === si ? previous.z : previous.z * (s.split ? 1 : 1.12),
         k: hi
       };
       fk = 0;
@@ -566,6 +590,17 @@
 
     /* ---------- Cliques ---------- */
     tourEl.addEventListener('click', e => {
+      const tourLink = e.target.closest('.tbar__links a[href="#visao"], .tbar__links a[href="#visita"]');
+      if (tourLink) {
+        const destination = document.querySelector(tourLink.getAttribute('href'));
+        if (destination) {
+          e.preventDefault();
+          closePops();
+          history.replaceState(null, '', tourLink.getAttribute('href'));
+          destination.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'start' });
+        }
+        return;
+      }
       const hot = e.target.closest('[data-hot]');
       if (hot) {
         const [si, hi] = hot.dataset.hot.split(':').map(Number);
@@ -594,7 +629,12 @@
       const tog = e.target.closest('.tcard__toggle');
       if (tog) {
         const open = tog.getAttribute('aria-expanded') !== 'true';
-        cards.forEach(c => { c.classList.toggle('is-open', open); c.querySelector('.tcard__toggle').setAttribute('aria-expanded', String(open)); c.querySelector('.tcard__toggle i').textContent = open ? '−' : '+'; });
+        cards.forEach(c => {
+          c.classList.toggle('is-open', open);
+          c.querySelector('.tcard__toggle').setAttribute('aria-expanded', String(open));
+          c.querySelector('.tcard__toggle i').textContent = open ? '−' : '+';
+          c.querySelector('.tcard__more').setAttribute('aria-hidden', String(!open));
+        });
         return;
       }
       const pop = e.target.closest('[data-pop]');

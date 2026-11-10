@@ -182,7 +182,11 @@
 }
 .ex-status { display: flex; align-items: baseline; gap: 8px; margin: 36px 0 24px; color: var(--muted); }
 .ex-status strong { font-size: 1.6rem; color: var(--ink); font-weight: 600; letter-spacing: -.03em; }
-.ex-reset { margin-left: auto; text-decoration: underline; text-underline-offset: 4px; color: var(--ink); font-size: .9rem; }
+.ex-reset { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px 0 14px; border: 1px solid var(--line-2); border-radius: 999px; background: transparent; color: var(--ink); font-size: .84rem; font-weight: 600; letter-spacing: -.005em; transition: background-color .3s, color .3s, border-color .3s; }
+.ex-reset svg { width: 11px; height: 11px; transition: transform .4s var(--ease); }
+.ex-reset:hover, .ex-reset:focus-visible { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.ex-reset:hover svg { transform: rotate(90deg); }
+.ex-reset[hidden] { display: none; }
 .ex-grid { display: grid; grid-template-columns: 1fr; gap: 48px 24px; }
 @media (min-width: 700px) { .ex-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1100px) { .ex-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -217,7 +221,7 @@
 .ex-recommendations h3 { max-width: 22em; font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight: 400; letter-spacing: -.04em; line-height: 1.1; }
 .ex-recommendations .ex-grid { margin-top: 12px; }
 .ex-more { margin-top: 48px; }
-.float-preview { position: fixed; left: 0; top: 0; z-index: 80; width: 260px; aspect-ratio: 4 / 5; border-radius: 18px; overflow: hidden; pointer-events: none; opacity: 0; scale: .85; transition: opacity .35s, scale .5s var(--ease); }
+.float-preview { position: fixed; left: 0; top: 0; z-index: 80; width: 112px; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden; pointer-events: none; opacity: 0; scale: .9; transition: opacity .3s, scale .4s var(--ease), transform .45s var(--ease); }
 .float-preview.on { opacity: 1; scale: 1; }
 .float-preview img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -455,18 +459,15 @@
 .round-btn:disabled { opacity: .35; cursor: default; }
 .round-btn svg { width: 18px; height: 18px; }
 .round-btn[data-q="-1"] svg { transform: scaleX(-1); }
-.quotes__track { display: flex; gap: 20px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 6px; }
-.quotes__track::after { content: ''; flex: 0 0 max(0px, calc(100% - min(86%, 440px) - 20px)); }
+.quotes__track { display: flex; gap: 20px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-padding-inline: 4px; scrollbar-width: none; margin-inline: -4px; padding: 4px 4px 10px; }
 .quotes__track::-webkit-scrollbar { display: none; }
-.quote { flex: 0 0 min(86%, 440px); scroll-snap-align: start; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; min-height: 340px; padding: 32px; border-radius: var(--r); background: var(--paper); border: 1px solid var(--line); }
+.quote { flex: 0 0 calc((100% - 40px) / 3); min-width: 0; scroll-snap-align: start; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; min-height: 340px; padding: 32px; border-radius: var(--r); background: var(--paper); border: 1px solid var(--line); }
 .quote blockquote { font-size: 1.3rem; line-height: 1.4; letter-spacing: -.02em; font-weight: 500; }
 .quote figcaption { display: grid; font-size: .9rem; }
 .quote figcaption span { color: var(--muted); }
 .quotes__note { margin-top: 20px; font-size: .8rem; color: var(--muted); }
-@media (max-width: 699.98px) {
-  .quotes__track::after { display: none; }
-  .quote { flex-basis: 100%; min-width: 0; scroll-snap-stop: always; }
-}
+@media (max-width: 1023.98px) { .quote { flex-basis: calc((100% - 20px) / 2); } }
+@media (max-width: 699.98px) { .quote { flex-basis: 100%; scroll-snap-stop: always; } }
 
 /* ---------- Perguntas ---------- */
 .faq { background: var(--bg-2); }
@@ -487,7 +488,7 @@
 @media (prefers-reduced-motion: reduce) {
   .faq summary span, .faq summary span::after, .faq__answer { transition-duration: .01ms; }
 }
-@media (min-width: 1024px) { .faq__grid { grid-template-columns: .8fr 1.2fr; gap: 80px; } }
+@media (min-width: 1024px) { .faq__grid { grid-template-columns: .8fr 1.2fr; gap: 80px; } .faq__grid > header { align-self: center; } }
 
 /* ---------- Contato ---------- */
 .contact__grid { display: grid; gap: 64px; }
