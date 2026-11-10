@@ -18,6 +18,12 @@ Os links do menu rolam suavemente para seções da página inicial. Clicar novam
 
 Cada imóvel tem um ambiente interno com croqui que dá lugar à foto durante a rolagem e um comparador de croqui e foto na seção de arquitetura. Os pontos de interesse abrem um cartão com imagem e descrição; os botões do cartão mudam o ponto e movem a câmera. A seção de localização exibe uma foto aérea do imóvel sob o gráfico de proximidade.
 
+## Prédio interativo e "do croqui à chave"
+
+- **Andares (`#predio`)**: aparece em imóveis com o campo `predio` em `assets/js/data.js` (hoje só a Cobertura Dossel). Passe o mouse ou toque nos andares da torre para ver tipo, área e status; ao selecionar, abre a planta isométrica e o botão "Entrar" leva ao tour. `geo` guarda a posição da torre na foto (frações da imagem); `tipo` descreve a planta dos andares-tipo. Status e valores dos andares-tipo são gerados na página, fictícios.
+- **Obra (`#obra`)**: aparece em todos os imóveis, com etapas montadas a partir dos dados que já existem (croqui, planta, arquitetura e foto final). Rola em etapas com troca suave de imagem; com movimento reduzido vira uma sequência normal.
+- Código: `assets/js/predio.js` e `assets/css/predio.css`.
+
 ## Onde editar
 
 - Imóveis, ambientes, imagens, pontos e plantas: `assets/js/data.js`.

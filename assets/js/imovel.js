@@ -276,12 +276,15 @@
 
   const dock = `
     <nav class="dock" aria-label="Seções do imóvel">
-      <a href="#tour">Tour</a><a href="#visao">Visão</a><a href="#planta">Planta</a><a href="#localizacao">Local</a>${hasGallery ? '<a href="#galeria">Galeria</a>' : ''}
+      <a href="#tour">Tour</a><a href="#visao">Visão</a>${P.passeio ? '<a href="#video">Vídeo</a>' : ''}${P.predio ? '<a href="#predio">Andares</a>' : ''}<a href="#obra">Obra</a><a href="#planta">Planta</a><a href="#localizacao">Local</a>${hasGallery ? '<a href="#galeria">Galeria</a>' : ''}
       <button type="button" class="dock__btn" data-drawer-open>Coleção</button>
       <a class="dock__cta" href="#visita">Agendar</a>
     </nav>`;
 
-  main.innerHTML = tour + overview + arch + plan + mats + loc + gallery + visit + next;
+  const predio = P.predio ? window.AZPredio.predio(P) : '';
+  const obra = window.AZPredio.obra(P);
+  const passeio = window.AZPredio.video(P);
+  main.innerHTML = tour + overview + passeio + predio + obra + arch + plan + mats + loc + gallery + visit + next;
   document.body.insertAdjacentHTML('beforeend', dock);
 
   function planSVG(kind) {
@@ -343,6 +346,7 @@
      ====================================================================== */
   const T = window.AZTour.init(P, main.querySelector('.tour'));
   const goTo = T.goTo;
+  window.AZPredio.init(main, P, goTo);
 
   /* ======================================================================
      Planta, comparação, radar, galeria, dock

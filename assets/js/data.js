@@ -95,6 +95,16 @@
       cover: IMG.living,
       card: IMG.torre,
       video: { src: 'assets/video/torre.mp4', portrait: 'assets/video/torre-retrato.mp4', poster: 'assets/video/torre-poster.webp', posterPortrait: 'assets/video/torre-retrato-poster.webp' },
+      // Tour em vídeo: troque src/portrait pelo vídeo de passeio do imóvel e ajuste os capítulos (t em segundos).
+      passeio: {
+        src: 'assets/video/torre.mp4', portrait: 'assets/video/torre-retrato.mp4',
+        poster: 'assets/video/torre-poster.webp', posterPortrait: 'assets/video/torre-retrato-poster.webp',
+        capitulos: [
+          { t: 0, nome: 'A torre entre as copas', texto: 'Vista de longe, a torre se mistura ao bairro arborizado.' },
+          { t: 4, nome: 'Fachada com jardins', texto: 'Varandas com floreiras estruturais em todos os andares.' },
+          { t: 9, nome: 'A cobertura', texto: 'O último volume, de vidro e latão, onde fica a Dossel.' }
+        ]
+      },
       tagline: 'Morar acima das copas, sem perder o chão.',
       resumo: 'A última residência da torre: 420 m² em um único pavimento, com terraço gourmet e vista de 360° sobre as árvores do Jardim Europa.',
       descricao: [
@@ -137,6 +147,27 @@
           { id: 'servico', nome: 'Serviço', x: 78, y: 4, w: 18, h: 14, area: 22 },
           { id: 'clube', nome: 'Clube (térreo e rooftop)', x: 68, y: 44, w: 28, h: 16, area: 0 }
         ]
+      },
+      // Prédio interativo: posição da torre na foto (frações da imagem) e planta dos andares-tipo.
+      predio: {
+        imagem: IMG.torre,
+        andares: 24,
+        geo: { x0: .397, x1: .604, topo: .13, y0: .205, y1: .855 },
+        cenaCobertura: 0,
+        cenaTipo: 2,
+        tipo: {
+          area: 248, suites: 3, vagas: 3,
+          rooms: [
+            { id: 'living', nome: 'Living', x: 4, y: 4, w: 36, h: 28, area: 54 },
+            { id: 'varanda', nome: 'Varanda gourmet', x: 4, y: 34, w: 36, h: 26, area: 36 },
+            { id: 'cozinha', nome: 'Cozinha', x: 42, y: 4, w: 20, h: 16, area: 24 },
+            { id: 'jantar', nome: 'Jantar', x: 42, y: 22, w: 20, h: 14, area: 22 },
+            { id: 'office', nome: 'Home office', x: 42, y: 38, w: 20, h: 22, area: 20 },
+            { id: 'master', nome: 'Suíte master', x: 64, y: 4, w: 32, h: 24, area: 42 },
+            { id: 'suite2', nome: 'Suíte 2', x: 64, y: 30, w: 32, h: 14, area: 24 },
+            { id: 'suite3', nome: 'Suíte 3', x: 64, y: 46, w: 32, h: 14, area: 26 }
+          ]
+        }
       },
       scenes: [
         {
@@ -291,6 +322,15 @@
           { id: 'escada', nome: 'Escada', x: 46, y: 24, w: 20, h: 14, area: 24 },
           { id: 'cozinha', nome: 'Cozinha', x: 68, y: 4, w: 28, h: 18, area: 48 },
           { id: 'banho', nome: 'Banho master', x: 68, y: 24, w: 28, h: 14, area: 26 }
+        ]
+      },
+      passeio: {
+        src: 'assets/video/sala.mp4', portrait: 'assets/video/sala-retrato.mp4',
+        poster: 'assets/video/sala-poster.webp', posterPortrait: 'assets/video/sala-retrato-poster.webp',
+        capitulos: [
+          { t: 0, nome: 'Estar', texto: 'Painel de madeira, sofá de linho e o vidro aberto para o jardim.' },
+          { t: 5, nome: 'Jardim tropical', texto: 'A câmera atravessa a vegetação que abraça a casa.' },
+          { t: 10, nome: 'Piscina', texto: 'A água fecha a vista, a poucos passos da sala.' }
         ]
       },
       scenes: [
