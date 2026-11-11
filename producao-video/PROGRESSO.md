@@ -28,3 +28,17 @@ Método (grátis): no editor de imagem do Flow (Nano Banana 2.1), editar a image
 "Change the framing to a much closer aerial drone view of the upper floors of this same <prédio/casa> under construction, at golden hour. Show about 12 to 15 clearly visible construction workers (masons) in white helmets and orange high-visibility vests on the slabs and scaffolding, laying bricks, tying rebar, pouring concrete, with the crane next to them. Photorealistic, same sky and light."
 Feito: Dossel/estrutura -> producao-video/dossel/etapas/estrutura-pedreiros.jpg (ficou bom).
 Falta: versões com pedreiros de fundação e acabamento do Dossel, e das etapas dos outros 5; depois usar esses quadros como início/fim dos clipes do Veo.
+
+## Situação em 2026-11-11 (fim do dia)
+- Planta 3D: FEITA nos 6 imóveis (assets/js/planta3d.js + planta3d-decor.js). Gira livre arrastando; decoração tirada das fotos.
+- Vídeos de obra com pedreiros (estilo do 1º vídeo da Maré): NÃO feitos — sem crédito de vídeo.
+  - Flow: "créditos acabaram" (11/11 13h). Muapi/Open-Higgsfield: saldo US$ 0; nenhum modelo de vídeo é grátis (mais barato US$ 0,016).
+- Vídeo drone (entra na casa, passa pelos cômodos, sai): NÃO feito — mesmo motivo.
+
+## Plano quando houver crédito (Flow/Veo, Frames-to-Video)
+Obra (4 clipes/imóvel): usar etapas/1..5 como quadros; prompt:
+"Fixed drone camera. Construction time-lapse of this same building: dozens of clearly visible masons in white helmets and orange vests laying bricks, tying rebar and pouring concrete, crane lifting loads, the structure rising until finished. Photorealistic, no text."
+Drone (3–4 clipes/imóvel): quadro inicial = foto externa; finais = fotos dos ambientes na ordem da planta
+(ex. Dossel: torre → lobby → living → suíte → terraço → piscina → torre). Prompt:
+"Smooth cinematic drone flight, continuous single shot, flying from <A> into <B>, keep every object exactly as in the frames, photorealistic, no people, no text."
+Ordem: Dossel, Aurora, Copa, Brise, Horizonte, Maré.
