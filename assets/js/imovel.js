@@ -276,13 +276,15 @@
 
   const dock = `
     <nav class="dock" aria-label="Seções do imóvel">
-      <a href="#tour">Tour</a><a href="#visao">Visão</a><a href="#planta">Planta</a><a href="#localizacao">Local</a>${hasGallery ? '<a href="#galeria">Galeria</a>' : ''}
+      <a href="#tour">Tour</a><a href="#visao">Visão</a>${P.obra ? '<a href="#obra">Obra</a>' : ''}<a href="#planta">Planta</a><a href="#localizacao">Local</a>${hasGallery ? '<a href="#galeria">Galeria</a>' : ''}
       <button type="button" class="dock__btn" data-drawer-open>Coleção</button>
       <a class="dock__cta" href="#visita">Agendar</a>
     </nav>`;
 
-  main.innerHTML = tour + overview + arch + plan + mats + loc + gallery + visit + next;
+  const obra = window.AZObra.markup(P);
+  main.innerHTML = tour + overview + obra + arch + plan + mats + loc + gallery + visit + next;
   document.body.insertAdjacentHTML('beforeend', dock);
+  window.AZObra.init(main, P);
 
   function planSVG(kind) {
     const rooms = P.plan.rooms;
