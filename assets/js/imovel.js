@@ -95,10 +95,10 @@
             <p class="eyebrow" data-reveal>Planta</p>
             <h2 class="h2" id="planta-title" data-split style="margin-top:22px">Cada ambiente<br>no seu <em>lugar</em>.</h2>
           </div>
-          <p class="lead" data-reveal>Planta esquemática, sem escala. ${allRoomsInTour ? 'Selecione qualquer ambiente para voltar a ele no tour.' : 'Explore a distribuição dos ambientes e suas áreas.'}</p>
+          <p class="lead" data-reveal>Planta em 3D, sem escala: arraste para girar e ver de cima. ${allRoomsInTour ? 'Selecione qualquer ambiente na lista para voltar a ele no tour.' : 'As áreas de cada ambiente estão na lista ao lado.'}</p>
         </header>
         <div class="p-plan__grid">
-          <div class="p-plan__svg" data-reveal="scale">${planSVG('big')}</div>
+          <div class="p-plan__svg" data-reveal="scale">${planSVG('big')}<div class="plan3d" hidden></div></div>
           <ul class="p-plan__list">
             ${P.plan.rooms.map(r => {
               const si = P.scenes.findIndex(s => s.room === r.id);
@@ -276,16 +276,17 @@
 
   const dock = `
     <nav class="dock" aria-label="Seções do imóvel">
-      <a href="#tour">Tour</a><a href="#visao">Visão</a>${P.passeio ? '<a href="#video">Vídeo</a>' : ''}${P.predio ? '<a href="#predio">Andares</a>' : ''}<a href="#obra">Obra</a><a href="#planta">Planta</a><a href="#localizacao">Local</a>${hasGallery ? '<a href="#galeria">Galeria</a>' : ''}
+      <a href="#tour">Tour</a><a href="#visao">Visão</a>${P.passeio ? '<a href="#video">Vídeo</a>' : ''}${P.predio ? '<a href="#predio">Andares</a>' : ''}${P.obra ? '<a href="#obra">Obra</a>' : ''}<a href="#planta">Planta</a><a href="#localizacao">Local</a>${hasGallery ? '<a href="#galeria">Galeria</a>' : ''}
       <button type="button" class="dock__btn" data-drawer-open>Coleção</button>
       <a class="dock__cta" href="#visita">Agendar</a>
     </nav>`;
 
   const predio = P.predio ? window.AZPredio.predio(P) : '';
-  const obra = window.AZPredio.obra(P);
   const passeio = window.AZPredio.video(P);
+  const obra = window.AZObra.markup(P);
   main.innerHTML = tour + overview + passeio + predio + obra + arch + plan + mats + loc + gallery + visit + next;
   document.body.insertAdjacentHTML('beforeend', dock);
+  window.AZObra.init(main, P);
 
   function planSVG(kind) {
     const rooms = P.plan.rooms;
@@ -357,9 +358,19 @@
   });
   const planBig = main.querySelector('.plan--big');
   const planItems = [...main.querySelectorAll('.p-plan__list li')];
-  const hiRoom = id => {
+  // Maquete 3D (assets/js/planta3d.js); sem WebGL, fica a planta 2D.
+  const plan3dBox = main.querySelector('.plan3d');
+  const plan3d = window.AZPlan3D ? (P.plan.giro ? window.AZPlan3D.giro(plan3dBox, P) : window.AZPlan3D.init(plan3dBox, P)) : null;
+  if (plan3d) {
+    window.__plan3d = plan3d;
+    plan3dBox.hidden = false;
+    plan3dBox.parentElement.classList.add('is-3d');
+    plan3d.onPick(id => hiRoom(id, true));
+  }
+  const hiRoom = (id, from3d) => {
     planBig.querySelectorAll('.plan__room').forEach(g => g.classList.toggle('is-on', g.dataset.room === id));
     planItems.forEach(li => li.classList.toggle('is-on', li.dataset.room === id));
+    if (plan3d && !from3d) plan3d.highlight(id);
   };
   planItems.forEach(li => {
     li.addEventListener('pointerenter', () => hiRoom(li.dataset.room));

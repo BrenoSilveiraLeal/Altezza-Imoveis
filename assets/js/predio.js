@@ -219,7 +219,7 @@
   }
 
   function initObra(main) {
-    const sec = main.querySelector('#obra');
+    const sec = main.querySelector('#obra.ob');
     if (!sec) return;
     const N = +sec.dataset.stages;
     const layers = [...sec.querySelectorAll('.ob__layer')];

@@ -1,0 +1,45 @@
+/* ==========================================================================
+   Altezza — "do desenho à chave": vídeo da obra controlado pela rolagem
+   ========================================================================== */
+.obra { position: relative; height: 520vh; background: var(--night); }
+.obra__sticky { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.obra__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: var(--night); }
+.obra__shade { position: absolute; inset: 0; pointer-events: none; background:
+  linear-gradient(180deg, rgba(11, 12, 10, .55) 0%, rgba(11, 12, 10, 0) 26%),
+  linear-gradient(0deg, rgba(11, 12, 10, .82) 0%, rgba(11, 12, 10, .45) 34%, rgba(11, 12, 10, 0) 62%); }
+
+.obra__head { position: absolute; top: calc(var(--nav-h) + 12px); left: var(--gutter); right: var(--gutter); display: grid; gap: 6px; }
+.obra__kicker { font-size: var(--fs-label); font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--accent-glow); }
+.obra__h2 { font-size: clamp(1rem, 1.4vw, 1.2rem); font-weight: 500; letter-spacing: -.01em; color: var(--on-night-2); }
+
+.obra__caps { position: absolute; left: var(--gutter); right: var(--gutter); bottom: clamp(150px, 21vh, 200px); display: grid; justify-items: center; text-align: center; }
+.obra__cap { grid-area: 1 / 1; max-width: 760px; opacity: 0; transform: translateY(18px); transition: opacity .6s var(--ease), transform .8s var(--ease); pointer-events: none; }
+.obra__cap.is-on { opacity: 1; transform: none; }
+.obra__title { font-size: clamp(2.6rem, 7.4vw, 6.6rem); line-height: .98; letter-spacing: -.05em; font-weight: 500; color: var(--on-night); text-shadow: 0 2px 30px rgba(0, 0, 0, .35); }
+.obra__text { margin: 16px auto 0; max-width: 46ch; font-size: clamp(.95rem, 1.2vw, 1.12rem); line-height: 1.5; color: var(--on-night); text-shadow: 0 1px 12px rgba(0, 0, 0, .55); }
+
+/* Fica acima da barra de seções do imóvel, que aparece fixa no rodapé. */
+.obra__pill { position: absolute; left: 50%; bottom: 92px; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; padding: 10px 18px; border-radius: 999px; background: var(--glass); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--line-night); color: var(--on-night); font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+.obra__step b { color: var(--accent-glow); font-weight: 600; margin-right: 4px; font-variant-numeric: tabular-nums; }
+.obra__bar { position: relative; width: clamp(120px, 18vw, 220px); height: 2px; background: rgba(241, 243, 232, .22); border-radius: 2px; }
+.obra__fill { position: absolute; inset: 0; background: var(--accent-glow); transform-origin: left; transform: scaleX(0); border-radius: 2px; }
+.obra__bar i { position: absolute; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--on-night); }
+
+.obra__hint { position: absolute; left: 50%; bottom: 148px; transform: translateX(-50%); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--on-night-2); transition: opacity .5s; }
+.obra__hint.is-gone { opacity: 0; }
+
+@media (max-width: 599.98px) {
+  .obra { height: 420vh; }
+  .obra__pill { gap: 10px; padding: 8px 14px; font-size: .66rem; }
+  .obra__bar { width: 90px; }
+}
+
+/* Movimento reduzido: vídeo normal com controles e as etapas em sequência. */
+.obra.is-static { height: auto; }
+.obra.is-static .obra__sticky { position: relative; height: auto; overflow: visible; }
+.obra.is-static .obra__video { position: relative; height: auto; aspect-ratio: 16 / 9; }
+.obra.is-static .obra__shade, .obra.is-static .obra__pill, .obra.is-static .obra__hint { display: none; }
+.obra.is-static .obra__head { position: static; padding: 24px var(--gutter) 0; }
+.obra.is-static .obra__caps { position: static; display: grid; gap: 32px; padding: 32px var(--gutter) 72px; justify-items: start; text-align: left; }
+.obra.is-static .obra__cap { grid-area: auto; opacity: 1; transform: none; }
+.obra.is-static .obra__title { font-size: clamp(2rem, 5vw, 3.4rem); }

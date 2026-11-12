@@ -459,6 +459,7 @@
     }
 
     function setActive(a) {
+      if (!scenes[a]) return; // aba em segundo plano (altura 0): índice inválido
       const prev = active;
       active = a;
       sticky.classList.toggle('split-on', Boolean(scenes[a].split));
