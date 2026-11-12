@@ -115,17 +115,16 @@
         { nome: 'Latão escovado', uso: 'Metais e caixilhos', cor: '#b38b4d', img: SW('latao') }
       ],
       obra: {
-        video: 'assets/video/obra-dossel.mp4?v=1',
-        poster: 'assets/video/obra-dossel-poster.jpg?v=1',
+        video: 'assets/video/obra-dossel.mp4?v=2',
+        poster: 'assets/video/obra-dossel-poster.jpg?v=2',
         etapas: [
-          { t: 0, de: 0, ate: 3.4, rotulo: 'Projeto', titulo: 'Do desenho…', texto: 'A torre nasce no traço: uma lâmina esbelta, pensada para ficar acima da copa das árvores do bairro.' },
-          { t: 5, de: 4.4, ate: 8, rotulo: 'Fundação', titulo: '…à fundação…', texto: 'O terreno é escavado, a base é concretada e os primeiros pavimentos começam a subir, com a grua no canteiro.' },
-          { t: 10, de: 9.4, ate: 12.6, rotulo: 'Estrutura', titulo: '…ao concreto…', texto: 'Pavimento a pavimento, a estrutura ganha altura e já desenha o perfil da cobertura.' },
-          { t: 14.5, de: 13.6, ate: 17, rotulo: 'Acabamento', titulo: '…ao acabamento…', texto: 'As fachadas são fechadas e os jardins verticais começam a revestir a torre.' },
-          { t: 21.4, de: 18.4, ate: 99, rotulo: 'Entrega', titulo: '…à chave.', texto: 'Torre entregue, iluminada ao entardecer. Pronta para morar no alto de Jardim Europa.' }
+          { t: 0, de: 0, ate: 2.4, rotulo: 'Projeto', titulo: 'Do desenho…', texto: 'A torre nasce no traço: uma lâmina esbelta, pensada para ficar acima da copa das árvores do bairro.' },
+          { t: 3, de: 2.9, ate: 5.4, rotulo: 'Fundação', titulo: '…à fundação…', texto: 'O terreno é escavado e a base é concretada, com a grua e a bomba de concreto trabalhando sem parar.' },
+          { t: 7, de: 5.9, ate: 9.6, rotulo: 'Estrutura', titulo: '…ao concreto…', texto: 'Pavimento a pavimento, as equipes levantam a estrutura até o topo e já desenham a silhueta da cobertura.' },
+          { t: 13, de: 10.6, ate: 17.4, rotulo: 'Acabamento', titulo: '…ao acabamento…', texto: 'As fachadas são fechadas andar por andar e os jardins verticais começam a revestir a torre.' },
+          { t: 23, de: 18.6, ate: 99, rotulo: 'Entrega', titulo: '…à chave.', texto: 'Torre entregue, iluminada ao entardecer. Pronta para morar no alto de Jardim Europa.' }
         ]
       },
-
       localizacao: {
         texto: 'Entre as ruas arborizadas do Jardim Europa, a uma caminhada da Av. Brasil e a poucos minutos da Faria Lima, sem o ruído das vias principais.',
         imagem: IMG.bairro,

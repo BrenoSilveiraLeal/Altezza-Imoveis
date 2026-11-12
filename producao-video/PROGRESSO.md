@@ -42,3 +42,13 @@ Drone (3–4 clipes/imóvel): quadro inicial = foto externa; finais = fotos dos 
 (ex. Dossel: torre → lobby → living → suíte → terraço → piscina → torre). Prompt:
 "Smooth cinematic drone flight, continuous single shot, flying from <A> into <B>, keep every object exactly as in the frames, photorealistic, no people, no text."
 Ordem: Dossel, Aurora, Copa, Brise, Horizonte, Maré.
+
+## 2026-11-11 (noite) — vídeos Veo gerados
+Créditos do Flow voltaram (Lite 720p, 10 créditos por clipe de 8 s). Receita que deu certo:
+- Clipe A: só quadro inicial (1-desenho), sem quadro final — a obra sobe sem voltar atrás. Prompt com "only moves forward" e pedreiros (capacete branco, colete laranja).
+- Clipe B: primeiro quadro = último quadro do clipe A (extraído com ffmpeg), último = 4-acabamento.
+- Clipe C: primeiro = 4-acabamento, último = 5-pronto.
+- Usar quadro final no clipe 1 faz o Veo subir o prédio inteiro e voltar à fundação: não usar.
+Feito: Dossel A+B+C (producao-video/dossel/recebidos-veo) -> assets/video/obra-dossel.mp4 (ampliado com Real-ESRGAN).
+Aurora: só clipe A feito (producao-video/aurora/recebidos-veo/obra-A.mp4). Faltam B e C da Aurora e os 3 clipes de Copa, Brise, Horizonte e Maré (refazer no estilo).
+Script: scratchpad/upscale.sh <id> obra-A obra-B obra-C
