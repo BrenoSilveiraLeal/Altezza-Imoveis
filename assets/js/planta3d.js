@@ -90,7 +90,7 @@
     const sun = new THREE.DirectionalLight(0xffcf9a, .7);
     sun.position.set(-70, 130, 80);
     sun.castShadow = true;
-    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.mapSize.set(4096, 4096); sun.shadow.radius = 3;
     Object.assign(sun.shadow.camera, { left: -85, right: 85, top: 85, bottom: -85, near: 10, far: 360 });
     sun.shadow.bias = -.0006;
     scene.add(sun);
@@ -375,7 +375,7 @@
       pool(p, o) {
         const w = o.w || 16, d = o.d || 6;
         B(p, w + 1.4, .3, d + 1.4, 0, 0, 0, o.edge || 'travertine');
-        B(p, w, .32, d, 0, .02, 0, new THREE.MeshStandardMaterial({ color: col(o.c || 'water'), roughness: .08, metalness: .1, transparent: true, opacity: .92, emissive: col(o.c || 'water'), emissiveIntensity: .12 })).castShadow = false;
+        B(p, w, .32, d, 0, .02, 0, new THREE.MeshStandardMaterial({ color: col(o.c || 'water'), roughness: .03, metalness: .25, transparent: true, opacity: .93, emissive: col(o.c || 'water'), emissiveIntensity: .22, envMapIntensity: 2.2 })).castShadow = false;
       },
       lounger(p, o) { const c = o.c || 'white'; B(p, 2, .7, 5.4, 0, .15, 0, o.frame || 'oak'); B(p, 1.9, .35, 3.6, 0, .85, .8, c); const b = B(p, 1.9, .35, 2, 0, 1.1, -1.8, c); b.rotation.x = -.6; },
       pergola(p, o) { const w = o.w, d = o.d, c = o.c || 'oak', n = o.n || 9; [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz]) => B(p, .5, H, .5, sx * (w / 2 - .5), 0, sz * (d / 2 - .5), c)); for (let i = 0; i < n; i++) B(p, w - .4, .35, .45, 0, H - .1, -d / 2 + .6 + i * (d - 1.2) / (n - 1), c); [-1, 1].forEach(s => B(p, .5, .45, d, s * (w / 2 - .5), H - .4, 0, c)); },
@@ -447,7 +447,7 @@
         const texM = woodKind ? mWood : stoneKind ? mStone : null;
         const t = tex(texM, Math.max(1, r.w / 14), Math.max(1, r.h / 14));
         baseC = t ? 0xffffff : (woodKind ? PAL.wood : stoneKind ? PAL.stone : FLOOR[kind]);
-        fm = new THREE.MeshStandardMaterial({ color: baseC, roughness: stoneKind ? .55 : .8, map: t || null });
+        fm = new THREE.MeshStandardMaterial({ color: baseC, roughness: stoneKind ? .38 : .52, map: t || null, envMapIntensity: .9 });
       }
       const fl = mesh(g, r.w, FH, r.h, 0, 0, 0, fm);
       fl.castShadow = false;
@@ -484,7 +484,7 @@
             // fachada envidraçada: peitoril baixo + vidro
             const w = horiz ? len : T, d = horiz ? T : len;
             mesh(g, w, 1.1, d, horiz ? 0 : x, FH, horiz ? z : 0, wallC);
-            mesh(g, w, H - 1.1, d, horiz ? 0 : x, FH + 1.1, horiz ? z : 0, 0x9fc4d8, { transparent: true, opacity: .3, roughness: .05, metalness: .3 }).castShadow = false;
+            mesh(g, w, H - 1.1, d, horiz ? 0 : x, FH + 1.1, horiz ? z : 0, 0x9fc4d8, { transparent: true, opacity: .26, roughness: .02, metalness: .6, envMapIntensity: 2 }).castShadow = false;
             mesh(g, w + .05, .18, d + .05, horiz ? 0 : x, FH + H, horiz ? z : 0, cap);
           }
         });
