@@ -54,7 +54,7 @@
     canvas.tabIndex = 0;
     box.appendChild(canvas);
 
-    if (THREE.ACESFilmicToneMapping) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = .82; }
+    if (THREE.ACESFilmicToneMapping) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15; }
 
     /* Paleta do imóvel: cores e texturas vêm dos materiais cadastrados (P.materiais). */
     const hex = s => parseInt(String(s).replace('#', ''), 16);
@@ -84,10 +84,10 @@
 
     const scene = new THREE.Scene();
     const cam = new THREE.PerspectiveCamera(32, 1, 1, 600);
-    scene.add(new THREE.HemisphereLight(0xfff4e2, 0x2f3229, .62));
-    const fill = new THREE.DirectionalLight(0xbfd2ff, .22);
+    scene.add(new THREE.HemisphereLight(0x9fb2d8, 0x1a1712, .34));
+    const fill = new THREE.DirectionalLight(0x8fa6d8, .25);
     fill.position.set(80, 60, -60); scene.add(fill);
-    const sun = new THREE.DirectionalLight(0xffe2b8, 1.35);
+    const sun = new THREE.DirectionalLight(0xffcf9a, .7);
     sun.position.set(-70, 130, 80);
     sun.castShadow = true;
     sun.shadow.mapSize.set(2048, 2048);
@@ -114,9 +114,9 @@
     }
 
     /* ---------- base ---------- */
-    const slab = new THREE.Mesh(new THREE.BoxGeometry(110, 2.2, 74), mat(0x0d0e0b));
+    const slab = new THREE.Mesh(new THREE.BoxGeometry(110, 2.2, 74), mat(0x07080a));
     slab.position.set(0, -1.1, 0); slab.receiveShadow = true; scene.add(slab);
-    const rim = new THREE.Mesh(new THREE.BoxGeometry(110.6, .5, 74.6), mat(0x2a2d24));
+    const rim = new THREE.Mesh(new THREE.BoxGeometry(110.6, .5, 74.6), mat(0x15171a));
     rim.position.set(0, .05, 0); rim.receiveShadow = true; scene.add(rim);
 
     /* ---------- decoração fiel às fotos ---------- */
@@ -484,7 +484,7 @@
             // fachada envidraçada: peitoril baixo + vidro
             const w = horiz ? len : T, d = horiz ? T : len;
             mesh(g, w, 1.1, d, horiz ? 0 : x, FH, horiz ? z : 0, wallC);
-            mesh(g, w, H - 1.1, d, horiz ? 0 : x, FH + 1.1, horiz ? z : 0, 0xa9d4e2, { transparent: true, opacity: .22, roughness: .1, metalness: .1 }).castShadow = false;
+            mesh(g, w, H - 1.1, d, horiz ? 0 : x, FH + 1.1, horiz ? z : 0, 0x9fc4d8, { transparent: true, opacity: .3, roughness: .05, metalness: .3 }).castShadow = false;
             mesh(g, w + .05, .18, d + .05, horiz ? 0 : x, FH + H, horiz ? z : 0, cap);
           }
         });
@@ -497,6 +497,14 @@
         });
       }
 
+      if (!OUTDOOR[kind]) {
+        const pl = new THREE.PointLight(0xffbe7a, 1.15, Math.max(r.w, r.h) * 1.9, 1.6);
+        pl.position.set(0, FH + H - .8, 0); g.add(pl);
+        const lamp = new THREE.Mesh(new THREE.BoxGeometry(Math.min(r.w * .5, 8), .15, .5), new THREE.MeshStandardMaterial({ color: 0xffe2b8, emissive: 0xffc27a, emissiveIntensity: 1.6 }));
+        lamp.position.set(0, FH + H - .25, 0); g.add(lamp);
+      } else if (kind === 'clube' || kind === 'jardim') {
+        const pl = new THREE.PointLight(0x7fd6e6, .9, 34, 1.6); pl.position.set(0, 4, 0); g.add(pl);
+      }
       if (spec && spec.items) decorate(g, spec, r);
       else furnish(g, kind, r.w, r.h, FH);
       g.traverse(o => { if (o.isMesh) o.userData.room = r.id; });
