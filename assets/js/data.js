@@ -285,17 +285,16 @@
         { nome: 'Linho cru', uso: 'Estofados e cortinas', cor: '#dcd2c0', img: SW('linho-cru') }
       ],
       obra: {
-        video: 'assets/video/obra-brise.mp4?v=1',
-        poster: 'assets/video/obra-brise-poster.jpg?v=1',
+        video: 'assets/video/obra-brise.mp4?v=2',
+        poster: 'assets/video/obra-brise-poster.jpg?v=2',
         etapas: [
-          { t: 0, de: 0, ate: 3.6, rotulo: 'Projeto', titulo: 'Do desenho…', texto: 'A casa começa no traço: volumes baixos e abertos, encaixados no lote sem derrubar o jardim.' },
-          { t: 5.5, de: 4.3, ate: 7, rotulo: 'Fundação', titulo: '…à fundação…', texto: 'O terreno é aberto só onde a casa pousa, com a vegetação do entorno preservada.' },
-          { t: 8.5, de: 7.6, ate: 10, rotulo: 'Estrutura', titulo: '…ao concreto…', texto: 'A bomba lança o concreto e a laje ganha forma, com a piscina já marcada no térreo.' },
-          { t: 11.5, de: 10.6, ate: 13, rotulo: 'Acabamento', titulo: '…ao acabamento…', texto: 'A cobertura plana se completa e a casa se abre para o jardim e para a piscina.' },
-          { t: 16.9, de: 13.6, ate: 99, rotulo: 'Entrega', titulo: '…à chave.', texto: 'Casa entregue, com madeira, vidro e piscina em meio ao verde da Cidade Jardim.' }
+          { t: 0, de: 0, ate: 2.4, rotulo: 'Projeto', titulo: 'Do desenho…', texto: 'A casa começa no traço: volumes baixos e abertos, encaixados no lote sem derrubar o jardim.' },
+          { t: 3, de: 2.9, ate: 6.2, rotulo: 'Fundação', titulo: '…à fundação…', texto: 'O terreno é aberto só onde a casa pousa, com a vegetação do entorno preservada.' },
+          { t: 8, de: 6.9, ate: 11.5, rotulo: 'Estrutura', titulo: '…ao concreto…', texto: 'A bomba lança o concreto, a laje ganha forma e a piscina já aparece marcada no térreo.' },
+          { t: 14, de: 12.5, ate: 18.5, rotulo: 'Acabamento', titulo: '…ao acabamento…', texto: 'Madeira, vidro e pedra fecham a casa, que se abre para o jardim e para a piscina.' },
+          { t: 23, de: 19.5, ate: 99, rotulo: 'Entrega', titulo: '…à chave.', texto: 'Casa entregue, com a piscina cheia e o jardim tropical plantado, em meio ao verde da Cidade Jardim.' }
         ]
       },
-
       localizacao: {
         texto: 'Numa rua sem saída da Cidade Jardim, cercada por quintais arborizados, com acesso rápido à Marginal Pinheiros e ao Jockey Club.',
         imagem: IMG.radarBrise,
@@ -668,17 +667,16 @@
         { nome: 'Terracota', uso: 'Revestimentos e cerâmicas', cor: '#b2603c', img: SW('terracota') }
       ],
       obra: {
-        video: 'assets/video/obra-copa.mp4?v=1',
-        poster: 'assets/video/obra-copa-poster.jpg?v=1',
+        video: 'assets/video/obra-copa.mp4?v=2',
+        poster: 'assets/video/obra-copa-poster.jpg?v=2',
         etapas: [
-          { t: 0, de: 0, ate: 3.6, rotulo: 'Projeto', titulo: 'Do desenho…', texto: 'O edifício nasce no traço: poucos andares, terraços generosos e o verde entrando em cada pavimento.' },
-          { t: 5.5, de: 4.3, ate: 7, rotulo: 'Fundação', titulo: '…à fundação…', texto: 'O terreno é aberto e a base concretada, no ritmo calmo das ruas arborizadas de Alto de Pinheiros.' },
-          { t: 8.5, de: 7.6, ate: 10, rotulo: 'Estrutura', titulo: '…ao concreto…', texto: 'Os pavimentos sobem um a um, com as lajes e as varandas já marcando o desenho da fachada.' },
-          { t: 11.5, de: 10.6, ate: 13, rotulo: 'Acabamento', titulo: '…ao acabamento…', texto: 'Madeira e pedra fecham as fachadas e os terraços começam a receber o paisagismo.' },
-          { t: 16.9, de: 13.6, ate: 99, rotulo: 'Entrega', titulo: '…à chave.', texto: 'Residência entregue, com jardins nos terraços e a copa das árvores na altura da varanda.' }
+          { t: 0, de: 0, ate: 2.4, rotulo: 'Projeto', titulo: 'Do desenho…', texto: 'O edifício nasce no traço: poucos andares, terraços generosos e o verde entrando em cada pavimento.' },
+          { t: 3, de: 2.9, ate: 5.6, rotulo: 'Fundação', titulo: '…à fundação…', texto: 'O terreno é aberto e a base concretada, com a bomba de concreto e a grua no ritmo calmo de Alto de Pinheiros.' },
+          { t: 7, de: 6.2, ate: 10.5, rotulo: 'Estrutura', titulo: '…ao concreto…', texto: 'Os pavimentos sobem um a um, e as lajes e as varandas já marcam o desenho da fachada.' },
+          { t: 13, de: 11.5, ate: 17, rotulo: 'Acabamento', titulo: '…ao acabamento…', texto: 'Madeira e pedra fecham as fachadas e os terraços começam a receber o paisagismo.' },
+          { t: 23, de: 18.5, ate: 99, rotulo: 'Entrega', titulo: '…à chave.', texto: 'Residência entregue, com jardins nos terraços e a copa das árvores na altura da varanda.' }
         ]
       },
-
       localizacao: {
         texto: 'Em frente à Praça Pôr do Sol, numa das áreas mais verdes de São Paulo, perto da USP e da Vila Madalena.',
         imagem: IMG.radarCopa,
@@ -797,17 +795,16 @@
         { nome: 'Aço preto', uso: 'Estruturas e molduras', cor: '#1d1d1b', img: SWJ('aco-preto') }
       ],
       obra: {
-        video: 'assets/video/obra-aurora.mp4?v=1',
-        poster: 'assets/video/obra-aurora-poster.jpg?v=1',
+        video: 'assets/video/obra-aurora.mp4?v=2',
+        poster: 'assets/video/obra-aurora-poster.jpg?v=2',
         etapas: [
-          { t: 0, de: 0, ate: 3.6, rotulo: 'Projeto', titulo: 'Do desenho…', texto: 'A torre começa no traço: uma lâmina de vidro e pedra, desenhada para o horizonte do Ibirapuera.' },
-          { t: 5.5, de: 4.3, ate: 7, rotulo: 'Fundação', titulo: '…à fundação…', texto: 'O terreno é escavado e a base é concretada, com o canteiro organizado entre as copas do bairro.' },
-          { t: 8.5, de: 7.6, ate: 10, rotulo: 'Estrutura', titulo: '…ao concreto…', texto: 'Pavimento a pavimento, a estrutura sobe com a grua ao lado e já desenha a silhueta final.' },
-          { t: 11.5, de: 10.6, ate: 13, rotulo: 'Acabamento', titulo: '…ao acabamento…', texto: 'As fachadas são revestidas e cada andar ganha a sua varanda voltada para o parque.' },
-          { t: 16.9, de: 13.6, ate: 99, rotulo: 'Entrega', titulo: '…à chave.', texto: 'Torre entregue à luz do fim de tarde. Pronta para morar, com o parque do outro lado da rua.' }
+          { t: 0, de: 0, ate: 2.4, rotulo: 'Projeto', titulo: 'Do desenho…', texto: 'A torre começa no traço: uma lâmina de vidro e pedra, desenhada para o horizonte do Ibirapuera.' },
+          { t: 3, de: 2.9, ate: 5.6, rotulo: 'Fundação', titulo: '…à fundação…', texto: 'O terreno é escavado e a base concretada, com a grua e a bomba de concreto abrindo caminho entre as copas do bairro.' },
+          { t: 7, de: 6.2, ate: 10.5, rotulo: 'Estrutura', titulo: '…ao concreto…', texto: 'Pavimento a pavimento, as equipes levantam a estrutura e já desenham a silhueta final.' },
+          { t: 13, de: 11.5, ate: 17, rotulo: 'Acabamento', titulo: '…ao acabamento…', texto: 'As fachadas são fechadas andar por andar e cada pavimento ganha a sua varanda voltada para o parque.' },
+          { t: 23, de: 18.5, ate: 99, rotulo: 'Entrega', titulo: '…à chave.', texto: 'Torre entregue à luz do fim de tarde, com os andares acesos. Pronta para morar, com o parque do outro lado da rua.' }
         ]
       },
-
       localizacao: {
         texto: 'Na Vila Nova Conceição, a duas quadras do Parque do Ibirapuera, entre restaurantes e o comércio de rua do bairro.',
         imagem: IMG.radarAurora,

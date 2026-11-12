@@ -52,3 +52,10 @@ Créditos do Flow voltaram (Lite 720p, 10 créditos por clipe de 8 s). Receita q
 Feito: Dossel A+B+C (producao-video/dossel/recebidos-veo) -> assets/video/obra-dossel.mp4 (ampliado com Real-ESRGAN).
 Aurora: só clipe A feito (producao-video/aurora/recebidos-veo/obra-A.mp4). Faltam B e C da Aurora e os 3 clipes de Copa, Brise, Horizonte e Maré (refazer no estilo).
 Script: scratchpad/upscale.sh <id> obra-A obra-B obra-C
+
+## 2026-11-12 — conta do Thiago (thyagoazevedo520, plano Plus, créditos MENSAIS, quase no fim)
+Projeto Flow: https://flow.google.com/u/5/project/55a45a81-2dbb-4a07-8599-946d83a4767c
+Feitos (3 clipes A+B+C cada, receita do Dossel): Dossel, Aurora, Copa, Brise -> assets/video/obra-<id>.mp4
+Faltam: Horizonte e Maré (refazer no estilo novo). Os vídeos antigos de fusão de fotos ainda estão nesses dois.
+Aviso do Flow: "créditos estão acabando; renovados mensalmente". Conferir saldo antes de gerar.
+Truque de envio: clicar no + do chat, "Enviar mídia", achar o file-input e usar file_upload; buscar o recurso pelo nome no seletor.
