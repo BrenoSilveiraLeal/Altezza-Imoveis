@@ -413,14 +413,14 @@
         { nome: 'Carvalho natural', uso: 'Pisos e marcenaria', cor: '#c49a6c', img: SW('freijo') }
       ],
       obra: {
-        video: 'assets/video/obra-horizonte.mp4?v=1',
-        poster: 'assets/video/obra-horizonte-poster.jpg?v=1',
+        video: 'assets/video/obra-horizonte.mp4?v=2',
+        poster: 'assets/video/obra-horizonte-poster.jpg?v=2',
         etapas: [
-          { t: 0, de: 0, ate: 3.6, rotulo: 'Projeto', titulo: 'Do desenho…', texto: 'A casa nasce no traço: volumes em degraus, descendo a encosta e olhando para as montanhas.' },
-          { t: 5.5, de: 4.3, ate: 7, rotulo: 'Fundação', titulo: '…à fundação…', texto: 'O terreno é terraplenado em patamares, só onde a casa pousa, com a mata em volta preservada.' },
-          { t: 8.5, de: 7.6, ate: 10, rotulo: 'Estrutura', titulo: '…ao concreto…', texto: 'A estrutura sobe em níveis, com a grua no canteiro e a vista aberta para o vale.' },
-          { t: 11.5, de: 10.6, ate: 13, rotulo: 'Acabamento', titulo: '…ao acabamento…', texto: 'Madeira e vidro fecham os volumes e a piscina de borda infinita ganha forma.' },
-          { t: 16.9, de: 13.6, ate: 99, rotulo: 'Entrega', titulo: '…à chave.', texto: 'Casa entregue ao fim da tarde, com piscina, jardim e as montanhas do Vale dos Cristais ao fundo.' }
+          { t: 0, de: 0, ate: 2.4, rotulo: 'Projeto', titulo: 'Do desenho…', texto: 'A casa nasce no traço: volumes em degraus, descendo a encosta e olhando para as montanhas.' },
+          { t: 3, de: 2.9, ate: 6.2, rotulo: 'Fundação', titulo: '…à fundação…', texto: 'O terreno é terraplenado em patamares, só onde a casa pousa, com a mata em volta preservada.' },
+          { t: 8, de: 6.9, ate: 11.5, rotulo: 'Estrutura', titulo: '…ao concreto…', texto: 'As equipes levantam a estrutura em níveis, com a grua e a bomba de concreto no canteiro.' },
+          { t: 14, de: 12.5, ate: 18.5, rotulo: 'Acabamento', titulo: '…ao acabamento…', texto: 'Madeira, pedra e vidro fecham os volumes, e a piscina e o pergolado ganham forma.' },
+          { t: 23, de: 19.5, ate: 99, rotulo: 'Entrega', titulo: '…à chave.', texto: 'Casa entregue ao fim da tarde, com piscina, jardim e as montanhas do Vale dos Cristais ao fundo.' }
         ]
       },
       localizacao: {
