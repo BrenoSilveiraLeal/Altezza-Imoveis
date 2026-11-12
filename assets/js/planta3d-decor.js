@@ -53,7 +53,7 @@ window.AZPlanDecor = {
         { t: 'art', wall: 'n', a: .18, w: 3.6, h: 6, y: 1.4, img: 'dossel-suite', frame: 'cream' },
         { t: 'curtain', wall: 'e', a: -.42, len: 3, inset: .9 },
         { t: 'curtain', wall: 'e', a: .42, len: 3, inset: .9 },
-        { t: 'rug', x: -.08, z: 0, w: 12, d: 10, c: 'sand' }
+        { t: 'rug', x: .2, z: 0, w: 12, d: 13, c: 'sand' }
       ]
     },
     suites: {
@@ -185,7 +185,7 @@ window.AZPlanDecor = {
       floor: 'bath', wall: 'stone', glass: ['s'],
       items: [
         { t: 'vanity', wall: 'w', a: -.1, len: 9, c: 'walnut', top: 'travertine', mirror: 'round', vase: 'terracotta' },
-        { t: 'shower', x: .1, z: .1, len: 9 },
+        { t: 'shower', x: .3, z: .2, len: 8 },
         { t: 'toilet', wall: 'n', a: .3, inset: 1.6 },
         { t: 'rug', x: -.15, z: .2, w: 4, d: 2.4, c: 'jute' }
       ]
@@ -359,3 +359,227 @@ window.AZPlanDecor = {
     }
   }
 };
+
+/* Camada extra de detalhe: completa cada cômodo com o que se vê numa casa mobiliada
+   (quadros, plantas, armários, luminárias, objetos) e mobilia os cômodos que faltavam. */
+(function (D) {
+  const more = {
+    dossel: {
+      living: [
+        { t: 'armchair', x: .22, z: -.06, r: -90, c: 'linen' },
+        { t: 'side', x: .22, z: .07, c: 'bronze', lamp: 'cream' },
+        { t: 'side', x: -.2, z: -.14, c: 'oak' },
+        { t: 'books', wall: 'e', a: -.28, len: 7, h: 5.4, c: 'oak' },
+        { t: 'plant', x: .42, z: .4, kind: 'fern', s: 1, pot: 'stone' },
+        { t: 'vase', x: -.42, z: -.4, s: 1.2, c: 'travertine' },
+        { t: 'shelf', wall: 'w', a: .32, len: 4, y: 3.4, c: 'oak' }
+      ],
+      hall: [
+        { t: 'gallery', wall: 'n', a: 0, n: 3, w: 2, h: 2.6, frame: 'oak', seed: 11, pal: 'olive' },
+        { t: 'pendant', x: 0, z: 0, kind: 'paper', drop: 1.4 },
+        { t: 'rug', x: 0, z: .05, w: 7, d: 5, c: 'jute' }
+      ],
+      jantar: [
+        { t: 'rug', x: 0, z: 0, w: 15, d: 9, c: 'jute' },
+        { t: 'console', wall: 's', a: .3, len: 6, c: 'walnut', vase: 'travertine', bowl: 'charcoal' },
+        { t: 'art', wall: 's', a: .3, w: 4.4, h: 3, y: 2.6, frame: 'oak', seed: 21, pal: 'olive' },
+        { t: 'plant', x: -.42, z: .36, kind: 'fiddle', s: .9, pot: 'stone' }
+      ],
+      cozinha: [
+        { t: 'pendant', x: 0, z: .2, kind: 'drum', n: 2, c: 'bronze', gap: 3, drop: 2.2 },
+        { t: 'plant', x: .42, z: .4, kind: 'fern', s: .8, pot: 'concrete' }
+      ],
+      suite: [
+        { t: 'wardrobe', wall: 'w', a: 0, len: 12, c: 'oak' },
+        { t: 'bench', x: .1, z: 0, r: 90, len: 5, d: 1.6, c: 'olive', legs: 'bronze' },
+        { t: 'armchair', x: -.2, z: -.36, r: 30, c: 'linen' },
+        { t: 'flamp', x: -.3, z: -.4, c: 'bronze' },
+        { t: 'plant', x: -.4, z: .4, kind: 'olive', s: .9, pot: 'stone' }
+      ],
+      suites: [
+        { t: 'wardrobe', wall: 's', a: -.25, len: 9, c: 'oak' },
+        { t: 'wardrobe', wall: 's', a: .25, len: 9, c: 'oak' },
+        { t: 'art', wall: 'n', a: -.25, w: 4, h: 2.6, y: 3.6, frame: 'oak', seed: 5, pal: 'olive' },
+        { t: 'art', wall: 'n', a: .25, w: 4, h: 2.6, y: 3.6, frame: 'oak', seed: 8, pal: 'earth' },
+        { t: 'desk', wall: 'w', a: 0, len: 4.5, c: 'oak' },
+        { t: 'plant', x: .44, z: .05, kind: 'fern', s: .9, pot: 'white' }
+      ],
+      terraco: [
+        { t: 'lounge', x: .32, z: .3, r: -120, c: 'linen' },
+        { t: 'side', x: .4, z: .2, c: 'oak' }
+      ]
+    },
+    aurora: {
+      estar: [
+        { t: 'flamp', x: .4, z: -.05, c: 'black' },
+        { t: 'books', wall: 'e', a: -.3, len: 7, h: 5.4, c: 'white' },
+        { t: 'side', x: -.28, z: .16, c: 'oak', lamp: 'white' },
+        { t: 'plant', x: -.42, z: .4, kind: 'fern', s: 1, pot: 'white' },
+        { t: 'pendant', x: .02, z: .13, kind: 'paper', drop: 1.6 }
+      ],
+      jantar: [
+        { t: 'rug', x: .05, z: .02, w: 11, d: 11, c: 'sand' },
+        { t: 'shelf', wall: 'e', a: -.2, len: 5, y: 3.2, c: 'oak' },
+        { t: 'plant', x: .4, z: .4, kind: 'olive', s: .9, pot: 'white' }
+      ],
+      suite: [
+        { t: 'wardrobe', wall: 'e', a: 0, len: 11, c: 'white' },
+        { t: 'gallery', wall: 'n', a: 0, n: 3, w: 1.8, h: 2.4, y: 3.8, frame: 'black', seed: 31, pal: 'mono' },
+        { t: 'armchair', x: -.36, z: .28, r: 60, c: 'white' },
+        { t: 'flamp', x: -.43, z: .4, c: 'black' }
+      ],
+      varanda: [
+        { t: 'plant', x: -.35, z: .4, kind: 'fern', s: 1, pot: 'white' },
+        { t: 'plant', x: .38, z: .4, kind: 'monstera', s: 1, pot: 'basket' }
+      ]
+    },
+    copa: {
+      jantar: [
+        { t: 'pendant', x: .1, z: .12, kind: 'drum', n: 3, c: 'walnut', gap: 2.8, drop: 1.8 },
+        { t: 'rug', x: -.34, z: -.1, w: 9, d: 12, c: 'jute' },
+        { t: 'armchair', x: -.18, z: -.32, r: 150, c: 'caramel' },
+        { t: 'coffee', x: -.26, z: -.1, s: 3.4, c: 'walnut' },
+        { t: 'plant', x: -.44, z: .4, kind: 'monstera', s: 1.1, pot: 'terracotta' },
+        { t: 'plant', x: .42, z: .42, kind: 'fern', s: 1, pot: 'terracotta' }
+      ],
+      biblioteca: [
+        { t: 'side', x: .12, z: .22, c: 'walnut', lamp: 'terracotta' },
+        { t: 'art', wall: 'w', a: 0, w: 4, h: 3, y: 2.4, frame: 'walnut', seed: 13, pal: 'earth' },
+        { t: 'plant', x: -.38, z: .4, kind: 'fern', s: .9, pot: 'terracotta' },
+        { t: 'pendant', x: -.05, z: .05, kind: 'drum', c: 'brass', drop: 1.8 }
+      ],
+      cozinha: [
+        { t: 'pendant', x: .14, z: .05, kind: 'drum', n: 3, c: 'brass', gap: 2.8, drop: 2.2, r: 90 },
+        { t: 'plant', x: .42, z: .42, kind: 'olive', s: .8, pot: 'terracotta' }
+      ],
+      suite: [
+        { t: 'wardrobe', wall: 'e', a: 0, len: 12, c: 'walnut' },
+        { t: 'lounge', x: -.38, z: .3, r: 45, c: 'caramel' },
+        { t: 'flamp', x: -.44, z: .18, c: 'brass' }
+      ],
+      banho: [
+        { t: 'towel', wall: 'e', a: -.25, y: 2.6 },
+        { t: 'shelf', wall: 'n', a: -.2, len: 4, y: 3.6, c: 'walnut' },
+        { t: 'plant', x: .38, z: .38, kind: 'fern', s: .8, pot: 'terracotta' }
+      ]
+    },
+    mare: {
+      estar: [
+        { t: 'armchair', x: .28, z: .08, r: -90, c: 'linen' },
+        { t: 'armchair', x: .28, z: .3, r: -90, c: 'linen' },
+        { t: 'flamp', x: .42, z: -.2, paper: true },
+        { t: 'books', wall: 'e', a: -.25, len: 7, h: 5.4, c: 'freijo' },
+        { t: 'plant', x: -.44, z: .4, kind: 'fern', s: 1, pot: 'cream' }
+      ],
+      cozinha: [
+        { t: 'shelf', wall: 'e', a: -.3, len: 5, y: 3.4, c: 'freijo' },
+        { t: 'plant', x: .42, z: -.1, kind: 'olive', s: .8, pot: 'cream' }
+      ],
+      suite: [
+        { t: 'night', wall: 'n', a: .3, c: 'freijo', lamp: 'cream', inset: 1.6 },
+        { t: 'art', wall: 'n', a: 0, w: 6, h: 2.6, y: 3.8, frame: 'freijo', seed: 17, pal: 'sea' },
+        { t: 'wardrobe', wall: 'w', a: -.15, len: 10, c: 'freijo' }
+      ],
+      varanda: [
+        { t: 'rug', x: -.15, z: .08, w: 12, d: 9, c: 'jute' }
+      ]
+    },
+    brise: {
+      estar: [
+        { t: 'rug', x: -.1, z: .05, w: 20, d: 14, c: 'sand' },
+        { t: 'art', wall: 'w', a: -.15, w: 7, h: 5, y: 1.8, frame: 'oak', seed: 2, pal: 'earth' },
+        { t: 'armchair', x: .14, z: .22, r: -110, c: 'linen' },
+        { t: 'side', x: -.28, z: .3, c: 'oak', lamp: 'cream' },
+        { t: 'books', wall: 'n', a: .3, len: 8, h: 5.4, c: 'oak' },
+        { t: 'plant', x: -.42, z: .4, kind: 'fiddle', s: 1.1, pot: 'terracotta' }
+      ],
+      jantar: [
+        { t: 'rug', x: 0, z: 0, w: 14, d: 9, c: 'jute' },
+        { t: 'console', wall: 'n', a: .2, len: 6, c: 'cumaru', vase: 'terracotta' },
+        { t: 'art', wall: 'n', a: .2, w: 4, h: 3, y: 2.6, frame: 'black', seed: 9, pal: 'earth' },
+        { t: 'plant', x: .4, z: .38, kind: 'monstera', s: 1, pot: 'terracotta' }
+      ],
+      cozinha: [
+        { t: 'pendant', x: 0, z: .2, kind: 'paper', n: 2, gap: 4, drop: 2 },
+        { t: 'plant', x: .44, z: .4, kind: 'olive', s: .8, pot: 'terracotta' }
+      ],
+      banho: [
+        { t: 'shower', x: .3, z: 0, len: 7 },
+        { t: 'toilet', wall: 'n', a: .4, inset: 1.6 },
+        { t: 'towel', wall: 'w', a: .2, y: 2.6 }
+      ]
+    },
+    horizonte: {
+      jantar: [
+        { t: 'rug', x: 0, z: .02, w: 15, d: 10, c: 'grey' },
+        { t: 'console', wall: 'n', a: 0, len: 10, c: 'charcoal', vase: 'cream', bowl: 'black' },
+        { t: 'gallery', wall: 'n', a: 0, n: 3, w: 2.4, h: 3, y: 2.8, frame: 'black', seed: 41, pal: 'mono' },
+        { t: 'plant', x: .4, z: .4, kind: 'fiddle', s: 1.1, pot: 'white' },
+        { t: 'plant', x: -.4, z: -.4, kind: 'fern', s: 1, pot: 'white' }
+      ],
+      estar: [
+        { t: 'armchair', x: .14, z: .02, r: -100, c: 'grey' },
+        { t: 'flamp', x: -.42, z: -.2, c: 'black' },
+        { t: 'plant', x: .4, z: .4, kind: 'monstera', s: 1.1, pot: 'white' }
+      ],
+      cozinha: [
+        { t: 'shelf', wall: 'e', a: -.2, len: 5, y: 3.4, c: 'oak' },
+        { t: 'plant', x: .42, z: .4, kind: 'olive', s: .8, pot: 'white' }
+      ],
+      escada: [
+        { t: 'art', wall: 'n', a: .3, w: 4, h: 3, y: 2.6, frame: 'black', seed: 23, pal: 'mono' },
+        { t: 'plant', x: .4, z: .3, kind: 'fern', s: .8, pot: 'white' }
+      ],
+      varanda: [
+        { t: 'plant', x: .44, z: .4, kind: 'olive', s: 1, pot: 'concrete' },
+        { t: 'plant', x: -.44, z: -.4, kind: 'fern', s: 1, pot: 'concrete' }
+      ]
+    }
+  };
+  Object.keys(more).forEach(p => Object.keys(more[p]).forEach(r => {
+    const s = D[p] && D[p][r]; if (s) s.items = s.items.concat(more[p][r]);
+  }));
+
+  // cômodos que ainda não tinham decoração
+  D.dossel.servico = {
+    floor: 'bath',
+    items: [
+      { t: 'laundry', wall: 'n', a: 0, len: 10 },
+      { t: 'bed', wall: 's', a: .25, w: 4.5, len: 7, base: 'oak', throwC: 'olive', pillows: 1, inset: 4.3 },
+      { t: 'night', wall: 's', a: -.05, c: 'oak', lamp: 'cream', inset: 1.6 },
+      { t: 'wardrobe', wall: 'w', a: .2, len: 5, c: 'white' },
+      { t: 'shelf', wall: 'e', a: -.2, len: 4, y: 3.4, c: 'oak' }
+    ]
+  };
+  D.aurora.suites = {
+    floor: 'oak',
+    items: [
+      { t: 'bed', wall: 'n', a: -.3, w: 6, len: 8, base: 'oak', throwC: 'cream', inset: 4.9 },
+      { t: 'night', wall: 'n', a: -.42, c: 'oak', lamp: 'white', inset: 1.6 },
+      { t: 'bed', wall: 'n', a: .1, w: 6, len: 8, base: 'white', throwC: 'sand', inset: 4.9 },
+      { t: 'night', wall: 'n', a: .22, c: 'white', lamp: 'cream', inset: 1.6 },
+      { t: 'wardrobe', wall: 's', a: -.3, len: 9, c: 'white' },
+      { t: 'wardrobe', wall: 's', a: .1, len: 8, c: 'oak' },
+      { t: 'desk', wall: 'w', a: .2, len: 4.5, c: 'white' },
+      { t: 'rug', x: -.3, z: .15, w: 9, d: 7, c: 'sand' },
+      { t: 'rug', x: .1, z: .15, w: 9, d: 7, c: 'cream' },
+      { t: 'laundry', wall: 'e', a: 0, len: 10 },
+      { t: 'art', wall: 'n', a: -.3, w: 4, h: 2.6, y: 3.6, frame: 'black', seed: 6, pal: 'mono' },
+      { t: 'plant', x: .3, z: .4, kind: 'fiddle', s: .9, pot: 'white' }
+    ]
+  };
+  D.copa.servico = {
+    floor: 'oak', wall: 'walnut',
+    items: [
+      { t: 'bed', wall: 'n', a: -.15, w: 6, len: 8, base: 'walnut', throwC: 'caramel', pillows: 2, inset: 4.9 },
+      { t: 'night', wall: 'n', a: -.42, c: 'walnut', lamp: 'terracotta', inset: 1.6 },
+      { t: 'night', wall: 'n', a: .12, c: 'walnut', inset: 1.6, vase: 'cream' },
+      { t: 'art', wall: 'n', a: -.15, w: 5, h: 2.6, y: 3.6, frame: 'walnut', seed: 14, pal: 'earth' },
+      { t: 'wardrobe', wall: 'e', a: -.2, len: 9, c: 'walnut' },
+      { t: 'rug', x: -.1, z: .05, w: 11, d: 9, c: 'jute' },
+      { t: 'laundry', wall: 's', a: .2, len: 9 },
+      { t: 'desk', wall: 'w', a: .25, len: 4.5, c: 'walnut' },
+      { t: 'plant', x: .4, z: .1, kind: 'monstera', s: .9, pot: 'terracotta' }
+    ]
+  };
+})(window.AZPlanDecor);
