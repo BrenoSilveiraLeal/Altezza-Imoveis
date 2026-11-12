@@ -247,7 +247,7 @@
       if (f === 'stone') return pbr('marble_01', rx * .7, ry * .7, { tint: 0xf3e6cf, rough: .45 });
       if (f === 'wood') return pbr('wood_floor', rx, ry);
       if (f === 'oak') return pbr('oak_wood_planks', rx * .8, ry * .8);
-      if (f === 'herring') return pbr('herringbone_parquet', rx * .75, ry * .75, { tint: 0xe6d6c2 });
+      if (f === 'herring') return pbr('herringbone_parquet', rx * .75, ry * .75, { tint: 0xece4da });
       if (f === 'tile') return pbr('terracotta_floor_tiles', rx * 1.6, ry * 1.6);
       if (f === 'bath') return pbr('large_floor_tiles_02', rx * 1.2, ry * 1.2, { tint: 0xf1e8d8, rough: .5 });
       if (f === 'deck') return pbr('wood_floor_deck', rx, ry);
@@ -280,7 +280,7 @@
       walnut: ['walnut_veneer'], oak: ['oak_veneer_01'], freijo: ['oak_veneer_01', 0xe0c8a8], cumaru: ['natural_walnut_veneer'],
       travertine: ['marble_01', 0xf1e3c9, .45], marble: ['marble_01', 0x6f8a78, .3], concrete: ['smooth_concrete_floor'],
       linen: ['rough_linen', 0xf1ebe0], white: ['rough_linen', 0xfbf8f2], cream: ['rough_linen', 0xf4ecdc], sand: ['rough_linen', 0xe7d9bd],
-      jute: ['rough_linen', 0xd6ad70], olive: ['rough_linen', 0x7d8250], caramel: ['rough_linen', 0xa8683c]
+      jute: ['rough_linen', 0xd6ad70], olive: ['rough_linen', 0x7d8250], caramel: ['rough_linen', 0x8a5636]
     };
     const realMat = (c, w, d) => {
       const r = typeof c === 'string' && REAL[c];
@@ -734,7 +734,12 @@
       if (T0 === 'armchair') { model(q, 'modern_arm_chair_01', { w: 3, tint: it.c || 'white' }); return true; }
       if (T0 === 'lounge') { model(q, 'mid_century_lounge_chair', { w: 3, tint: it.c && it.c !== 'caramel' ? it.c : null }); return true; }
       if (T0 === 'coffee') {
-        model(q, it.shape === 'round' ? 'coffee_table_round_01' : 'modern_coffee_table_01', { w: it.s ? it.s * 1.1 : 4.5 });
+        if (it.shape === 'round' && it.c && it.c !== 'white') {
+          const r = (it.s || 4.5) / 2, tc = it.c, top = new THREE.Mesh(new THREE.CylinderGeometry(r, r, .22, 48), realMat(tc, r * 2, r * 2) || M(tc));
+          top.position.y = 1.3; top.castShadow = top.receiveShadow = true; q.add(top);
+          Cy(q, r * .55, r * .6, 1.2, 0, 0, 0, it.base || tc, 32);
+          D.books && B(q, 1.6, .3, 1.1, r * .3, 1.41, -.2, 'cream'); B(q, 1.3, .25, .9, r * .3, 1.71, -.2, 'charcoal');
+        } else model(q, it.shape === 'round' ? 'coffee_table_round_01' : 'modern_coffee_table_01', { w: it.s ? it.s * 1.1 : 4.5 });
         if (it.bowl) model(q, 'wooden_bowl_01', { w: 1.2, y: 1.4 });
         if (it.vases) model(q, 'ceramic_vase_03', { hgt: 1.3, y: 1.4, x: -.8 });
         return true;

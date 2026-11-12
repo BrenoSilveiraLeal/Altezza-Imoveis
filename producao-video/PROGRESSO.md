@@ -59,3 +59,9 @@ Feitos (3 clipes A+B+C cada, receita do Dossel): Dossel, Aurora, Copa, Brise -> 
 Faltam: Horizonte e Maré (refazer no estilo novo). Os vídeos antigos de fusão de fotos ainda estão nesses dois.
 Aviso do Flow: "créditos estão acabando; renovados mensalmente". Conferir saldo antes de gerar.
 Truque de envio: clicar no + do chat, "Enviar mídia", achar o file-input e usar file_upload; buscar o recurso pelo nome no seletor.
+
+## Planta 3D (2026-11-12)
+- 3D livre em three.js para os 6 imóveis, com decoração por cômodo em `assets/js/planta3d-decor.js` (bloco "Camada extra de detalhe" no fim do arquivo + cômodos de serviço/suítes que faltavam).
+- Peças procedurais detalhadas em `assets/js/planta3d.js`: sofá estofado, cama com edredom/lençol/almofadas, cozinha com portas e puxadores, cuba e cooktop, banheiro com cuba, espelho, boxe e toalha, armários, lavanderia, escrivaninha, quadros gerados, rodapés, batentes e caixilhos.
+- Cores sólidas agora passam por sRGB→linear (`lin()`); exposição 1.05.
+- Conferência: capturas por cômodo via `__plan3d.snap(th, ph, r, roomId)`.
