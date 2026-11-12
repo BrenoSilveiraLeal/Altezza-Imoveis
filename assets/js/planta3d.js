@@ -270,7 +270,21 @@
     }
 
     // primitivas no grupo p, com y = base
-    const B = (p, w, h, d, x, y, z, c, o) => mesh(p, w, h, d, x, y, z, c && c.isMaterial ? c : col(c), o);
+    // nomes de material viram texturas reais; o resto continua cor lisa
+    const REAL = {
+      walnut: ['walnut_veneer'], oak: ['oak_veneer_01'], freijo: ['oak_veneer_01', 0xe0c8a8], cumaru: ['natural_walnut_veneer'],
+      travertine: ['marble_01', 0xf1e3c9, .45], marble: ['marble_01', 0x6f8a78, .3], concrete: ['smooth_concrete_floor'],
+      linen: ['rough_linen', 0xf1ebe0], white: ['rough_linen', 0xfbf8f2], cream: ['rough_linen', 0xf4ecdc], sand: ['rough_linen', 0xe7d9bd],
+      jute: ['rough_linen', 0xd6ad70], olive: ['rough_linen', 0x7d8250], caramel: ['rough_linen', 0xa8683c]
+    };
+    const realMat = (c, w, d) => {
+      const r = typeof c === 'string' && REAL[c];
+      if (!r) return null;
+      const q2 = v => Math.max(.5, Math.round(v * 2) / 2);
+      const rx = q2((w || 2) / 5), ry = q2((d || 2) / 5);
+      return pbr(r[0], rx, ry, { tint: r[1], rough: r[2] });
+    };
+    const B = (p, w, h, d, x, y, z, c, o) => mesh(p, w, h, d, x, y, z, c && c.isMaterial ? c : (!o && realMat(c, w, Math.max(h, d))) || col(c), o);
     const Cy = (p, rt, rb, h, x, y, z, c, seg, o) => mesh(p, 0, h, 0, x, y, z, col(c), o, new THREE.CylinderGeometry(rt, rb, h, seg || 20));
     const Ball = (p, r, x, y, z, c, sx, sy, sz) => {
       const m = new THREE.Mesh(new THREE.IcosahedronGeometry(r, 1), new THREE.MeshStandardMaterial({ color: col(c), roughness: .85, flatShading: true }));
