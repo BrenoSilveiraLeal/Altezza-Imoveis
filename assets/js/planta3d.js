@@ -54,7 +54,7 @@
     canvas.tabIndex = 0;
     box.appendChild(canvas);
 
-    if (THREE.ACESFilmicToneMapping) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = .98; }
+    if (THREE.ACESFilmicToneMapping) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = .8; }
 
     /* Paleta do imóvel: cores e texturas vêm dos materiais cadastrados (P.materiais). */
     const hex = s => parseInt(String(s).replace('#', ''), 16);
@@ -176,26 +176,89 @@
         for (let i = 0; i < 9; i++) { x.fillStyle = 'rgba(0,0,0,.035)'; x.fillRect(0, (i * 29) % s, s, 2); }
       }, rx, ry);
     }
+    /* ---------- materiais reais (texturas CC0 da Poly Haven) e modelos 3D ---------- */
+    const TX = 'assets/3d/tex/';
+    const pbrCache = {};
+    function texFile(path, rx, ry, srgb) {
+      const t = loader.load(path, () => setTimeout(() => { dirty = true; kick(); }));
+      t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx, ry);
+      if (srgb && THREE.sRGBEncoding) t.encoding = THREE.sRGBEncoding;
+      if (renderer.capabilities && renderer.capabilities.getMaxAnisotropy) t.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+      return t;
+    }
+    function pbr(name, rx, ry, o) {
+      o = o || {};
+      const k = [name, rx.toFixed(2), ry.toFixed(2), o.tint || 0, o.rough || 0].join('|');
+      if (pbrCache[k]) return pbrCache[k];
+      const m = new THREE.MeshStandardMaterial({
+        color: o.tint != null ? o.tint : 0xffffff,
+        map: texFile(TX + name + '/diff.jpg', rx, ry, true),
+        normalMap: texFile(TX + name + '/nor.jpg', rx, ry, false),
+        roughnessMap: texFile(TX + name + '/rough.jpg', rx, ry, false),
+        roughness: o.rough != null ? o.rough : 1, metalness: 0
+      });
+      m.normalScale.set(.6, .6);
+      return (pbrCache[k] = m);
+    }
+    const U = 3.45; // 1 metro em unidades da planta
+    try {
+      if (THREE.RGBELoader) {
+        new THREE.RGBELoader().setDataType(THREE.UnsignedByteType).load('assets/3d/env/studio.hdr', hdr => {
+          const pm = new THREE.PMREMGenerator(renderer);
+          scene.environment = pm.fromEquirectangular(hdr).texture;
+          hdr.dispose(); pm.dispose();
+          dirty = true; kick();
+        });
+      }
+    } catch (e) { /* segue com as luzes */ }
+    const gltfCache = {};
+    function loadModel(id) {
+      if (!THREE.GLTFLoader) return Promise.reject(new Error('sem GLTFLoader'));
+      if (!gltfCache[id]) gltfCache[id] = new Promise((res, rej) => new THREE.GLTFLoader().load('assets/3d/models/' + id + '/' + id + '.gltf', g => res(g.scene), undefined, rej));
+      return gltfCache[id];
+    }
+    // coloca um modelo no grupo p: base no chão, centrado; w = maior medida horizontal, hgt = altura (unidades)
+    function model(p, id, o) {
+      o = o || {};
+      return loadModel(id).then(src => {
+        const m = src.clone(true);
+        const box = new THREE.Box3().setFromObject(m), size = new THREE.Vector3(), ctr = new THREE.Vector3();
+        box.getSize(size); box.getCenter(ctr);
+        const k = o.hgt ? o.hgt / size.y : o.w ? o.w / Math.max(size.x, size.z) : U;
+        m.scale.setScalar(k);
+        m.position.set(-ctr.x * k + (o.x || 0), -box.min.y * k + (o.y || 0), -ctr.z * k + (o.z || 0));
+        const w = new THREE.Group(); w.rotation.y = (o.r || 0) * Math.PI / 180; w.add(m); p.add(w);
+        let up = p; while (up && !(up.userData && up.userData.room)) up = up.parent;
+        m.traverse(c => {
+          if (!c.isMesh) return;
+          c.castShadow = true; c.receiveShadow = true;
+          if (o.tint != null) { c.material = c.material.clone(); c.material.color.setHex(col(o.tint)); if (o.plain !== false) c.material.map = null; c.material.needsUpdate = true; }
+          if (up) c.userData.room = up.userData.room;
+        });
+        dirty = true; kick();
+        return w;
+      }).catch(e => { console.warn('[planta3d] modelo', id, e); return null; });
+    }
+
     function floorMat(f, w, h) {
-      const rx = Math.max(1, w / 12), ry = Math.max(1, h / 12);
-      const o = { roughness: .75 };
-      if (f === 'stone') { const t = tex(mStone && /travert/i.test(mStone.nome) ? mStone : null, rx, ry); return new THREE.MeshStandardMaterial(Object.assign(o, { color: t ? 0xffffff : C.travertine, map: t || speckle(C.travertine, rx, ry), roughness: .5 })); }
-      if (f === 'wood') { const t = tex(mWood, rx, ry); return new THREE.MeshStandardMaterial(Object.assign(o, { color: t ? 0xffffff : PAL.wood, map: t || planks(PAL.wood, rx, ry) })); }
-      if (f === 'oak') return new THREE.MeshStandardMaterial(Object.assign(o, { color: 0xffffff, map: planks(C.oak, rx, ry) }));
-      if (f === 'herring') return new THREE.MeshStandardMaterial(Object.assign(o, { color: 0xffffff, map: herring(0x9a6e48, rx * 2.4, ry * 2.4) }));
-      if (f === 'tile') return new THREE.MeshStandardMaterial(Object.assign(o, { color: 0xffffff, map: tiles(C.terracotta, rx * 2, ry * 2) }));
-      if (f === 'bath') return new THREE.MeshStandardMaterial(Object.assign(o, { color: 0xffffff, map: tiles(0xded3bf, rx * 1.5, ry * 1.5, '#cfc3ad'), roughness: .4 }));
-      if (f === 'deck') return new THREE.MeshStandardMaterial(Object.assign(o, { color: 0xffffff, map: planks(0xb98c5a, rx * 1.4, ry * 1.4, true) }));
-      if (f === 'grass') return new THREE.MeshStandardMaterial({ color: 0xffffff, map: speckle(0x6a8250, rx, ry, .22), roughness: 1 });
-      if (f === 'concrete') return new THREE.MeshStandardMaterial(Object.assign(o, { color: 0xffffff, map: speckle(C.concrete, rx, ry, .08) }));
+      const rx = Math.max(1, w / 7), ry = Math.max(1, h / 7);
+      if (f === 'stone') return pbr('marble_01', rx * .7, ry * .7, { tint: 0xf3e6cf, rough: .45 });
+      if (f === 'wood') return pbr('wood_floor', rx, ry);
+      if (f === 'oak') return pbr('oak_wood_planks', rx * .8, ry * .8);
+      if (f === 'herring') return pbr('herringbone_parquet', rx * .75, ry * .75);
+      if (f === 'tile') return pbr('terracotta_floor_tiles', rx * 1.6, ry * 1.6);
+      if (f === 'bath') return pbr('large_floor_tiles_02', rx * 1.2, ry * 1.2, { tint: 0xf1e8d8, rough: .5 });
+      if (f === 'deck') return pbr('wood_floor_deck', rx, ry);
+      if (f === 'grass') return new THREE.MeshStandardMaterial({ color: 0xffffff, map: speckle(0x6a8250, w / 12, h / 12, .22), roughness: 1 });
+      if (f === 'concrete') return pbr('smooth_concrete_floor', rx, ry);
       return new THREE.MeshStandardMaterial({ color: col(f), roughness: .8 });
     }
     function wallMat(w) {
-      if (w === 'wood') return new THREE.MeshStandardMaterial({ color: 0xffffff, map: planks(0xb48654, 3, 1, true), roughness: .7 });
-      if (w === 'walnut') return new THREE.MeshStandardMaterial({ color: 0xffffff, map: planks(C.walnut, 3, 1, true), roughness: .7 });
+      if (w === 'wood') return pbr('oak_veneer_01', 2.5, 1);
+      if (w === 'walnut') return pbr('walnut_veneer', 2.5, 1);
       if (w === 'earth') return new THREE.MeshStandardMaterial({ color: 0xffffff, map: canvasTex(128, (x, s) => { for (let i = 0; i < 16; i++) { x.fillStyle = hexs(shade(C.earth, .88 + (i * 7 % 11) / 50)); x.fillRect(0, i * s / 16, s, s / 16); } }, 2, 1), roughness: .95 });
-      if (w === 'concrete') return new THREE.MeshStandardMaterial({ color: 0xffffff, map: speckle(C.concrete, 2, 1, .1), roughness: .95 });
-      if (w === 'stone') return new THREE.MeshStandardMaterial({ color: 0xffffff, map: speckle(C.travertine, 2, 1, .06), roughness: .6 });
+      if (w === 'concrete') return pbr('smooth_concrete_floor', 2, 1, { tint: 0xd8d4cc });
+      if (w === 'stone') return pbr('marble_01', 1.5, 1, { tint: 0xf3e6cf, rough: .5 });
       return new THREE.MeshStandardMaterial({ color: col(w), roughness: .9 });
     }
     const artTex = {};
@@ -401,6 +464,69 @@
       return [w / 2 - i, a * h, -Math.PI / 2];
     }
 
+    // Troca os blocos por modelos 3D reais quando existe um equivalente.
+    function realItem(q, it) {
+      if (!THREE.GLTFLoader) return false;
+      const T0 = it.t;
+      if (T0 === 'sofa') {
+        const L = it.len || 9;
+        model(q, it.curved ? 'sofa_03' : 'sofa_02', { w: L, tint: it.c || 'linen' });
+        if (it.l) { const g = new THREE.Group(); g.position.set(-L / 2 + 1.7, 0, 1.7 + it.l / 2); g.rotation.y = -Math.PI / 2; q.add(g); model(g, 'Ottoman_01', { w: 3 }); }
+        if (it.pillows || it.throwC) model(q, 'throw_pillows_01', { w: Math.min(3, L * .35), y: 1.2, z: -.4 });
+        return true;
+      }
+      if (T0 === 'armchair') { model(q, 'modern_arm_chair_01', { w: 3, tint: it.c || 'white' }); return true; }
+      if (T0 === 'lounge') { model(q, 'mid_century_lounge_chair', { w: 3, tint: it.c && it.c !== 'caramel' ? it.c : null }); return true; }
+      if (T0 === 'coffee') {
+        model(q, it.shape === 'round' ? 'coffee_table_round_01' : 'modern_coffee_table_01', { w: it.s ? it.s * 1.1 : 4.5 });
+        if (it.bowl) model(q, 'wooden_bowl_01', { w: 1.2, y: 1.4 });
+        if (it.vases) model(q, 'ceramic_vase_03', { hgt: 1.3, y: 1.4, x: -.8 });
+        return true;
+      }
+      if (T0 === 'side') { model(q, 'side_table_01', { w: 1.8 }); return true; }
+      if (T0 === 'chair') { model(q, 'dining_chair_02', { w: 1.7, tint: it.c && /white|grey/.test(it.c) ? it.c : null }); return true; }
+      if (T0 === 'stools') { const n = it.n || 3; for (let i = 0; i < n; i++) model(q, 'bar_chair_round_01', { hgt: 2.9, x: (i - (n - 1) / 2) * (it.gap || 2) }); return true; }
+      if (T0 === 'table' && it.kind !== 'round') {
+        const L = it.len || 10, W = it.wid || 3.6, n = it.chairs || 0;
+        const wood = pbr(/walnut|charcoal/.test(it.c || '') ? 'walnut_veneer' : 'oak_veneer_01', L / 6, W / 6);
+        B(q, L, .25, W, 0, 2.3, 0, wood);
+        if (it.base === 'trestle') [-1, 1].forEach(sd => B(q, .45, 2.3, W - .8, sd * (L / 2 - 1.2), 0, 0, wood));
+        else [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz]) => B(q, .28, 2.3, .28, sx * (L / 2 - .4), 0, sz * (W / 2 - .4), wood));
+        if (it.settings) { const per0 = Math.max(1, Math.floor(n / 2)); for (let i = 0; i < per0; i++) [-1, 1].forEach(sd => Cy(q, .45, .45, .05, -L / 2 + (i + .5) * L / per0, 2.55, sd * (W / 2 - .7), 'cream', 16)); }
+        const per = Math.max(1, Math.floor(n / 2));
+        for (let i = 0; i < per; i++) { const x = -L / 2 + (i + .5) * L / per; [-1, 1].forEach(sd => { const g = new THREE.Group(); g.position.set(x, 0, sd * (W / 2 + .9)); g.rotation.y = sd > 0 ? Math.PI : 0; q.add(g); model(g, 'dining_chair_02', { w: 1.7 }); }); }
+        if (it.vase) model(q, 'ceramic_vase_01', { hgt: 1.4, y: 2.55 });
+        if (it.bowl) model(q, 'wooden_bowl_01', { w: 1.6, y: 2.55 });
+        return true;
+      }
+      if (T0 === 'table' && it.kind === 'round') {
+        const r = it.r || 2.6, n = it.chairs || 0;
+        model(q, 'side_table_tall_01', { w: r * 2 });
+        for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2; const g = new THREE.Group(); g.position.set(Math.sin(a) * (r + 1), 0, Math.cos(a) * (r + 1)); g.rotation.y = a + Math.PI; q.add(g); model(g, 'dining_chair_02', { w: 1.7, tint: it.chairC && /white|grey/.test(it.chairC) ? it.chairC : null }); }
+        return true;
+      }
+      if (T0 === 'plant') {
+        const s0 = it.s || 1, k = it.kind || 'olive';
+        const id = (k === 'fiddle' || k === 'tree' || k === 'olive') ? 'pachira_aquatica_01' : k === 'monstera' ? 'calathea_orbifolia_01' : k === 'fern' ? 'potted_plant_04' : null;
+        if (!id || it.pot === 'none') return false;
+        model(q, id, { hgt: (k === 'fern' || k === 'monstera' ? 3.2 : 6) * s0 });
+        return true;
+      }
+      if (T0 === 'pendant') {
+        const n = it.n || 1, gap = it.gap || 2.6;
+        for (let i = 0; i < n; i++) model(q, 'modern_ceiling_lamp_01', { hgt: 2.4, x: (i - (n - 1) / 2) * gap, y: H - 2.6 });
+        return true;
+      }
+      if (T0 === 'books') return false;
+      if (T0 === 'console') {
+        model(q, 'modern_wooden_cabinet', { w: it.len || 6 });
+        if (it.vase) model(q, 'ceramic_vase_03', { hgt: 1.6, y: 2.2, x: (it.len || 6) * .3 });
+        if (it.bowl) model(q, 'wooden_bowl_01', { w: 1.2, y: 2.2, x: -(it.len || 6) * .25 });
+        return true;
+      }
+      return false;
+    }
+
     const INSET = { art: .75, curtain: .9, books: 1.4, run: 1.9, console: 1.4, tv: 1.4, vanity: 1.6, bed: 5, night: 1.6, niche: 1.5, bench: 1.2, toilet: 1.6, fireplace: 1.4, sculpture: .9 };
     function decorate(g, spec, r) {
       spec.items.forEach(it => {
@@ -410,7 +536,7 @@
         else { x = (it.x || 0) * r.w; z = (it.z || 0) * r.h; ry = (it.r || 0) * Math.PI / 180; }
         if (it.t === 'pergola') { it.w = it.w || r.w; it.d = it.d || r.h; }
         q.position.set(x, FH, z); q.rotation.y = ry; g.add(q);
-        try { if (D[it.t]) D[it.t](q, it); } catch (e) { console.warn('[planta3d]', it.t, e); }
+        try { if (!realItem(q, it) && D[it.t]) D[it.t](q, it); } catch (e) { console.warn('[planta3d]', it.t, e); }
       });
     }
 
@@ -456,7 +582,7 @@
 
       // paredes (cômodos internos), com vão de porta onde há vizinho
       if (!OUTDOOR[kind] && !(spec && spec.open)) {
-        const wallC = spec && spec.wall ? wallMat(spec.wall) : 0xf0ebe0, cap = 0xd9d3c4;
+        const wallC = spec && spec.wall ? wallMat(spec.wall) : pbr('white_plaster_02', 2, 1, { tint: 0xf4efe6 }), cap = 0xd9d3c4;
         const solid = (spec && spec.solid) || [], glass = (spec && spec.glass) || [];
         const wall = (len, x, z, horiz, gapAt) => {
           const seg = (a, b) => {
@@ -500,8 +626,6 @@
       if (!OUTDOOR[kind]) {
         const pl = new THREE.PointLight(0xffbe7a, 1.5, Math.max(r.w, r.h) * 1.9, 1.6);
         pl.position.set(0, FH + H - .8, 0); g.add(pl);
-        const lamp = new THREE.Mesh(new THREE.BoxGeometry(Math.min(r.w * .5, 8), .15, .5), new THREE.MeshStandardMaterial({ color: 0xffe2b8, emissive: 0xffc27a, emissiveIntensity: 1.6 }));
-        lamp.position.set(0, FH + H - .25, 0); g.add(lamp);
       } else if (kind === 'clube' || kind === 'jardim') {
         const pl = new THREE.PointLight(0x7fd6e6, .9, 34, 1.6); pl.position.set(0, 4, 0); g.add(pl);
       }
