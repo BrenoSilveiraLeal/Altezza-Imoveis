@@ -357,7 +357,7 @@
   const planItems = [...main.querySelectorAll('.p-plan__list li')];
   // Maquete 3D (assets/js/planta3d.js); sem WebGL, fica a planta 2D.
   const plan3dBox = main.querySelector('.plan3d');
-  const plan3d = window.AZPlan3D ? window.AZPlan3D.init(plan3dBox, P) : null;
+  const plan3d = window.AZPlan3D ? (P.plan.giro ? window.AZPlan3D.giro(plan3dBox, P) : window.AZPlan3D.init(plan3dBox, P)) : null;
   if (plan3d) {
     window.__plan3d = plan3d;
     plan3dBox.hidden = false;

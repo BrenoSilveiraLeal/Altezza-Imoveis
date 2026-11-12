@@ -785,63 +785,51 @@
 
     return {
       setView: (th, ph, r) => { auto = false; goal.th = view.th = th; goal.ph = view.ph = ph; if (r) goal.r = view.r = r; kick(); },
+      snap: (th, ph, r) => { goal.th = view.th = th; goal.ph = view.ph = ph; goal.r = view.r = r; place(); renderer.render(scene, cam); return canvas; },
+      r0: () => r0,
       highlight: setActive,
       onPick: fn => { onPick = fn; }
     };
   }
 
-  /* Renders realistas (P.plan.renders): 4 ângulos; arrastar troca de ângulo. */
-  function renders(box, P) {
-    const list = P.plan.renders;
-    if (!list || !list.length) return null;
-    const n = list.length;
+  /* Giro com renders realistas (P.plan.giro = { dir, n }): arrastar gira continuamente, em volta, entre n quadros. */
+  function giro(box, P) {
+    const G = P.plan.giro;
+    if (!G) return null;
+    const n = G.n;
     box.classList.add('plan3d--img');
     box.setAttribute('role', 'group');
     box.setAttribute('aria-label', `Planta realista de ${P.nome}. Arraste para girar.`);
     box.tabIndex = 0;
+    const url = i => `${G.dir}f${String(((i % n) + n) % n).padStart(2, '0')}.jpg?v=${G.v || 1}`;
     box.innerHTML = `
-      <div class="plan3d__stack">${list.map((s, i) => `<img src="${s}" alt="Planta de ${P.nome}, ângulo ${i + 1} de ${n}" draggable="false" decoding="async"${i ? '' : ' class="is-on"'}>`).join('')}</div>
-      <div class="plan3d__ui">
-        <span class="plan3d__hint">Arraste para girar</span>
-        <div class="plan3d__btns">
-          <button type="button" data-act="prev" aria-label="Girar para a esquerda">‹</button>
-          <span class="plan3d__dots" aria-hidden="true">${list.map((_, i) => `<i${i ? '' : ' class="is-on"'}></i>`).join('')}</span>
-          <button type="button" data-act="next" aria-label="Girar para a direita">›</button>
-        </div>
-      </div>`;
-    const imgs = [...box.querySelectorAll('.plan3d__stack img')];
-    const dots = [...box.querySelectorAll('.plan3d__dots i')];
-    let cur = 0, drag = null;
-    const go = k => {
-      cur = (k % n + n) % n;
-      imgs.forEach((im, i) => im.classList.toggle('is-on', i === cur));
-      dots.forEach((d, i) => d.classList.toggle('is-on', i === cur));
+      <div class="plan3d__stack"><img class="gA" alt="Planta de ${P.nome}" draggable="false" decoding="async"><img class="gB" alt="" aria-hidden="true" draggable="false" decoding="async"></div>
+      <div class="plan3d__ui"><span class="plan3d__hint">Arraste para girar</span>
+        <div class="plan3d__btns"><button type="button" data-act="prev" aria-label="Girar para a esquerda">‹</button><button type="button" data-act="next" aria-label="Girar para a direita">›</button></div></div>`;
+    const A = box.querySelector('.gA'), B = box.querySelector('.gB');
+    // pré-carrega todos os quadros
+    for (let i = 0; i < n; i++) { const im = new Image(); im.decoding = 'async'; im.src = url(i); }
+    let pos = 0, goal = 0, raf = 0, drag = null, shown = -1;
+    const draw = () => {
+      const f = Math.round(pos);
+      if (f !== shown) { A.src = url(f); shown = f; }
     };
-    const STEP = 90; // pixels de arrasto por ângulo
-    box.addEventListener('pointerdown', e => {
-      if (e.target.closest('button')) return;
-      drag = { x: e.clientX, cur, t: e.pointerType === 'touch' };
-      box.setPointerCapture(e.pointerId);
-      box.classList.add('is-drag');
-    });
-    box.addEventListener('pointermove', e => {
-      if (!drag) return;
-      const k = Math.round((e.clientX - drag.x) / STEP);
-      go(drag.cur - k);
-    });
+    const tick = () => {
+      raf = 0;
+      const d = goal - pos;
+      if (Math.abs(d) > .002) { pos += d * .22; draw(); raf = requestAnimationFrame(tick); } else { pos = goal; draw(); }
+    };
+    const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    const PX = 28; // pixels por quadro
+    box.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; drag = { x: e.clientX, g: goal }; box.setPointerCapture(e.pointerId); box.classList.add('is-drag'); });
+    box.addEventListener('pointermove', e => { if (!drag) return; goal = drag.g - (e.clientX - drag.x) / PX; kick(); });
     const end = () => { drag = null; box.classList.remove('is-drag'); };
-    box.addEventListener('pointerup', end);
-    box.addEventListener('pointercancel', end);
-    box.addEventListener('keydown', e => {
-      if (e.key === 'ArrowLeft') { go(cur + 1); e.preventDefault(); }
-      if (e.key === 'ArrowRight') { go(cur - 1); e.preventDefault(); }
-    });
-    box.addEventListener('click', e => {
-      const b = e.target.closest('button'); if (!b) return;
-      go(cur + (b.dataset.act === 'prev' ? 1 : -1));
-    });
+    box.addEventListener('pointerup', end); box.addEventListener('pointercancel', end);
+    box.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') { goal += 1; kick(); e.preventDefault(); } if (e.key === 'ArrowRight') { goal -= 1; kick(); e.preventDefault(); } });
+    box.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; goal += b.dataset.act === 'prev' ? 2 : -2; kick(); });
+    draw();
     return { highlight() {}, onPick() {}, setView() {} };
   }
 
-  window.AZPlan3D = { init, renders };
+  window.AZPlan3D = { init, giro };
 })();

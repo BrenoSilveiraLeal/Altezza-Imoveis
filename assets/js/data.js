@@ -147,7 +147,8 @@
           { id: 'terraco', nome: 'Terraço gourmet', x: 42, y: 36, w: 24, h: 24, area: 86 },
           { id: 'servico', nome: 'Serviço', x: 78, y: 4, w: 18, h: 14, area: 22 },
           { id: 'clube', nome: 'Clube (térreo e rooftop)', x: 68, y: 44, w: 28, h: 16, area: 0 }
-        ]
+        ],
+        giro: { dir: 'assets/img/planta/dossel/', n: 27, v: 1 }
       },
       scenes: [
         {
