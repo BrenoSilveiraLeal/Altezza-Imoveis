@@ -54,7 +54,7 @@
     canvas.tabIndex = 0;
     box.appendChild(canvas);
 
-    if (THREE.ACESFilmicToneMapping) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15; }
+    if (THREE.ACESFilmicToneMapping) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = .98; }
 
     /* Paleta do imóvel: cores e texturas vêm dos materiais cadastrados (P.materiais). */
     const hex = s => parseInt(String(s).replace('#', ''), 16);
@@ -84,10 +84,10 @@
 
     const scene = new THREE.Scene();
     const cam = new THREE.PerspectiveCamera(32, 1, 1, 600);
-    scene.add(new THREE.HemisphereLight(0x9fb2d8, 0x1a1712, .34));
+    scene.add(new THREE.HemisphereLight(0x9fb2d8, 0x1a1712, .22));
     const fill = new THREE.DirectionalLight(0x8fa6d8, .25);
     fill.position.set(80, 60, -60); scene.add(fill);
-    const sun = new THREE.DirectionalLight(0xffcf9a, .7);
+    const sun = new THREE.DirectionalLight(0xffcf9a, 1.25);
     sun.position.set(-70, 130, 80);
     sun.castShadow = true;
     sun.shadow.mapSize.set(4096, 4096); sun.shadow.radius = 3;
@@ -498,7 +498,7 @@
       }
 
       if (!OUTDOOR[kind]) {
-        const pl = new THREE.PointLight(0xffbe7a, 1.15, Math.max(r.w, r.h) * 1.9, 1.6);
+        const pl = new THREE.PointLight(0xffbe7a, 1.5, Math.max(r.w, r.h) * 1.9, 1.6);
         pl.position.set(0, FH + H - .8, 0); g.add(pl);
         const lamp = new THREE.Mesh(new THREE.BoxGeometry(Math.min(r.w * .5, 8), .15, .5), new THREE.MeshStandardMaterial({ color: 0xffe2b8, emissive: 0xffc27a, emissiveIntensity: 1.6 }));
         lamp.position.set(0, FH + H - .25, 0); g.add(lamp);

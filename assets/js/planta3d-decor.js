@@ -14,7 +14,11 @@ window.AZPlanDecor = {
         { t: 'curtain', wall: 'n', a: -.42, len: 4, inset: .9 },
         { t: 'curtain', wall: 'n', a: .3, len: 4, inset: .9 },
         { t: 'console', wall: 'e', a: .2, len: 7, c: 'oak', bowl: 'charcoal', vase: 'travertine' },
-        { t: 'armchair', x: .22, z: .2, r: -90, c: 'linen', legs: 'bronze' }
+        { t: 'armchair', x: .22, z: .2, r: -90, c: 'linen', legs: 'bronze' },
+        { t: 'rug', x: -.02, z: .08, w: 17, d: 12, c: 'sand' },
+        { t: 'tlamp', x: -.1, z: -.4, c: 'bronze' },
+        { t: 'plant', x: -.42, z: .38, kind: 'olive', s: .9, pot: 'stone' },
+        { t: 'pendant', x: 0, z: .05, kind: 'paper', drop: 1.2 }
       ]
     },
     hall: {
