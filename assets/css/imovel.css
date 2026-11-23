@@ -57,7 +57,7 @@
 /* Maquete 3D da planta */
 .p-plan__svg.is-3d { padding: 0; overflow: hidden; }
 .p-plan__svg.is-3d .plan--big { display: none; }
-.plan3d { position: relative; width: 100%; aspect-ratio: 4 / 3; min-height: 340px; max-height: 76vh; background: radial-gradient(120% 90% at 50% 38%, #23261d 0%, var(--night) 70%); cursor: grab; }
+.plan3d { position: relative; width: 100%; aspect-ratio: 4 / 3; min-height: 340px; max-height: 76vh; background: radial-gradient(115% 105% at 50% 38%, #17263b 0%, #101925 58%, #090e16 100%); cursor: grab; }
 .plan3d.is-drag { cursor: grabbing; }
 .plan3d canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; outline: none; }
 .plan3d canvas:focus-visible { outline: 2px solid var(--accent-glow); outline-offset: -4px; }
@@ -239,18 +239,3 @@
 .p-next__txt strong { font-size: clamp(3rem, 10vw, 9rem); font-weight: 600; letter-spacing: -.06em; line-height: .9; }
 .p-next__go { display: inline-flex; align-items: center; gap: 14px; font-weight: 500; margin-top: 10px; }
 .p-next__go .btn__arrow { width: 46px; height: 46px; }
-
-/* ---------- Dock ---------- */
-.dock {
-  position: fixed; z-index: 95; left: 50%; bottom: 18px; display: flex; align-items: center; gap: 2px; padding: 6px;
-  border-radius: 999px; background: rgba(12, 13, 10, .7); color: #fff; border: 1px solid rgba(255,255,255,.12);
-  backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4);
-  transform: translate(-50%, 140%); transition: transform .8s var(--ease); max-width: calc(100% - 24px); overflow-x: auto; scrollbar-width: none;
-}
-.dock::-webkit-scrollbar { display: none; }
-.dock.is-on { transform: translate(-50%, 0); }
-.dock a, .dock__btn { flex: none; display: inline-flex; align-items: center; height: 40px; padding: 0 14px; border-radius: 999px; font-size: .85rem; color: rgba(255,255,255,.72); transition: background-color .3s, color .3s; }
-.dock a:hover, .dock a[aria-current] { color: #fff; background: rgba(255,255,255,.1); }
-.dock .dock__cta { background: var(--accent-glow); color: var(--ink); font-weight: 600; margin-left: 4px; }
-.dock .dock__cta:hover { background: #fff; color: var(--ink); }
-@media (max-width: 520px) { .dock a { padding: 0 11px; font-size: .8rem; } }

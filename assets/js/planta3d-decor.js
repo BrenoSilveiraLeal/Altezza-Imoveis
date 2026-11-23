@@ -22,7 +22,7 @@ window.AZPlanDecor = {
       ]
     },
     hall: {
-      floor: 'stone', wall: 'wood',
+      floor: 'stone', wall: 'slats',
       items: [
         { t: 'plant', x: 0, z: .05, kind: 'tree', s: 1.1, pot: 'travertine', potW: 1.6, potH: .9 },
         { t: 'bench', wall: 's', a: 0, len: 5, d: 1.6, c: 'travertine', legs: 'travertine' },
@@ -227,7 +227,7 @@ window.AZPlanDecor = {
       ]
     },
     varanda: {
-      floor: 'deck',
+      floor: 'stone',
       items: [
         { t: 'pergola', c: 'freijo', n: 10 },
         { t: 'lounge', x: -.25, z: .1, r: 30, c: 'linen', wood: 'freijo' },
@@ -271,7 +271,7 @@ window.AZPlanDecor = {
     escada: {
       floor: 'stone', wall: 'concrete',
       items: [
-        { t: 'stairs', x: -.05, z: -.18, n: 13, len: 16, wid: 3, c: 'cumaru' },
+        { t: 'stairs', x: -.05, z: -.12, n: 13, len: 16, wid: 3, c: 'cumaru', cwall: true },
         { t: 'plant', x: .36, z: .25, kind: 'monstera', s: 1.3, pot: 'terracotta' }
       ]
     },

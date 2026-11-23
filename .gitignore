@@ -1,0 +1,22 @@
+# Local secrets and environment-specific settings
+.env
+.env.*
+!.env.example
+credentials.json
+service-account*.json
+*.pem
+*.key
+
+# Local QA artifacts and generated media working frames
+/qa-reports/
+/producao-video/_giro/
+/.playwright-cli/
+
+# Editor and operating-system files
+.impeccable/
+.DS_Store
+Thumbs.db
+*.p12
+*.pfx
+id_rsa
+id_ed25519

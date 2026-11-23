@@ -69,11 +69,11 @@
     return `<article class="pcard" data-id="${p.id}" ${opts.reveal ? `data-reveal style="--d:${opts.delay || 0}s"` : ''}>
       <div class="pcard__media" data-cursor="Iniciar<br>tour">
         <img src="${img.srcM}" ${img.src !== img.srcM ? `srcset="${img.srcM} 800w, ${img.src} ${img.w}w" sizes="(min-width: 1100px) 32vw, (min-width: 700px) 48vw, 100vw"` : ''} alt="${img.alt}" width="${img.w}" height="${img.h}" loading="lazy" decoding="async">
-        <div class="pcard__top">
-          <span class="chip chip--glass">${p.status}</span>
-          <button class="fav-btn" type="button" data-fav="${p.id}" data-fav-name="${p.nome}" aria-pressed="false">${ICON.heart}</button>
-        </div>
         <div class="pcard__play"><span class="pcard__play-txt">Apresentação imersiva · ${p.scenes.length} ambientes</span><span class="pcard__play-btn">${ICON.arrowUp}</span></div>
+      </div>
+      <div class="pcard__top">
+        <span class="chip chip--glass">${p.status}</span>
+        <button class="fav-btn" type="button" data-fav="${p.id}" data-fav-name="${p.nome}" aria-pressed="false">${ICON.heart}</button>
       </div>
       <div class="pcard__body">
         <div class="pcard__row">

@@ -263,7 +263,8 @@ html.motion [data-split].is-in .split-line > span { transform: none; }
 .pcard__media { position: relative; aspect-ratio: 4 / 5; border-radius: var(--r); overflow: hidden; background: var(--bg-2); isolation: isolate; }
 .pcard__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
 .pcard__media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.32), transparent 30%, transparent 60%, rgba(0,0,0,.55)); pointer-events: none; }
-.pcard__top { position: absolute; z-index: 2; inset: 16px 16px auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.pcard__top { position: absolute; z-index: 2; inset: 16px 16px auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; pointer-events: none; }
+.pcard__top > .fav-btn { pointer-events: auto; }
 .pcard__play {
   position: absolute; z-index: 2; left: 16px; right: 16px; bottom: 16px; display: flex; align-items: center; justify-content: space-between;
   color: #fff; font-size: .85rem; font-weight: 500;
@@ -325,7 +326,7 @@ form.is-sent .form-ok { display: grid; animation: fade-up .9s var(--ease) both; 
 @keyframes fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 
 /* ---------- Rodapé ---------- */
-.footer { background: var(--night); color: var(--on-night); padding-top: clamp(80px, 10vw, 140px); overflow: hidden; }
+.footer { background: var(--night); color: var(--on-night); padding-top: clamp(48px, 5vw, 72px); overflow: hidden; }
 .footer__top { display: grid; gap: 48px; grid-template-columns: 1fr; padding-bottom: 64px; border-bottom: 1px solid var(--line-night); }
 .footer__cta h2 { font-size: clamp(2.2rem, 5vw, 4.4rem); font-weight: 600; letter-spacing: -.04em; line-height: 1.04; margin-bottom: 30px; }
 .footer__cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; font-size: .92rem; }
@@ -342,7 +343,7 @@ form.is-sent .form-ok { display: grid; animation: fade-up .9s var(--ease) both; 
   .footer__cols { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 699.98px) {
-  .footer { padding-top: 72px; }
+  .footer { padding-top: 48px; }
   .footer__top { gap: 40px; padding-bottom: 44px; }
   .footer__cta { min-width: 0; }
   .footer__cta h2 { font-size: clamp(2.15rem, 9vw, 3rem); }

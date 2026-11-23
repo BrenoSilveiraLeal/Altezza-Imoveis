@@ -274,18 +274,8 @@
       </a>
     </section>`;
 
-  const dock = `
-    <nav class="dock" aria-label="Seções do imóvel">
-      <a href="#tour">Tour</a><a href="#visao">Visão</a>${P.passeio ? '<a href="#video">Vídeo</a>' : ''}${P.predio ? '<a href="#predio">Andares</a>' : ''}${P.obra ? '<a href="#obra">Obra</a>' : ''}<a href="#planta">Planta</a><a href="#localizacao">Local</a>${hasGallery ? '<a href="#galeria">Galeria</a>' : ''}
-      <button type="button" class="dock__btn" data-drawer-open>Coleção</button>
-      <a class="dock__cta" href="#visita">Agendar</a>
-    </nav>`;
-
-  const predio = P.predio ? window.AZPredio.predio(P) : '';
-  const passeio = window.AZPredio.video(P);
   const obra = window.AZObra.markup(P);
-  main.innerHTML = tour + overview + passeio + predio + obra + arch + plan + mats + loc + gallery + visit + next;
-  document.body.insertAdjacentHTML('beforeend', dock);
+  main.innerHTML = tour + overview + obra + arch + plan + mats + loc + gallery + visit + next;
   window.AZObra.init(main, P);
 
   function planSVG(kind) {
@@ -347,10 +337,8 @@
      ====================================================================== */
   const T = window.AZTour.init(P, main.querySelector('.tour'));
   const goTo = T.goTo;
-  window.AZPredio.init(main, P, goTo);
-
   /* ======================================================================
-     Planta, comparação, radar, galeria, dock
+     Planta, comparação, radar e galeria
      ====================================================================== */
   main.addEventListener('click', e => {
     const go = e.target.closest('.p-plan [data-go]');
@@ -427,21 +415,11 @@
     });
   }
 
-  const dockEl = document.querySelector('.dock');
-  const nextEl = main.querySelector('.p-next');
-  const dockLinks = [...dockEl.querySelectorAll('a[href^="#"]')];
-  const dockTargets = dockLinks.map(a => document.querySelector(a.getAttribute('href')));
-  function dockUpdate() {
+  function navUpdate() {
     const tr = T.el.getBoundingClientRect();
-    const pastTour = T.isStatic ? scrollY > innerHeight * .8 : tr.bottom < innerHeight * .5;
-    const atEnd = nextEl.getBoundingClientRect().top < innerHeight * .7;
-    dockEl.classList.toggle('is-on', pastTour && !atEnd);
-    // O tour tem cabeçalho próprio: a barra do site só volta depois dele.
+    // O tour tem cabeçalho próprio: a navegação do site fica oculta durante a apresentação.
     document.body.toggleAttribute('data-nav-hide', !T.isStatic && tr.top <= 1 && tr.bottom >= innerHeight * .98);
-    let cur = -1;
-    dockTargets.forEach((t, i) => { if (t && t.getBoundingClientRect().top < innerHeight * .4) cur = i; });
-    dockLinks.forEach((a, i) => a.toggleAttribute('aria-current', i === cur));
   }
-  addEventListener('scroll', dockUpdate, { passive: true });
-  dockUpdate();
+  addEventListener('scroll', navUpdate, { passive: true });
+  navUpdate();
 })();

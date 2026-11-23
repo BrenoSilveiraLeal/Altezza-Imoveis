@@ -362,17 +362,22 @@
         const h = s.data.hotspots[i];
         const tag = el.querySelector('.hotspot__tag');
         const x = view.left + mapHotspotX(s, h.x) * s.box.w * view.z;
-        tag.style.maxWidth = `${maxWidth}px`;
         tag.style.translate = '0px 0px';
-        const labelWidth = tag.getBoundingClientRect().width;
         const leftRoom = x - leftBound - 34;
         const rightRoom = rightBound - x - 34;
+        const requestedRoom = h.side === 'left' ? leftRoom : h.side === 'right' ? rightRoom : maxWidth;
+        tag.style.maxWidth = `${Math.max(96, Math.min(maxWidth, requestedRoom))}px`;
+        const labelWidth = tag.getBoundingClientRect().width;
         // Pontos na metade direita da foto abrem o rótulo para a esquerda: do lado
         // direito ficam painéis e a borda escura, que cortariam o texto.
         const preferLeft = h.side ? h.side === 'left' : h.x > .5;
-        const side = preferLeft
-          ? (leftRoom >= labelWidth ? 'left' : rightRoom >= labelWidth ? 'right' : 'center')
-          : (rightRoom >= labelWidth ? 'right' : leftRoom >= labelWidth ? 'left' : 'center');
+        const side = h.side === 'left'
+          ? (leftRoom >= labelWidth ? 'left' : 'center')
+          : h.side === 'right'
+            ? (rightRoom >= labelWidth ? 'right' : 'center')
+            : preferLeft
+              ? (leftRoom >= labelWidth ? 'left' : rightRoom >= labelWidth ? 'right' : 'center')
+              : (rightRoom >= labelWidth ? 'right' : leftRoom >= labelWidth ? 'left' : 'center');
         el.classList.toggle('hotspot--left', side === 'left');
         el.classList.toggle('hotspot--center', side === 'center');
         if (side === 'center') {

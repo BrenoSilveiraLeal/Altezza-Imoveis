@@ -1,36 +1,58 @@
 # Altezza Imóveis
 
-Site de demonstração de uma imobiliária fictícia, feito com HTML, CSS e JavaScript, sem etapa de compilação ou banco de dados.
+Site demonstrativo de uma imobiliária fictícia de alto padrão, criado como projeto de portfólio. A experiência apresenta imóveis em páginas editoriais, catálogo com filtros e favoritos, tours interativos, plantas 3D e vídeos das etapas de construção.
 
-## Abrir localmente
+## Tecnologias
 
-Abra `index.html` no navegador ou sirva esta pasta em um servidor estático. As fotos hospedadas no Cloudinary exigem conexão com a internet.
+- HTML semântico, CSS responsivo e JavaScript nativo.
+- Three.js e GLTFLoader para as plantas 3D.
+- Conteúdo e dados de demonstração, sem servidor de aplicação ou banco de dados.
+
+## Executar localmente
+
+Na raiz do projeto, inicie um servidor estático:
+
+```powershell
+python -m http.server 8000
+```
+
+Depois, abra `http://localhost:8000`. Também funciona com qualquer servidor estático. As imagens do Cloudinary e as bibliotecas Three.js carregadas por CDN precisam de conexão com a internet.
 
 ## Páginas
 
-- `index.html`: apresentação, coleção, experiência, depoimentos, perguntas e contato.
-- `imoveis.html`: catálogo com busca, filtros e favoritos.
-- `imovel.html?id=<id>`: tour de cada imóvel. IDs: `dossel`, `brise`, `horizonte`, `mare`, `copa` e `aurora`.
+- `index.html`: apresentação da marca, imóveis em destaque, serviços, regiões, perguntas e contato.
+- `imoveis.html`: catálogo com busca, filtros, ordenação e favoritos; os filtros podem ser compartilhados pela URL.
+- `imovel.html?id=<id>`: tour imersivo. IDs disponíveis: `dossel`, `brise`, `horizonte`, `mare`, `copa` e `aurora`.
 
-Os links do menu rolam suavemente para seções da página inicial. Clicar novamente no destino atual não recarrega a página. A logo leva ao início da página inicial com a transição visual do site. Ao recarregar qualquer página (por exemplo, com F5 ou Ctrl+R), a visualização começa no topo.
+## Estrutura do projeto
 
-## Tour dos imóveis
+```text
+assets/
+  3d/       modelos, texturas e iluminação das plantas
+  css/      estilos globais e estilos por página
+  fonts/    fontes locais
+  img/      fotografias, croquis e imagens do site
+  js/       dados, componentes e comportamento das páginas
+  video/    vídeos e pôsteres das etapas de construção
+producao-video/  materiais de referência e arquivos de produção
+```
 
-Cada imóvel tem um ambiente interno com croqui que dá lugar à foto durante a rolagem e um comparador de croqui e foto na seção de arquitetura. Os pontos de interesse abrem um cartão com imagem e descrição; os botões do cartão mudam o ponto e movem a câmera. A seção de localização exibe uma foto aérea do imóvel sob o gráfico de proximidade.
+Os principais pontos de edição são `assets/js/data.js` (imóveis e conteúdo), `assets/js/home.js`, `catalog.js`, `tour.js`, `obra.js` e `imovel.js`, com os estilos correspondentes em `assets/css/`.
 
-## Prédio interativo e "do croqui à chave"
+## Comportamentos
 
-- **Andares (`#predio`)**: aparece em imóveis com o campo `predio` em `assets/js/data.js` (hoje só a Cobertura Dossel). Passe o mouse ou toque nos andares da torre para ver tipo, área e status; ao selecionar, abre a planta isométrica e o botão "Entrar" leva ao tour. `geo` guarda a posição da torre na foto (frações da imagem); `tipo` descreve a planta dos andares-tipo. Status e valores dos andares-tipo são gerados na página, fictícios.
-- **Obra (`#obra`)**: aparece em todos os imóveis, com etapas montadas a partir dos dados que já existem (croqui, planta, arquitetura e foto final). Rola em etapas com troca suave de imagem; com movimento reduzido vira uma sequência normal.
-- Código: `assets/js/predio.js` e `assets/css/predio.css`.
+- Recarregar uma página começa novamente no topo.
+- O catálogo mantém os filtros na URL e guarda favoritos apenas no navegador.
+- Os formulários validam os campos e abrem uma conversa do WhatsApp preenchida; não há envio para um backend.
+- A seção de construção avança pelas etapas em sincronia com o vídeo. Com movimento reduzido, apresenta uma sequência estática.
+- O tour respeita a preferência de movimento reduzido do sistema.
 
-## Onde editar
+## Conteúdo e configuração
 
-- Imóveis, ambientes, imagens, pontos e plantas: `assets/js/data.js`.
-- Navegação e componentes compartilhados: `assets/js/common.js` e `assets/css/base.css`.
-- Página inicial: `assets/js/home.js` e `assets/css/home.css`.
-- Catálogo: `assets/js/catalog.js` e `assets/css/catalog.css`.
-- Tour: `assets/js/tour.js` e `assets/css/tour.css`.
-- Outras seções do imóvel: `assets/js/imovel.js` e `assets/css/imovel.css`.
+O projeto é demonstrativo: imóveis, preços, pessoas, depoimentos e contatos são fictícios. `WHATSAPP_NUMBER` em `assets/js/data.js` está como placeholder (`5511000000000`); substitua pelo número público da empresa antes de usar os formulários em uma demonstração real.
 
-Os formulários não usam backend nem armazenam dados: após a validação no navegador, abrem o WhatsApp com uma mensagem preenchida com os dados do contato e o imóvel/visita escolhido. Configure `WHATSAPP_NUMBER` em `assets/js/data.js` com o número da imobiliária em formato internacional, apenas dígitos (DDI + DDD + número). O valor atual é um placeholder de demonstração. Os favoritos são salvos apenas no navegador. Imóveis, valores, pessoas e depoimentos são fictícios; as imagens são ilustrativas. Com a preferência de reduzir movimento ativada, o tour mostra uma apresentação estática.
+Não há chaves de API necessárias para executar o site. Segredos e arquivos locais de QA são excluídos pelo `.gitignore`. Os quadros intermediários de produção em `producao-video/_giro/` permanecem no computador e não são publicados no repositório.
+
+## Publicação
+
+Como o site não tem etapa de build, publique os arquivos HTML e a pasta `assets/` em uma hospedagem estática, como GitHub Pages, Netlify ou Vercel. Confira o limite de tamanho de arquivos da plataforma antes de enviar os vídeos de construção.
