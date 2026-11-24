@@ -13,7 +13,7 @@ window.AZPlanDecor = {
         { t: 'plant', x: .4, z: -.36, kind: 'olive', s: 1.2, pot: 'stone' },
         { t: 'curtain', wall: 'n', a: -.42, len: 4, inset: .9 },
         { t: 'curtain', wall: 'n', a: .3, len: 4, inset: .9 },
-        { t: 'console', wall: 'e', a: .2, len: 7, c: 'oak', bowl: 'charcoal', vase: 'travertine' },
+        { t: 'console', wall: 'w', a: -.05, len: 7, c: 'oak', bowl: 'charcoal', vase: 'travertine' },
         { t: 'armchair', x: .22, z: .2, r: -90, c: 'linen', legs: 'bronze' },
         { t: 'rug', x: -.02, z: .08, w: 17, d: 12, c: 'sand' },
         { t: 'tlamp', x: -.1, z: -.4, c: 'bronze' },
@@ -25,9 +25,9 @@ window.AZPlanDecor = {
       floor: 'stone', wall: 'slats',
       items: [
         { t: 'plant', x: 0, z: .05, kind: 'tree', s: 1.1, pot: 'travertine', potW: 1.6, potH: .9 },
-        { t: 'bench', wall: 's', a: 0, len: 5, d: 1.6, c: 'travertine', legs: 'travertine' },
+        { t: 'bench', x: .15, z: .2, len: 5, d: 1.6, c: 'travertine', legs: 'travertine' },
         { t: 'niche', wall: 'e', a: 0, len: 4, c: 'olive' },
-        { t: 'sculpture', wall: 'w', a: -.1, y: 3.6, c: 'bronze' }
+        { t: 'vase', x: -.35, z: -.3, s: 1.2, c: 'bronze' }
       ]
     },
     jantar: {
@@ -68,7 +68,7 @@ window.AZPlanDecor = {
     terraco: {
       floor: 'stone',
       items: [
-        { t: 'table', x: -.08, z: .15, len: 12, wid: 3.6, c: 'oak', chairs: 8, chairC: 'rush', settings: true },
+        { t: 'table', x: -.08, z: .15, len: 12, wid: 3.6, c: 'oak', chairs: 12, chairC: 'rush', settings: true },
         { t: 'pendant', x: -.08, z: .15, kind: 'drum', n: 4, c: 'oak', gap: 3, drop: 2 },
         { t: 'island', x: .02, z: -.28, len: 10, wid: 3, base: 'marble', top: 'marble', grill: true, sink: true },
         { t: 'plant', x: .38, z: -.36, kind: 'olive', s: 1.3, pot: 'travertine' },
@@ -99,7 +99,7 @@ window.AZPlanDecor = {
         { t: 'armchair', x: -.2, z: .3, r: 90, c: 'white', frame: 'black' },
         { t: 'coffee', x: .02, z: .13, shape: 'round', s: 4.6, c: 'oak', base: 'oak', books: true },
         { t: 'side', x: .33, z: .42, c: 'black' },
-        { t: 'art', wall: 'n', a: -.1, w: 9, h: 7, y: 2.2, img: 'aurora-galeria', frame: 'black' },
+        { t: 'gallery', wall: 'n', a: -.1, cols: 4, rows: 4, w: 1.5, h: 1, gap: .23, y: 1.25, frame: 'black', seed: 5, pal: 'mono' },
         { t: 'console', wall: 'n', a: -.1, len: 9, c: 'white', lamp: 'white', vase: 'charcoal', inset: 1.4 },
         { t: 'plant', x: .4, z: -.36, kind: 'fiddle', s: 1.25, pot: 'basket' },
         { t: 'plant', x: -.42, z: -.36, kind: 'fiddle', s: 1, pot: 'white' },
@@ -111,8 +111,6 @@ window.AZPlanDecor = {
       items: [
         { t: 'table', x: .05, z: .02, kind: 'round', r: 3, c: 'oak', base: 'oak', chairs: 6, chairC: 'white', legs: 'black' },
         { t: 'pendant', x: .05, z: .02, kind: 'paper', drop: 1.6 },
-        { t: 'console', wall: 'w', a: .12, len: 8, c: 'oak', inset: 1.4 },
-        { t: 'art', wall: 'w', a: .12, w: 4, h: 6, y: 2.4, img: 'aurora-jantar', frame: 'oak' },
         { t: 'plant', x: -.32, z: -.38, kind: 'fiddle', s: 1.3, pot: 'basket' }
       ]
     },
@@ -145,18 +143,21 @@ window.AZPlanDecor = {
       items: [
         { t: 'sofa', x: -.36, z: -.1, r: 90, len: 8, c: 'linen', throwC: 'cream' },
         { t: 'side', x: -.4, z: .2, c: 'oak' },
-        { t: 'table', x: .1, z: .12, len: 9, wid: 3.6, c: 'walnut', chairs: 6, chairC: 'walnut', base: 'trestle', settings: true, vase: 'terracotta' },
-        { t: 'books', wall: 'e', a: -.3, len: 7, h: 5.6, c: 'oak', inset: 1.4 },
-        { t: 'books', wall: 'e', a: .3, len: 7, h: 5.6, c: 'oak', inset: 1.4 },
-        { t: 'art', wall: 'e', a: 0, w: 4.5, h: 6, y: 1.6, img: 'copa-jantar', frame: 'oak' },
+        { t: 'table', x: .1, z: .12, len: 9, wid: 3.6, c: 'walnut', chairs: 8, chairC: 'walnut', base: 'trestle', settings: true, vase: 'terracotta' },
+        { t: 'books', wall: 's', a: -.3, len: 7, h: 5.6, c: 'oak', inset: 1.4 },
+        { t: 'books', wall: 's', a: .3, len: 7, h: 5.6, c: 'oak', inset: 1.4 },
+        { t: 'art', wall: 's', a: 0, w: 4.5, h: 6, y: 1.6, img: 'copa-jantar', frame: 'oak' },
         { t: 'curtain', wall: 'n', a: -.38, len: 4, inset: .9 }
       ]
     },
     biblioteca: {
       floor: 'herring', wall: 'walnut',
       items: [
-        { t: 'books', wall: 'e', a: 0, len: 20, h: 5.6, c: 'walnut', inset: 1.4 },
+        { t: 'books', wall: 'n', a: 0, len: 17, h: 5.6, c: 'walnut', inset: 1.4 },
+        { t: 'books', wall: 's', a: .08, len: 12, h: 3.8, c: 'walnut', inset: 1.4 },
         { t: 'lounge', x: -.1, z: .1, r: 60, c: 'caramel' },
+        { t: 'lounge', x: -.32, z: .3, r: 15, c: 'caramel' },
+        { t: 'side', x: -.15, z: .38, c: 'walnut', lamp: 'terracotta' },
         { t: 'flamp', x: -.32, z: -.05, c: 'brass' },
         { t: 'rug', x: -.05, z: .05, w: 10, d: 10, c: 'jute' }
       ]
@@ -164,7 +165,7 @@ window.AZPlanDecor = {
     cozinha: {
       floor: 'herring', glass: ['n', 'e'],
       items: [
-        { t: 'run', wall: 'w', a: .08, len: 18, base: 'walnut', top: 'travertine', back: 'tile', upper: 'shelves', shelfC: 'walnut', cooktop: true, sink: true, fridge: true, plant: true },
+        { t: 'run', wall: 's', a: -.2, len: 13, base: 'walnut', top: 'travertine', back: 'tile', upper: 'shelves', shelfC: 'walnut', cooktop: true, sink: true, fridge: true, plant: true },
         { t: 'island', x: .14, z: .05, r: 90, len: 10, wid: 3, base: 'walnut', top: 'travertine', stools: 3, stoolC: 'walnut', fruit: true }
       ]
     },
@@ -211,7 +212,7 @@ window.AZPlanDecor = {
       items: [
         { t: 'run', wall: 'n', a: 0, len: 20, base: 'freijo', top: 'travertine', upper: 'cabinets', cooktop: true, sink: true },
         { t: 'island', x: -.22, z: -.08, r: 90, len: 10, wid: 3, base: 'travertine', top: 'travertine', stools: 4, stoolC: 'rush' },
-        { t: 'table', x: .15, z: .18, r: 90, len: 14, wid: 3.6, c: 'freijo', chairs: 10, chairC: 'rush', base: 'trestle', bowl: 'freijo' },
+        { t: 'table', x: .15, z: .18, r: 90, len: 14, wid: 3.6, c: 'freijo', chairs: 12, chairC: 'rush', base: 'trestle', bowl: 'freijo' },
         { t: 'pendant', x: .15, z: .18, r: 90, kind: 'rattan', n: 3, gap: 3.6, drop: 1.5 }
       ]
     },
@@ -272,6 +273,7 @@ window.AZPlanDecor = {
       floor: 'stone', wall: 'concrete',
       items: [
         { t: 'stairs', x: -.05, z: -.12, n: 13, len: 16, wid: 3, c: 'cumaru', cwall: true },
+        { t: 'books', x: .4, z: -.3, len: 5, h: 4.6, c: 'cumaru' },
         { t: 'plant', x: .36, z: .25, kind: 'monstera', s: 1.3, pot: 'terracotta' }
       ]
     },
@@ -310,7 +312,7 @@ window.AZPlanDecor = {
     jantar: {
       floor: 'oak', glass: ['w', 's'],
       items: [
-        { t: 'table', x: 0, z: .02, len: 10, wid: 3.8, c: 'charcoal', chairs: 6, chairC: 'grey', legs: 'black', vase: 'cream' },
+        { t: 'table', x: 0, z: .02, len: 10, wid: 3.8, c: 'charcoal', chairs: 8, chairC: 'grey', legs: 'black', vase: 'cream' },
         { t: 'pendant', x: 0, z: .02, kind: 'drum', n: 3, c: 'black', gap: 3 }
       ]
     },
@@ -321,9 +323,8 @@ window.AZPlanDecor = {
         { t: 'sofa', x: -.3, z: .1, r: 90, len: 10, l: 5, c: 'white', pillows: ['grey', 'mustard', 'darkgrey'] },
         { t: 'coffee', x: -.08, z: .1, shape: 'round', s: 4, c: 'white', base: 'white' },
         { t: 'side', x: .06, z: .28, c: 'black' },
-        { t: 'fireplace', wall: 'e', a: -.25, inset: 1.4 },
-        { t: 'bench', wall: 'e', a: .2, len: 10, d: 2, c: 'black', legs: 'black', inset: 1.6 },
-        { t: 'art', wall: 'e', a: .25, w: 4, h: 6, y: 2.4, img: 'horizonte-estar', frame: 'black' },
+        { t: 'fireplace', wall: 'e', a: -.36, inset: 1.4 },
+        { t: 'bench', x: .25, z: .28, r: 90, len: 7, d: 2, c: 'black', legs: 'black' },
         { t: 'plant', x: -.1, z: .06, kind: 'fern', s: .45, pot: 'white', potH: .6 }
       ]
     },
@@ -369,10 +370,10 @@ window.AZPlanDecor = {
         { t: 'armchair', x: .22, z: -.06, r: -90, c: 'linen' },
         { t: 'side', x: .22, z: .07, c: 'bronze', lamp: 'cream' },
         { t: 'side', x: -.2, z: -.14, c: 'oak' },
-        { t: 'books', wall: 'e', a: -.28, len: 7, h: 5.4, c: 'oak' },
+        { t: 'books', wall: 'w', a: .32, len: 7, h: 5.4, c: 'oak' },
         { t: 'plant', x: .42, z: .4, kind: 'fern', s: 1, pot: 'stone' },
         { t: 'vase', x: -.42, z: -.4, s: 1.2, c: 'travertine' },
-        { t: 'shelf', wall: 'w', a: .32, len: 4, y: 3.4, c: 'oak' }
+        { t: 'shelf', wall: 'w', a: -.32, len: 4, y: 3.4, c: 'oak' }
       ],
       hall: [
         { t: 'gallery', wall: 'n', a: 0, n: 3, w: 2, h: 2.6, frame: 'oak', seed: 11, pal: 'olive' },
@@ -412,7 +413,7 @@ window.AZPlanDecor = {
     aurora: {
       estar: [
         { t: 'flamp', x: .4, z: -.05, c: 'black' },
-        { t: 'books', wall: 'e', a: -.3, len: 7, h: 5.4, c: 'white' },
+        { t: 'books', wall: 's', a: -.3, len: 7, h: 5.4, c: 'white' },
         { t: 'side', x: -.28, z: .16, c: 'oak', lamp: 'white' },
         { t: 'plant', x: -.42, z: .4, kind: 'fern', s: 1, pot: 'white' },
         { t: 'pendant', x: .02, z: .13, kind: 'paper', drop: 1.6 }
@@ -444,7 +445,7 @@ window.AZPlanDecor = {
       ],
       biblioteca: [
         { t: 'side', x: .12, z: .22, c: 'walnut', lamp: 'terracotta' },
-        { t: 'art', wall: 'w', a: 0, w: 4, h: 3, y: 2.4, frame: 'walnut', seed: 13, pal: 'earth' },
+        { t: 'vase', x: .38, z: -.38, s: .8, c: 'terracotta' },
         { t: 'plant', x: -.38, z: .4, kind: 'fern', s: .9, pot: 'terracotta' },
         { t: 'pendant', x: -.05, z: .05, kind: 'drum', c: 'brass', drop: 1.8 }
       ],
@@ -468,7 +469,7 @@ window.AZPlanDecor = {
         { t: 'armchair', x: .28, z: .08, r: -90, c: 'linen' },
         { t: 'armchair', x: .28, z: .3, r: -90, c: 'linen' },
         { t: 'flamp', x: .42, z: -.2, paper: true },
-        { t: 'books', wall: 'e', a: -.25, len: 7, h: 5.4, c: 'freijo' },
+        { t: 'books', wall: 'n', a: .34, len: 7, h: 5.4, c: 'freijo' },
         { t: 'plant', x: -.44, z: .4, kind: 'fern', s: 1, pot: 'cream' }
       ],
       cozinha: [
@@ -527,7 +528,6 @@ window.AZPlanDecor = {
         { t: 'plant', x: .42, z: .4, kind: 'olive', s: .8, pot: 'white' }
       ],
       escada: [
-        { t: 'art', wall: 'n', a: .3, w: 4, h: 3, y: 2.6, frame: 'black', seed: 23, pal: 'mono' },
         { t: 'plant', x: .4, z: .3, kind: 'fern', s: .8, pot: 'white' }
       ],
       varanda: [

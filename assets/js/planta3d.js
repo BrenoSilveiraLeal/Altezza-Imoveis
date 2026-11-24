@@ -448,7 +448,26 @@
         const L = o.len || 8, h = o.h || 5.6, c = o.c || 'walnut', rows = Math.round(h / 1.1);
         B(p, L, h, .2, 0, 0, -.6, c); [-1, 1].forEach(s => B(p, .2, h, 1.3, s * L / 2, 0, 0, c));
         const cols = [0xd8cdb5, 0x6b4630, 0x2f2d29, 0xb4643e, 0x8d8d88, 0xe9e1cf, 0x55554f];
-        for (let r = 0; r < rows; r++) { B(p, L, .15, 1.3, 0, r * h / rows, 0, c); let x = -L / 2 + .3; let k = r * 3; while (x < L / 2 - .6) { const w = .18 + (k % 4) * .06, bh = .6 + (k % 3) * .12; if ((k % 9) === 4) { Cy(p, .25, .3, .5, x + .3, r * h / rows + .15, 0, cols[k % 7], 10); x += .8; } else { B(p, w, bh, .9, x, r * h / rows + .15, 0, cols[k % 7]); x += w + .03; } k++; } }
+        const volumes = [];
+        for (let r = 0; r < rows; r++) {
+          const y = r * h / rows;
+          B(p, L, .15, 1.3, 0, y, 0, c);
+          let x = -L / 2 + .3, k = r * 3;
+          while (x < L / 2 - .6) {
+            const w = .18 + (k % 4) * .06, bh = .6 + (k % 3) * .12;
+            if (k % 9 === 4) { Cy(p, .25, .3, .5, x + .3, y + .15, 0, cols[k % 7], 10); x += .8; }
+            else { volumes.push({ x, y: y + .15 + bh / 2, w, h: bh, c: cols[k % 7] }); x += w + .03; }
+            k++;
+          }
+        }
+        const spines = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), mat(0xffffff), volumes.length);
+        const dummy = new THREE.Object3D();
+        volumes.forEach((v, i) => {
+          dummy.position.set(v.x, v.y, 0); dummy.scale.set(v.w, v.h, .9); dummy.updateMatrix();
+          spines.setMatrixAt(i, dummy.matrix); spines.setColorAt(i, lin(v.c));
+        });
+        spines.instanceMatrix.needsUpdate = true;
+        spines.castShadow = false; spines.receiveShadow = true; p.add(spines);
       },
       tv(p, o) { B(p, o.len || 7, 1.4, 1.5, 0, 0, 0, o.c || 'black'); if (!o.noTv) B(p, 4.5, 2.5, .15, 0, 2.8, -.4, 'charcoal'); if (o.deco) { Cy(p, .3, .4, .8, -2.4, 1.4, 0, 'cream', 12); B(p, 1.2, .2, .9, 2, 1.4, 0, 'charcoal'); } },
       console(p, o) { B(p, o.len || 6, 2.2, 1.4, 0, 0, 0, o.c || 'oak'); if (o.lamp) D.tlamp(p, { c: o.lamp, y: 2.2 }); if (o.vase) { Cy(p, .3, .4, 1, 1.8, 2.2, 0, o.vase, 12); Ball(p, .6, 1.8, 3.6, 0, 'leaf', .8, 1.4, .8); } if (o.bowl) Cy(p, .7, .4, .3, -1.6, 2.2, 0, o.bowl, 14); },
@@ -459,7 +478,16 @@
         if (o.mirror === 'round') { const m = Cy(p, 1.7, 1.7, .08, -L * .1, 4.4, -.85, 0xcfd8da, 40, { roughness: .05, metalness: .6 }); m.rotation.x = Math.PI / 2; } else if (o.mirror) B(p, L - .6, 2.2, .1, 0, 3.6, -.85, 0xcfd8da, { roughness: .05, metalness: .6 });
         if (o.vase) { Cy(p, .3, .45, .9, L * .3, 3.15, 0, o.vase, 12); for (let i = 0; i < 4; i++) B(p, .05, 1.8, .05, L * .3 + (i - 1.5) * .2, 4, 0, 'leaf').rotation.z = (i - 1.5) * .25; }
       },
-      shower(p, o) { B(p, .1, 5, o.len || 4, 0, 0, 0, 0xcfe6e6, { transparent: true, opacity: .3, roughness: .05 }).castShadow = false; Cy(p, .5, .5, .06, -1, 5.2, 0, 'brass', 16); },
+      shower(p, o) {
+        const L = o.len || 4;
+        B(p, 4.5, .08, L, 2.25, .01, 0, o.base || 'travertine').castShadow = false;
+        B(p, 2.5, .035, .06, 2.25, .1, L * .3, 'charcoal').castShadow = false;
+        B(p, .08, 5, L, 0, 0, 0, 0xcfe6e6, { transparent: true, opacity: .22, roughness: .05 }).castShadow = false;
+        B(p, .035, 5, .035, 0, 0, -L / 2, 'brass').castShadow = false;
+        B(p, .035, 5, .035, 0, 0, L / 2, 'brass').castShadow = false;
+        Cy(p, .58, .58, .08, 2, 5.35, -L * .25, 'brass', 20);
+        Cy(p, .045, .045, .65, 2, 5.45, -L * .25, 'brass', 8);
+      },
       toilet(p, o) { B(p, 1.3, 1.4, 1.9, 0, 0, 0, 'white'); B(p, 1.3, .8, .5, 0, 1.4, -.7, 'white'); },
       curtain(p, o) { const L = o.len || 6, n = Math.round(L / .5); for (let i = 0; i < n; i++) B(p, .45, H - .6, .18, -L / 2 + i * L / n, 0, (i % 2) * .15, 0xf4efe6, { transparent: true, opacity: .7, roughness: 1 }).castShadow = false; },
       plant(p, o) {
@@ -704,6 +732,17 @@
         pl.position.set(0, y + h / 2, .11); p.add(pl);
       },
       gallery(p, o) { // conjunto de quadros
+        if (o.cols && o.rows) {
+          const cols = o.cols, rows = o.rows, w = o.w || 1.4, h = o.h || 1, gap = o.gap || .25;
+          for (let row = 0; row < rows; row++) for (let col = 0; col < cols; col++) {
+            const q = new THREE.Group();
+            q.position.x = (col - (cols - 1) / 2) * (w + gap);
+            q.position.y = (rows - 1 - row) * (h + gap);
+            p.add(q);
+            D.art(q, { w, h, y: o.y || 1.4, frame: o.frame || 'black', seed: (o.seed || 3) + row * cols * 7 + col * 7, pal: o.pal });
+          }
+          return;
+        }
         const n = o.n || 3, gap = o.gap || .6, w = o.w || 2.4, h = o.h || 3;
         for (let i = 0; i < n; i++) { const q = new THREE.Group(); q.position.x = (i - (n - 1) / 2) * (w + gap); p.add(q); D.art(q, { w, h: i % 2 ? h * .75 : h, y: (o.y || 2.2) + (i % 2 ? h * .12 : 0), frame: o.frame || 'black', seed: (o.seed || 3) + i * 7, pal: o.pal }); }
       },

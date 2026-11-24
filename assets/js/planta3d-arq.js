@@ -43,7 +43,6 @@ window.AZPlanArq = {
         { t: 'side', x: .3, z: -.12, c: 'travertine' }
       ],
       living: [
-        { t: 'curtain', wall: 'e', a: -.42, len: 3, inset: .9 },
         { t: 'armchair', x: .27, z: -.26, r: -55, c: 'linen', legs: 'bronze' },
         { t: 'side', x: .35, z: -.17, c: 'travertine' }
       ],
@@ -142,7 +141,7 @@ window.AZPlanArq = {
         { t: 'rug', x: -.32, z: -.25, w: 9, d: 7, c: 'sand' },
         { t: 'armchair', x: -.36, z: -.3, r: 120, c: 'white', frame: 'black' },
         { t: 'side', x: -.42, z: -.16, c: 'black', lamp: 'white' },
-        { t: 'books', wall: 'n', a: .36, len: 6, h: 5.4, c: 'white' },
+        { t: 'books', wall: 's', a: 0, len: 6, h: 5.4, c: 'white' },
         { t: 'pouf', x: .12, z: .38, c: 'cream', r: .8 },
         { t: 'plant', x: -.08, z: -.42, kind: 'fiddle', s: 1.3, pot: 'basket' },
         { t: 'vase', x: .1, z: .02, s: .7, c: 'charcoal' },
@@ -177,6 +176,7 @@ window.AZPlanArq = {
   copa: {
     rail: true, door: 'walnut',
     open: [['jantar', 'biblioteca'], ['biblioteca', 'cozinha']],
+    ext: { 'biblioteca:n': 'wall' },
     doors: [
       ['jantar', 'suite', .9, 3.2],
       ['suite', 'banho', .25, 3],
@@ -199,15 +199,14 @@ window.AZPlanArq = {
         { t: 'curtain', wall: 'w', a: -.3, len: 4, inset: .9 }
       ],
       biblioteca: [
-        { t: 'desk', wall: 'w', a: .3, len: 5, c: 'walnut', lamp: 'brass' },
+        { t: 'desk', x: .22, z: -.28, len: 5, c: 'walnut', lamp: 'brass' },
         { t: 'armchair', x: .15, z: -.3, r: -140, c: 'caramel' },
         { t: 'rug', x: .08, z: .05, w: 10, d: 8, c: 'jute' },
         { t: 'side', x: .25, z: -.16, c: 'walnut' }
       ],
       cozinha: [
         { t: 'table', x: .3, z: .36, kind: 'round', r: 2.4, c: 'walnut', base: 'walnut', chairs: 4, chairC: 'walnut' },
-        { t: 'rug', x: .3, z: .36, w: 9, d: 9, c: 'jute' },
-        { t: 'wardrobe', wall: 's', a: -.25, len: 8, c: 'walnut' }
+        { t: 'rug', x: .3, z: .36, w: 9, d: 9, c: 'jute' }
       ],
       jantar: [
         { t: 'plant', x: -.45, z: -.38, kind: 'olive', s: 1.1, pot: 'stone' },
@@ -222,9 +221,6 @@ window.AZPlanArq = {
         { t: 'side', x: .3, z: -.25, c: 'walnut' }
       ],
       banho: [
-        { t: 'wardrobe', wall: 'n', a: 0, len: 14, c: 'walnut' },
-        { t: 'wardrobe', wall: 'e', a: -.28, len: 7, c: 'walnut' },
-        { t: 'bench', x: .05, z: -.22, len: 4, d: 1.6, c: 'caramel', legs: 'walnut' },
         { t: 'vanity', wall: 'w', a: .2, len: 7, c: 'walnut', top: 'travertine', mirror: 'round', vase: 'terracotta' },
         { t: 'shower', x: .3, z: .26, len: 6 },
         { t: 'toilet', wall: 'e', a: .38, inset: 1.6 },
@@ -319,8 +315,9 @@ window.AZPlanArq = {
 
   horizonte: {
     door: 'white',
-    open: [['jantar', 'estar'], ['estar', 'cozinha'], ['estar', 'escada'], ['cozinha', 'escada']],
+    open: [['jantar', 'estar'], ['estar', 'escada'], ['cozinha', 'escada']],
     doors: [
+      ['estar', 'cozinha', .65, 8, { open: true }]
     ],
     items: {
       estar: [
