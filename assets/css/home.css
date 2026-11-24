@@ -366,6 +366,8 @@
 .demo__spot i { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid #fff; display: grid; place-items: center; }
 .demo__spot i::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-glow); }
 .demo__spot b { font-weight: 500; padding: 6px 12px; border-radius: 999px; background: rgba(10,10,10,.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); white-space: nowrap; }
+/* Rótulo à esquerda do ponto em qualquer tela (pontos perto da borda direita). */
+.demo__spot--label-left b { position: absolute; right: 32px; top: 50%; transform: translateY(-50%); }
 @keyframes spot { 0%, 8% { opacity: 0; transform: translate(-11px, -3px); } 14%, 80% { opacity: 1; transform: translate(-11px, -11px); } 88%, 100% { opacity: 0; } }
 .demo__panel { position: absolute; z-index: 3; left: 18px; bottom: 18px; padding: 16px 18px; border-radius: 16px; background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.12); }
 .demo__panel p { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-glow); }
