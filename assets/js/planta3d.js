@@ -63,7 +63,7 @@
 
     /* ---------- cena ---------- */
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
-    renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+    renderer.setPixelRatio(Math.min(innerWidth < 800 ? 1 : 1.35, window.devicePixelRatio || 1));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     if (THREE.sRGBEncoding) renderer.outputEncoding = THREE.sRGBEncoding;
@@ -109,7 +109,7 @@
     const sun = new THREE.DirectionalLight(0xffd7ae, 1.05);
     sun.position.set(-70, 130, 80);
     sun.castShadow = true;
-    sun.shadow.mapSize.set(4096, 4096); sun.shadow.radius = 3;
+    sun.shadow.mapSize.set(1024, 1024); sun.shadow.radius = 3;
     Object.assign(sun.shadow.camera, { left: -85, right: 85, top: 85, bottom: -85, near: 10, far: 360 });
     sun.shadow.bias = -.0006;
     scene.add(sun);
@@ -348,7 +348,7 @@
         if (!o.noArms) { B(p, .8, 1.9, d, -L / 2 - .4, .15, 0, c); B(p, .8, 1.9, d, L / 2 + .4, .15, 0, c); }
         if (o.l) { const q = new THREE.Group(); q.position.set(-L / 2 + d / 2, 0, d / 2 + o.l / 2); q.rotation.y = -Math.PI / 2; p.add(q); mod(q, o.l); }
         if (o.throwC) B(p, 1.6, .12, d - .6, L / 2 - 1.3, 1.85, .2, o.throwC);
-        (o.pillows || []).forEach((pc, i) => B(p, 1.1, 1, .35, -L / 2 + 1 + i * 1.4, 1.85, -d / 2 + 1.1, pc));
+        (o.pillows || ['cream', 'sand']).forEach((pc, i) => B(p, 1.1, 1, .35, -L / 2 + 1 + i * 1.4, 1.85, -d / 2 + 1.1, pc));
       },
       armchair(p, o) {
         const c = o.c || 'white', f = o.frame;
@@ -429,6 +429,7 @@
         if (o.grill) { B(p, 2.6, .12, 1.6, L * .2, 2.8, 0, 'steel'); for (let i = 0; i < 6; i++) B(p, .08, .05, 1.4, L * .2 - 1.1 + i * .44, 2.93, 0, 'charcoal'); }
         if (o.sink) B(p, 1.4, .1, 1, -L * .25, 2.81, 0, 'charcoal');
         if (o.fruit) { Cy(p, .8, .5, .3, L * .15, 2.8, 0, 'walnut', 14); Ball(p, .3, L * .15, 3.2, 0, 'mustard'); }
+        else { Cy(p, .55, .45, .22, L * .28, 2.8, 0, 'cream', 12).castShadow = false; }
         if (o.stools) { const q = new THREE.Group(); q.position.set(0, 0, W / 2 + 1.2); p.add(q); D.stools(q, { n: o.stools, c: o.stoolC, gap: L / (o.stools + .5) }); }
       },
       run(p, o) { // bancada encostada na parede (local: costas em -z)
@@ -441,6 +442,7 @@
         if (o.sink) B(p, 1.6, .06, 1.2, -L * .2, 2.76, .1, 'steel');
         if (o.fridge) B(p, 2.6, 5.6, 2.3, -L / 2 - 1.4, 0, 0, 'steel');
         if (o.plant) { Cy(p, .35, .3, .7, L * .4, 2.75, 0, 'terracotta', 10); Ball(p, .7, L * .4, 3.9, 0, 'leaf', 1, 1.1, 1); }
+        else { Cy(p, .32, .35, .48, L * .42, 2.75, 0, 'terracotta', 10).castShadow = false; Ball(p, .45, L * .42, 3.38, 0, 'leaf', .8, 1, .8).castShadow = false; }
       },
       books(p, o) { // estante (costas em -z)
         const L = o.len || 8, h = o.h || 5.6, c = o.c || 'walnut', rows = Math.round(h / 1.1);
@@ -940,6 +942,7 @@
         if (it.base === 'trestle') [-1, 1].forEach(sd => B(q, .45, 2.3, W - .8, sd * (L / 2 - 1.2), 0, 0, wood));
         else [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz]) => B(q, .28, 2.3, .28, sx * (L / 2 - .4), 0, sz * (W / 2 - .4), wood));
         if (it.settings) { const per0 = Math.max(1, Math.floor(n / 2)); for (let i = 0; i < per0; i++) [-1, 1].forEach(sd => Cy(q, .45, .45, .05, -L / 2 + (i + .5) * L / per0, 2.55, sd * (W / 2 - .7), 'cream', 16)); }
+        if (!it.vase && !it.bowl) { Cy(q, .38, .44, .55, 0, 2.55, 0, 'cream', 12).castShadow = false; Ball(q, .38, 0, 3.3, 0, 'leaf', .75, 1, .75).castShadow = false; }
         const per = Math.max(1, Math.floor(n / 2));
         for (let i = 0; i < per; i++) { const x = -L / 2 + (i + .5) * L / per; [-1, 1].forEach(sd => { const g = new THREE.Group(); g.position.set(x, 0, sd * (W / 2 + .9)); g.rotation.y = sd > 0 ? Math.PI : 0; q.add(g); model(g, 'dining_chair_02', { w: 1.7, tint: chairTint(it.chairC) }); }); }
         if (it.vase) model(q, 'ceramic_vase_01', { hgt: 1.4, y: 2.55 });
@@ -993,7 +996,7 @@
       const cs = Math.abs(Math.cos(ry)), sn = Math.abs(Math.sin(ry));
       const ex = (width * cs + depth * sn) / 2, ez = (width * sn + depth * cs) / 2;
       return ARCH.gaps.some(d => {
-        if (d.owner && d.owner !== r.id) return false;
+        if (d.passage === 'open' || d.owner && d.owner !== r.id) return false;
         const edge = d.horiz ? Math.abs(d.c - r.y) < .05 || Math.abs(d.c - r.y - r.h) < .05
           : Math.abs(d.c - r.x) < .05 || Math.abs(d.c - r.x - r.w) < .05;
         if (!d.owner && !edge) return false;
@@ -1189,12 +1192,6 @@
         zm.castShadow = false; zm.userData.room = r.id;
       });
 
-      if (!OUTDOOR[kind]) {
-        const pl = new THREE.PointLight(0xffbe7a, 1.5, Math.max(r.w, r.h) * 1.9, 1.6);
-        pl.position.set(0, FH + H - .8, 0); g.add(pl);
-      } else if (kind === 'clube' || kind === 'jardim') {
-        const pl = new THREE.PointLight(0x7fd6e6, .9, 34, 1.6); pl.position.set(0, 4, 0); g.add(pl);
-      }
       if (spec && spec.items) decorate(g, spec, r);
       else furnish(g, kind, r.w, r.h, FH);
       g.traverse(o => { if (o.isMesh) o.userData.room = r.id; });
@@ -1452,7 +1449,6 @@
       r0 = Math.max(112 / (k * cam.aspect), 84 / k) * 1.02;
       goal.r = Math.min(Math.max(goal.r, r0 * .35), r0 * 1.3);
       if (!fit.done) { view.r = goal.r = r0; fit.done = true; }
-      if (composer) composer.setSize(w, h);
       dirty = true;
     }
 
@@ -1474,57 +1470,7 @@
     }
 
 
-    /* ---------- oclusão de ambiente (SSAO): sombra de contato em cantos, rodapés e sob os móveis ----------
-       Só quando a maquete está parada; girando, desenha direto (rápido). */
-    let composer = null, aoPass = null, lastFast = false;
-    function setupAO() {
-      if (!THREE.EffectComposer || !THREE.SSAOPass || !THREE.ShaderPass) return;
-      try {
-        const w = box.clientWidth || 600, h = box.clientHeight || 420, pr = renderer.getPixelRatio();
-        composer = new THREE.EffectComposer(renderer);
-        composer.setPixelRatio(pr);
-        aoPass = new THREE.SSAOPass(scene, cam, w, h);
-        aoPass.kernelRadius = 1.6; aoPass.minDistance = .0006; aoPass.maxDistance = .006;
-        // cena com antisserrilhado (WebGL2)
-        if (THREE.WebGLMultisampleRenderTarget && renderer.capabilities.isWebGL2) {
-          aoPass.beautyRenderTarget.dispose();
-          aoPass.beautyRenderTarget = new THREE.WebGLMultisampleRenderTarget(w * pr, h * pr, { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat });
-          aoPass.beautyRenderTarget.samples = 4;
-        }
-        // vidro e cortinas não entram no cálculo do AO
-        const over = aoPass.renderOverride.bind(aoPass);
-        aoPass.renderOverride = function () {
-          const hid = [];
-          scene.traverse(o => { if (o.isMesh && o.visible && o.material && o.material.transparent) { hid.push(o); o.visible = false; } });
-          over.apply(null, arguments);
-          hid.forEach(o => { o.visible = true; });
-        };
-        composer.addPass(aoPass);
-        // no r128 o tone mapping já sai no render target; falta só converter para sRGB
-        const out = new THREE.ShaderPass({
-          uniforms: { tDiffuse: { value: null }, exposure: { value: renderer.toneMappingExposure } },
-          vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
-          fragmentShader: [
-            'uniform sampler2D tDiffuse; uniform float exposure; varying vec2 vUv;',
-            'vec3 fit(vec3 v){ vec3 a = v * (v + 0.0245786) - 0.000090537; vec3 b = v * (0.983729 * v + 0.4329510) + 0.238081; return a / b; }',
-            'vec3 aces(vec3 c){ const mat3 I = mat3(vec3(0.59719,0.07600,0.02840), vec3(0.35458,0.90834,0.13383), vec3(0.04823,0.01566,0.83777));',
-            '  const mat3 O = mat3(vec3(1.60475,-0.10208,-0.00327), vec3(-0.53108,1.10813,-0.07276), vec3(-0.07367,-0.00605,1.07602));',
-            '  c *= exposure / 0.6; c = I * c; c = fit(c); c = O * c; return clamp(c, 0.0, 1.0); }',
-            'vec3 srgb(vec3 c){ return mix(pow(c, vec3(0.41666)) * 1.055 - vec3(0.055), c * 12.92, vec3(lessThanEqual(c, vec3(0.0031308)))); }',
-            'void main(){ vec4 t = texture2D(tDiffuse, vUv); float a = max(t.a, 1e-4); vec3 c = srgb(clamp(t.rgb / a, 0.0, 1.0)); gl_FragColor = vec4(c * t.a, t.a); }'
-          ].join('\n')
-        });
-        out.material.transparent = true; out.material.blending = THREE.NoBlending;
-        composer.addPass(out);
-        composer.setSize(w, h);
-      } catch (e) { console.warn('[planta3d] AO indisponível', e); composer = null; }
-    }
-    function draw(fast) {
-      if (!composer || fast) { renderer.render(scene, cam); lastFast = !!composer; return; }
-      renderer.setClearColor(0x000000, 0);
-      composer.render();
-      lastFast = false;
-    }
+    function draw() { renderer.render(scene, cam); }
 
     function frame() {
       raf = 0;
@@ -1536,7 +1482,6 @@
         if (Math.abs(d) > 1e-4) { view[k] += d * (k === 'r' ? .14 : .16); moving = true; }
       });
       if (moving || dirty) { place(); draw(moving || !!drag); paintLabels(); dirty = false; }
-      else if (lastFast) draw(false);
       if (moving || drag) raf = requestAnimationFrame(frame);
     }
     const kick = () => { dirty = true; if (!raf && visible) raf = requestAnimationFrame(frame); };
@@ -1618,7 +1563,7 @@
 
     new ResizeObserver(fit).observe(box);
     new IntersectionObserver(es => { visible = es.some(e => e.isIntersecting); if (visible) { dirty = true; kick(); } }, { rootMargin: '80px' }).observe(box);
-    setupAO(); fit(); place();
+    fit(); place();
 
     return {
       setView: (th, ph, r) => { auto = false; view.tgt = null; goal.th = view.th = th; goal.ph = view.ph = ph; if (r) goal.r = view.r = r; kick(); },

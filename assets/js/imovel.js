@@ -219,6 +219,14 @@
             <div><dt>Valor por m²</dt><dd>${brl(Math.round(P.preco / P.area))}</dd></div>
           </dl>
           <p class="price__note" data-reveal>Valores ilustrativos, criados para esta demonstração.</p>
+          <div class="visit-guide" data-reveal>
+            <p class="visit-guide__label">Durante a visita</p>
+            <p class="visit-guide__intro">Veja de perto os detalhes que chamaram sua atenção no tour.</p>
+            <ol>
+              <li><span>01</span><p><strong>Explore os ambientes</strong>Perceba as proporções, a luz e a relação entre os espaços.</p></li>
+              <li><span>02</span><p><strong>Converse com um consultor</strong>Conheça os materiais e tire suas dúvidas.</p></li>
+            </ol>
+          </div>
         </div>
         <form class="vform" data-demo-form data-vform novalidate data-reveal>
           <header class="vform__head">
