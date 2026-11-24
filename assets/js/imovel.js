@@ -356,12 +356,26 @@
   const planItems = [...main.querySelectorAll('.p-plan__list li')];
   // Maquete 3D (assets/js/planta3d.js); sem WebGL, fica a planta 2D.
   const plan3dBox = main.querySelector('.plan3d');
-  const plan3d = window.AZPlan3D ? (P.plan.giro ? window.AZPlan3D.giro(plan3dBox, P) : window.AZPlan3D.init(plan3dBox, P)) : null;
-  if (plan3d) {
-    window.__plan3d = plan3d;
+  // A cena é pesada: monta em tempo ocioso após o load (ou quando a seção se aproxima), nunca no meio do scroll.
+  let plan3d = null;
+  const startPlan3d = () => {
+    if (plan3d || !window.AZPlan3D) return;
+    const p = P.plan.giro ? window.AZPlan3D.giro(plan3dBox, P) : window.AZPlan3D.init(plan3dBox, P);
+    if (!p) return;
+    plan3d = p;
+    window.__plan3d = p;
     plan3dBox.hidden = false;
     plan3dBox.parentElement.classList.add('is-3d');
-    plan3d.onPick(id => hiRoom(id, true));
+    p.onPick(id => hiRoom(id, true));
+  };
+  if (window.AZPlan3D) {
+    const idle = window.requestIdleCallback || (f => setTimeout(f, 300));
+    const later = () => idle(startPlan3d, { timeout: 2500 });
+    if (document.readyState === 'complete') later(); else window.addEventListener('load', later, { once: true });
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); startPlan3d(); } }, { rootMargin: '1500px 0px' });
+      io.observe(plan3dBox.parentElement);
+    }
   }
   const hiRoom = (id, from3d) => {
     planBig.querySelectorAll('.plan__room').forEach(g => g.classList.toggle('is-on', g.dataset.room === id));

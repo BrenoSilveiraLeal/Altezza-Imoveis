@@ -1523,7 +1523,14 @@
       if (moving || dirty) { place(); draw(moving || !!drag); paintLabels(); dirty = false; }
       if (moving || drag) raf = requestAnimationFrame(frame);
     }
-    const kick = () => { dirty = true; if (!raf && visible) raf = requestAnimationFrame(frame); };
+    // Fora da tela: renderiza um quadro (debounced) só para compilar shaders e subir texturas à GPU,
+    // assim nada disso acontece no instante em que o usuário rola até a maquete.
+    let warmT = 0;
+    const warm = () => {
+      clearTimeout(warmT);
+      warmT = setTimeout(() => { try { place(); draw(); } catch (e) { /* sem contexto */ } }, 200);
+    };
+    const kick = () => { dirty = true; if (!visible) { warm(); return; } if (!raf) raf = requestAnimationFrame(frame); };
 
     /* ---------- interação ---------- */
     let drag = null;
@@ -1603,6 +1610,7 @@
     new ResizeObserver(fit).observe(box);
     new IntersectionObserver(es => { visible = es.some(e => e.isIntersecting); if (visible) { dirty = true; kick(); } }, { rootMargin: '80px' }).observe(box);
     fit(); place();
+    warm();
 
     return {
       setView: (th, ph, r) => { auto = false; view.tgt = null; goal.th = view.th = th; goal.ph = view.ph = ph; if (r) goal.r = view.r = r; kick(); },
