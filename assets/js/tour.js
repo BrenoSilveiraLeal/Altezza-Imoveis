@@ -371,8 +371,10 @@
         // Pontos na metade direita da foto abrem o rótulo para a esquerda: do lado
         // direito ficam painéis e a borda escura, que cortariam o texto.
         const preferLeft = h.side ? h.side === 'left' : h.x > .5;
+        // side: 'left' é obrigatório: o rótulo sempre abre para a esquerda e
+        // quebra linha se faltar espaço, nunca vai para a direita nem centraliza.
         const side = h.side === 'left'
-          ? (leftRoom >= labelWidth ? 'left' : 'center')
+          ? 'left'
           : h.side === 'right'
             ? (rightRoom >= labelWidth ? 'right' : 'center')
             : preferLeft
