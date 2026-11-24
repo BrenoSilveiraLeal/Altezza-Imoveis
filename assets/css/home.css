@@ -388,6 +388,7 @@
   .demo__spot i { flex: none; }
   .demo__spot b { position: absolute; left: 30px; top: 50%; transform: translateY(-50%); width: max-content; max-width: 110px; padding: 7px 10px; border-radius: 12px; white-space: normal; line-height: 1.35; }
   .demo__spot:nth-of-type(1) b, .demo__spot:nth-of-type(2) b { left: auto; right: 30px; }
+  .demo__spot--label-left b { left: auto; right: 30px; }
   .demo__spot:nth-of-type(2) { top: 51%; }
   .demo__spot:nth-of-type(3) { top: 67%; }
   .demo__bar { left: 12px; right: 12px; top: 12px; }
@@ -487,6 +488,7 @@
 /* ---------- Perguntas ---------- */
 .faq { background: var(--bg-2); padding-block: clamp(72px, 8vw, 112px); }
 .faq__grid { display: grid; gap: 48px; }
+.faq__intro { max-width: 29ch; margin-top: 28px; color: var(--ink-2); font-size: 1rem; line-height: 1.7; }
 .faq__list { border-top: 1px solid var(--line-2); }
 .faq details { border-bottom: 1px solid var(--line-2); }
 .faq summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; font-size: clamp(1.1rem, 1.6vw, 1.35rem); font-weight: 500; letter-spacing: -.02em; cursor: pointer; }
@@ -504,6 +506,7 @@
   .faq summary span, .faq summary span::after, .faq__answer { transition-duration: .01ms; }
 }
 @media (min-width: 1024px) { .faq__grid { grid-template-columns: .8fr 1.2fr; gap: 80px; } .faq__grid > header { align-self: start; } }
+@media (max-width: 699.98px) { .faq { padding-top: 48px; } .faq__grid { gap: 36px; } }
 
 /* ---------- Contato ---------- */
 .contact { padding-bottom: clamp(48px, 5vw, 72px); }

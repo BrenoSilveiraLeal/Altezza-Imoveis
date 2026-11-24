@@ -14,37 +14,20 @@
 window.AZPlanArq = {
   dossel: {
     rail: true, door: 'oak',
-    open: [['living', 'jantar']],
+    open: [['hall', 'living'], ['hall', 'jantar'], ['living', 'jantar'], ['jantar', 'cozinha']],
     doors: [
-      ['hall', 'living', .5, 5, { open: true }],
-      ['hall', 'jantar', .5, 6, { open: true }],
-      ['jantar', 'cozinha', .5, 3.2],
       ['cozinha', 'servico', .3, 3],
       ['jantar', 'suite', .3, 3.2],
-      ['living', 'suites', .42, 3.2],
-      ['living', 'suites', .58, 3.2, { hinge: 'b' }]
+      ['living', 'suites', .25, 3.2],
+      ['living', 'suites', .75, 3.2, { hinge: 'b' }]
     ],
     ext: { 'suite:e': 'wall' },
     parts: {
-      // suíte master: banheiro no canto norte, encostado na cozinha e no serviço
-      suite: [
-        { p: [-.12, -.12, .5, -.12], door: .22, dw: 3, into: 1 },
-        { p: [-.12, -.5, -.12, -.12] }
-      ],
-      // suítes: dois quartos, cada um com o seu banheiro no meio
+      // duas suítes com acessos independentes; os banhos não são inventados nesta planta
       suites: [
-        { p: [0, -.5, 0, .5] },
-        { p: [-.17, .1, .17, .1] },
-        { p: [-.17, .1, -.17, .5], door: .45, dw: 2.8, into: -1 },
-        { p: [.17, .1, .17, .5], door: .45, dw: 2.8, into: 1, hinge: 'b' }
+        { p: [0, -.5, 0, .5] }
       ],
-      // serviço: lavanderia separada do quarto
-      servico: [{ p: [-.5, -.05, .5, -.05], door: .8, dw: 2.8, into: 1 }]
-    },
-    zones: {
-      suite: [{ r: [-.12, -.5, .5, -.12], floor: 'bath' }],
-      suites: [{ r: [-.17, .1, .17, .5], floor: 'bath' }],
-      servico: [{ r: [-.5, -.5, .5, -.05], floor: 'bath' }]
+      // área de serviço sem repartições não documentadas
     },
     drop: {
       terraco: [{ t: 'lounge' }, { t: 'side' }, { t: 'table' }],
@@ -88,10 +71,6 @@ window.AZPlanArq = {
         { t: 'bench', x: -.05, z: .2, r: 90, len: 5, d: 1.6, c: 'olive', legs: 'bronze' },
         { t: 'armchair', x: -.3, z: .38, r: 140, c: 'linen' },
         { t: 'flamp', x: -.42, z: .44, c: 'bronze' },
-        { t: 'vanity', wall: 'n', a: .26, len: 7, c: 'oak', top: 'travertine', mirror: true },
-        { t: 'tub', x: .36, z: -.3, len: 6, wid: 2.8, c: 'travertine' },
-        { t: 'shower', x: -.03, z: -.32, len: 3.6 },
-        { t: 'toilet', wall: 'n', a: -.02, inset: 1.6 },
         { t: 'plant', x: .44, z: .44, kind: 'olive', s: .9, pot: 'stone' },
         { t: 'shelf', wall: 'w', a: .02, len: 5, y: 2.2, c: 'oak' },
         { t: 'vase', x: -.44, z: .02, s: .9, c: 'cream' },
@@ -134,25 +113,13 @@ window.AZPlanArq = {
     open: [['estar', 'jantar']],
     doors: [
       ['estar', 'suite', .74, 3.2],
-      ['jantar', 'suites', .55, 3.2],
-      ['jantar', 'suites', .85, 3.2, { hinge: 'b' }]
+      ['jantar', 'suites', .5, 3.2]
     ],
     parts: {
-      // suíte master: closet e banheiro a leste
-      suite: [
-        { p: [.3, -.5, .3, .5], door: .2, dw: 3, into: 1 },
-        { p: [.3, .05, .5, .05], door: .5, dw: 2.8, into: 1 }
-      ],
-      // suítes: dois quartos e o banheiro do segundo
+      // suítes: só a separação dos quartos, sem banheiros supostos
       suites: [
-        { p: [-.1, -.5, -.1, .5] },
-        { p: [.28, -.5, .28, .05], door: .55, dw: 2.8, into: 1 },
-        { p: [.28, .05, .5, .05] }
+        { p: [-.5, 0, .5, 0], door: .5, dw: 3, into: 1 }
       ]
-    },
-    zones: {
-      suite: [{ r: [.3, .05, .5, .5], floor: 'bath' }],
-      suites: [{ r: [.28, -.5, .5, .05], floor: 'bath' }]
     },
     drop: {
       suite: [{ t: 'wardrobe' }, { t: 'plant' }, { t: 'curtain', a: .4 }, { t: 'flamp' }, { t: 'armchair' }],
@@ -183,9 +150,6 @@ window.AZPlanArq = {
         { t: 'flamp', x: -.44, z: .42, c: 'black' },
         { t: 'wardrobe', wall: 'n', a: .4, len: 8, c: 'white' },
         { t: 'wardrobe', wall: 'e', a: -.2, len: 8, c: 'white' },
-        { t: 'vanity', wall: 'e', a: .2, len: 6, c: 'oak', top: 'white', mirror: 'round' },
-        { t: 'tub', x: .4, z: .4, len: 5.5, wid: 2.6, c: 'white' },
-        { t: 'toilet', x: .33, z: .16, r: 90 },
         { t: 'plant', x: .22, z: .4, kind: 'olive', s: 1.2, pot: 'stone' },
         { t: 'curtain', wall: 'w', a: -.3, len: 4, inset: .9 },
         { t: 'console', wall: 'w', a: .15, len: 6, c: 'oak', inset: 1.4, vase: 'cream' },
@@ -193,43 +157,29 @@ window.AZPlanArq = {
       ],
       suites: [
         // quarto 1
-        { t: 'bed', wall: 'n', a: -.36, w: 6, len: 8, base: 'oak', throwC: 'cream', inset: 4.9 },
-        { t: 'night', wall: 'n', a: -.47, c: 'oak', lamp: 'white', inset: 1.6 },
-        { t: 'art', wall: 'n', a: -.36, w: 4, h: 2.6, y: 3.6, frame: 'black', seed: 6, pal: 'mono' },
-        { t: 'wardrobe', wall: 's', a: -.3, len: 8, c: 'white' },
-        { t: 'desk', wall: 'w', a: .2, len: 4.5, c: 'white' },
-        { t: 'rug', x: -.32, z: .1, w: 9, d: 7, c: 'sand' },
+        { t: 'bed', x: -.25, z: -.27, w: 6, len: 8, base: 'oak', throwC: 'cream' },
+        { t: 'night', x: -.36, z: -.35, c: 'oak', lamp: 'white' },
+        { t: 'wardrobe', x: .35, z: -.38, r: 90, len: 7, c: 'white' },
+        { t: 'rug', x: -.25, z: -.27, w: 9, d: 7, c: 'sand' },
         // quarto 2
-        { t: 'bed', wall: 'n', a: .08, w: 6, len: 8, base: 'white', throwC: 'sand', inset: 4.9 },
-        { t: 'night', wall: 'n', a: .21, c: 'white', lamp: 'cream', inset: 1.6 },
-        { t: 'wardrobe', wall: 's', a: .08, len: 8, c: 'oak' },
-        { t: 'rug', x: .08, z: .1, w: 9, d: 7, c: 'cream' },
-        { t: 'plant', x: -.05, z: .42, kind: 'fiddle', s: .9, pot: 'white' },
-        // banheiro
-        { t: 'vanity', wall: 'e', a: -.25, len: 6, c: 'oak', top: 'white', mirror: true },
-        { t: 'toilet', wall: 'n', a: .44, inset: 1.6 },
-        { t: 'shower', x: .36, z: -.12, r: 90, len: 3.6 }
+        { t: 'bed', x: .25, z: .27, r: 180, w: 6, len: 8, base: 'white', throwC: 'sand' },
+        { t: 'night', x: .36, z: .35, c: 'white', lamp: 'cream' },
+        { t: 'wardrobe', x: -.35, z: .38, r: 90, len: 7, c: 'oak' },
+        { t: 'rug', x: .25, z: .27, w: 9, d: 7, c: 'cream' }
       ]
     }
   },
 
   copa: {
     rail: true, door: 'walnut',
+    open: [['jantar', 'biblioteca'], ['biblioteca', 'cozinha']],
     doors: [
-      ['jantar', 'biblioteca', .08, 3.2],
-      ['biblioteca', 'cozinha', .85, 3],
       ['jantar', 'suite', .9, 3.2],
       ['suite', 'banho', .25, 3],
       ['cozinha', 'servico', .85, 3]
     ],
     parts: {
-      servico: [{ p: [-.5, .22, .5, .22], door: .78, dw: 2.8, into: 1 }],
-      // banho master: closet ao norte (entrada pela suíte), banheiro ao sul
-      banho: [{ p: [-.5, -.02, .5, -.02], door: .3, dw: 2.8, into: 1 }]
-    },
-    zones: {
-      servico: [{ r: [-.5, .22, .5, .5], floor: 'bath' }],
-      banho: [{ r: [-.5, -.5, .5, -.02], floor: 'herring' }]
+      // o banho é um cômodo próprio na planta
     },
     drop: {
       servico: [{ t: 'desk' }, { t: 'laundry' }, { t: 'plant' }, { t: 'rug' }],
@@ -288,13 +238,6 @@ window.AZPlanArq = {
     ext: { 'estar:n': 'wall', 'cozinha:n': 'wall' },
     open: [['estar', 'cozinha']],
     doors: [['cozinha', 'suite', .78, 3.2]],
-    parts: {
-      suite: [
-        { p: [.1, .22, .5, .22] },
-        { p: [.1, .22, .1, .5], door: .5, dw: 2.8, into: -1 }
-      ]
-    },
-    zones: { suite: [{ r: [.1, .22, .5, .5], floor: 'bath' }] },
     drop: { suite: [{ t: 'curtain' }, { t: 'bench' }], varanda: [{ t: 'plant' }], deck: [{ t: 'lounger' }] },
     items: {
       varanda: [
@@ -317,9 +260,6 @@ window.AZPlanArq = {
       ],
       suite: [
         { t: 'bench', x: -.05, z: -.1, r: 0, len: 6, d: 1.6, c: 'freijo', legs: 'freijo' },
-        { t: 'tub', x: .27, z: .42, len: 5.5, wid: 2.6, c: 'travertine' },
-        { t: 'vanity', wall: 'e', a: .34, len: 5, c: 'freijo', top: 'travertine', mirror: 'round' },
-        { t: 'toilet', x: .155, z: .3, r: 90 },
         { t: 'curtain', wall: 'e', a: -.3, len: 4, inset: .9 }
       ]
     }
@@ -327,9 +267,8 @@ window.AZPlanArq = {
 
   brise: {
     door: 'oak',
-    open: [['estar', 'jantar'], ['estar', 'escada'], ['jantar', 'escada']],
+    open: [['estar', 'jantar'], ['estar', 'escada'], ['jantar', 'escada'], ['jantar', 'cozinha']],
     doors: [
-      ['jantar', 'cozinha', .5, 3.4],
       ['escada', 'banho', .5, 3]
     ],
     items: {
@@ -359,10 +298,8 @@ window.AZPlanArq = {
 
   horizonte: {
     door: 'white',
-    open: [['jantar', 'estar']],
+    open: [['jantar', 'estar'], ['estar', 'cozinha'], ['estar', 'escada'], ['cozinha', 'escada']],
     doors: [
-      ['estar', 'cozinha', .1, 4.4, { open: true }],
-      ['estar', 'escada', .8, 4, { open: true }]
     ],
     items: {
       jantar: [

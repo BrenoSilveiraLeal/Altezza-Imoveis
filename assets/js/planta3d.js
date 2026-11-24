@@ -57,7 +57,8 @@
     const THREE = window.THREE;
     if (!THREE || !webgl()) return null;
     const ARQ = (window.AZPlanArq || {})[P.id] || {};
-    const rooms = snapRooms(P.plan.rooms, ARQ);
+    // Ambientes comuns em outros pavimentos (área 0 na planta) não pertencem à laje da residência.
+    const rooms = snapRooms(P.plan.rooms.filter(r => r.area !== 0), ARQ);
     const BB = rooms.reduce((b, r) => ({ x0: Math.min(b.x0, r.x), y0: Math.min(b.y0, r.y), x1: Math.max(b.x1, r.x + r.w), y1: Math.max(b.y1, r.y + r.h) }), { x0: 1e9, y0: 1e9, x1: -1e9, y1: -1e9 });
 
     /* ---------- cena ---------- */
@@ -132,13 +133,16 @@
       return m;
     }
 
-    /* ---------- base: laje do pavimento, só sob a planta ---------- */
+    /* ---------- base: acompanha a implantação real dos ambientes, sem preencher vazios ---------- */
     {
-      const pad = 1.2, sw = BB.x1 - BB.x0 + pad * 2, sd = BB.y1 - BB.y0 + pad * 2;
-      const slab = new THREE.Mesh(new THREE.BoxGeometry(sw, 1.6, sd), mat(0xe8e3d9, { roughness: .95 }));
-      slab.position.set((BB.x0 + BB.x1) / 2 - CX, -.8, (BB.y0 + BB.y1) / 2 - CZ); slab.receiveShadow = true; scene.add(slab);
-      const lip = new THREE.Mesh(new THREE.BoxGeometry(sw + .3, .35, sd + .3), mat(0xd6d0c4, { roughness: .9 }));
-      lip.position.set(slab.position.x, -1.78, slab.position.z); scene.add(lip);
+      const slabM = mat(0xe8e3d9, { roughness: .95 }), lipM = mat(0xd6d0c4, { roughness: .9 });
+      rooms.forEach(r => {
+        const x = r.x + r.w / 2 - CX, z = r.y + r.h / 2 - CZ;
+        const slab = new THREE.Mesh(new THREE.BoxGeometry(r.w + .8, 1.6, r.h + .8), slabM);
+        slab.position.set(x, -.8, z); slab.receiveShadow = true; scene.add(slab);
+        const lip = new THREE.Mesh(new THREE.BoxGeometry(r.w + 1.1, .35, r.h + 1.1), lipM);
+        lip.position.set(x, -1.78, z); scene.add(lip);
+      });
     }
 
     /* ---------- decoração fiel às fotos ---------- */
@@ -976,10 +980,30 @@
     const INSET = { gallery: .75, wardrobe: 1.4, laundry: 1.4, shelf: .75, towel: .6, tvwall: 1, desk: 1.4, art: .75, curtain: .9, books: 1.4, run: 1.9, console: 1.4, tv: 1.4, vanity: 1.6, bed: 5, night: 1.6, niche: 1.5, bench: 1.2, toilet: 1.6, fireplace: 1.4, sculpture: .9 };
     const FLOOR_BLOCKERS = new Set(['bench', 'bed', 'books', 'console', 'desk', 'fireplace', 'laundry', 'night', 'niche', 'run', 'shelf', 'toilet', 'tvwall', 'vanity', 'wardrobe']);
     const DOOR_CLEARANCE = .8, WALL_ITEM_CLEARANCE = .35;
+    const WALKWAY_ITEMS = new Set(['armchair', 'bar', 'bed', 'bench', 'books', 'console', 'deckchair', 'desk', 'fireplace', 'grill', 'island', 'laundry', 'lounge', 'night', 'planter', 'pouf', 'run', 'shelf', 'side', 'sofa', 'table', 'toilet', 'tub', 'tvwall', 'vanity', 'wardrobe']);
     function itemSpan(it) {
       if (it.t === 'bed' || it.t === 'fireplace') return it.w || it.len || 5;
       if (it.len || it.w) return it.len || it.w;
       return ({ night: 2.2, niche: 4, toilet: 3, fireplace: 5, books: 5, shelf: 5 }[it.t] || 4);
+    }
+    function blocksPassage(r, it, x, z, ry) {
+      if (!WALKWAY_ITEMS.has(it.t)) return false;
+      const width = it.t === 'table' || it.t === 'sofa' ? it.len || 8 : it.w || it.len || it.wid || (it.t === 'bed' ? 6 : 2.6);
+      const depth = it.t === 'bed' ? it.len || 8 : it.t === 'sofa' ? 3.2 : it.t === 'table' ? (it.wid || 3.6) + 2.8 : it.t === 'island' ? it.wid || 3 : it.d || 2.8;
+      const cs = Math.abs(Math.cos(ry)), sn = Math.abs(Math.sin(ry));
+      const ex = (width * cs + depth * sn) / 2, ez = (width * sn + depth * cs) / 2;
+      return ARCH.gaps.some(d => {
+        if (d.owner && d.owner !== r.id) return false;
+        const edge = d.horiz ? Math.abs(d.c - r.y) < .05 || Math.abs(d.c - r.y - r.h) < .05
+          : Math.abs(d.c - r.x) < .05 || Math.abs(d.c - r.x - r.w) < .05;
+        if (!d.owner && !edge) return false;
+        const along = (d.a + d.b) / 2 - (d.horiz ? r.x + r.w / 2 : r.y + r.h / 2);
+        const across = d.c - (d.horiz ? r.y + r.h / 2 : r.x + r.w / 2);
+        const halfDoor = (d.b - d.a) / 2 + 1;
+        const clearance = d.passage === 'open' ? .8 : 3.2;
+        return d.horiz ? Math.abs(x - along) < halfDoor + ex && Math.abs(z - across) < clearance + ez
+          : Math.abs(z - along) < halfDoor + ez && Math.abs(x - across) < clearance + ex;
+      });
     }
     function decorate(g, spec, r) {
       const occupied = { n: [], s: [], w: [], e: [] };
@@ -1016,7 +1040,10 @@
           }
           ry += (it.r || 0) * Math.PI / 180;
         }
-        else { x = (it.x || 0) * r.w; z = (it.z || 0) * r.h; ry = (it.r || 0) * Math.PI / 180; }
+        else {
+          x = (it.x || 0) * r.w; z = (it.z || 0) * r.h; ry = (it.r || 0) * Math.PI / 180;
+          if (blocksPassage(r, it, x, z, ry)) return;
+        }
         if (it.t === 'pergola') { it.w = it.w || r.w; it.d = it.d || r.h; }
         q.position.set(x, FH, z); q.rotation.y = ry; g.add(q);
         try { if (!realItem(q, it) && D[it.t]) D[it.t](q, it); } catch (e) { console.warn('[planta3d]', it.t, e); }
@@ -1114,8 +1141,11 @@
         e.gaps.push(g);
         gaps.push({ horiz: e.horiz, c: e.c, a: g.a, b: g.b });
       });
+      edges.forEach(e => {
+        if (e.part) e.gaps.forEach(g => gaps.push({ horiz: e.horiz, c: e.c, a: g.a, b: g.b, owner: e.A.id }));
+      });
       // lados abertos (ambientes integrados) também não recebem móveis encostados
-      edges.forEach(e => { if (e.B && e.type === 'none' && !outdoor(e.A.id) && !outdoor(e.B.id)) gaps.push({ horiz: e.horiz, c: e.c, a: e.a, b: e.b }); });
+      edges.forEach(e => { if (e.B && e.type === 'none' && !outdoor(e.A.id) && !outdoor(e.B.id)) gaps.push({ horiz: e.horiz, c: e.c, a: e.a, b: e.b, passage: 'open' }); });
       return { edges, gaps, partGaps: {} };
     })();
 
